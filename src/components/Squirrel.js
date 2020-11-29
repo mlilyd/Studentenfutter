@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Image, Animated } from "react-native";
-import Images from './assets/Images';
+import image from "../assets/squirrel.png"
 
 export default class Squirrel extends Component {
     constructor(props){
@@ -21,8 +21,6 @@ export default class Squirrel extends Component {
             outputRange: ['-20deg', '0deg', '15deg', '45deg'],
             extrapolate: 'clamp'
         })
-
-        let image = Images['squirrel'];
 
         return (
             <Animated.Image

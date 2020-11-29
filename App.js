@@ -1,70 +1,181 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import Matter from 'matter-js';
-import { GameEngine } from 'react-native-game-engine';
-import Squirrel from './src/Squirrel';
+import { Dimensions, StyleSheet, Text, View, StatusBar, Alert, TouchableOpacity, Image } from 'react-native';
+import Matter from "matter-js";
+import { GameEngine } from "react-native-game-engine";
+import Squirrel from './src/components/Squirrel';
+import Floor from './src/components/Floor';
+import Physics, { resetPipes } from './src/components/Physics';
 import Constants from './src/Constants';
+import bg from './src/assets/bg.png';
 
 export default class App extends Component {
     constructor(props){
-      super(props);
+        super(props);
 
-      this.state = {
-        running: true
-      };
-      this.gameEngine = null;
-      this.entities = this.setupWorld();
+        this.state = {
+            running: true,
+            score: 0,
+        };
 
+        this.gameEngine = null;
+        this.entities = this.setupWorld();
     }
 
     setupWorld = () => {
-      let engine = Matter.Engine.create({
-        enableSleeping: false
-      });
-      let world = engine.world;
-      let squirrel = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 4, Constants.MAX_HEIGHT / 2, 50, 50);
+        let engine = Matter.Engine.create({ enableSleeping: false });
+        let world = engine.world;
+        world.gravity.y =0.0;
 
-      Matter.World.add(world, [squirrel]);
+        let squirrel = Matter.Bodies.rectangle( 
+          Constants.MAX_WIDTH / 5, 
+          Constants.MAX_HEIGHT - 90, 
+          Constants.SQUIRREL_WIDTH, 
+          Constants.SQUIRREL_HEIGHT);
 
-      return {
-        physics: { engine: engine, world: world },
-        squirrel: { body: squirrel, size: [50,50], color: 'red', renderer: Squirrel},
-      }
+        let floor1 = Matter.Bodies.rectangle(
+            Constants.MAX_WIDTH / 2,
+            Constants.MAX_HEIGHT - 70,
+            Constants.MAX_WIDTH + 4,
+            45,
+            { isStatic: true }
+        );
+
+        let floor2 = Matter.Bodies.rectangle(
+            Constants.MAX_WIDTH + (Constants.MAX_WIDTH / 2),
+            Constants.MAX_HEIGHT - 70,
+            Constants.MAX_WIDTH + 4,
+            45,
+            { isStatic: true }
+        );
+
+
+        Matter.World.add(world, [squirrel, floor1, floor2]);
+        Matter.Events.on(engine, 'collisionStart', (event) => {
+            var pairs = event.pairs;
+
+            this.gameEngine.dispatch({ type: "game-over"});
+
+        });
+
+        return {
+            physics: { engine: engine, world: world },
+            floor1: { body: floor1, renderer: Floor },
+            floor2: { body: floor2, renderer: Floor },
+            squirrel: { body: squirrel, pose: 1, renderer: Squirrel},
+        }
+    }
+
+    onEvent = (e) => {
+        if (e.type === "game-over"){
+            //Alert.alert("Game Over");
+            this.setState({
+                running: true
+            });
+        } else if (e.type === "score") {
+            this.setState({
+                score: this.state.score + 1
+            })
+        }
+    }
+
+    reset = () => {
+        resetPipes();
+        this.gameEngine.swap(this.setupWorld());
+        this.setState({
+            running: true,
+            score: 0
+        });
+    }
+
+    jump() {
+      Matter.Body.applyForce(this.entities.squirrel.body, 
+                             this.entities.squirrel.body.position, 
+                             {x: 0.0, y: -0.1});
+
     }
 
     render() {
-      return (
-        <View style={StyleSheet.container}>
-          <GameEngine 
-          ref={(ref) => { this.gameEngine = ref; }}
-          style={styles.gameContainer}
-          running={this.state.running}
-          entities={this.entities}>
-          </GameEngine>
-        </View>
-      );
+        return (
+            <View style={styles.container}>
+                <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
+                <GameEngine
+                    ref={(ref) => { this.gameEngine = ref; }}
+                    style={styles.gameContainer}
+                    systems={[Physics]}
+                    running={this.state.running}
+                    onEvent={this.onEvent}
+                    entities={this.entities}>
+                    <StatusBar hidden={true} />
+                </GameEngine>
+                <TouchableOpacity 
+                  style={styles.fullScreenButton}
+                  >
+                </TouchableOpacity>
+
+            </View>
+        );
     }
 }
 
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      backgroundColor: '#fff',
-  },
-  gameContainer: {
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-  },
-
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    backgroundImage: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: Constants.MAX_WIDTH,
+        height: Constants.MAX_HEIGHT
+    },
+    gameContainer: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    gameOverText: {
+        color: 'white',
+        fontSize: 48,
+        fontFamily: '04b_19'
+    },
+    gameOverSubText: {
+        color: 'white',
+        fontSize: 24,
+        fontFamily: '04b_19'
+    },
+    fullScreen: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'black',
+        opacity: 0.8,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    score: {
+        position: 'absolute',
+        color: 'white',
+        fontSize: 72,
+        top: 50,
+        left: Constants.MAX_WIDTH / 2 - 20,
+        textShadowColor: '#444444',
+        textShadowOffset: { width: 2, height: 2},
+        textShadowRadius: 2,
+        fontFamily: '04b_19'
+    },
+    fullScreenButton: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        flex: 1
+    }
 });

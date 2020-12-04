@@ -5,7 +5,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
     let squirrel = entities.squirrel.body;
 
     touches.filter(t => t.type === "press").forEach(t => {
-            Matter.Body.applyForce(squirrel, squirrel.position, {x: 0.00, y: -0.10});
+            Matter.Body.setVelocity(squirrel, {x: 10, y: -10});
         });
 
     Matter.Engine.update(engine, time.delta);

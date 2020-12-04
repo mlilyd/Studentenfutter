@@ -65,39 +65,16 @@ export default class App extends Component {
         }
     }
 
-    onEvent = (e) => {
-        if (e.type === "game-over"){
-            //Alert.alert("Game Over");
-            this.setState({
-                running: true
-            });
-        } else if (e.type === "score") {
-            this.setState({
-                score: this.state.score + 1
-            })
-        }
-    }
-
-    reset = () => {
-        resetPipes();
-        this.gameEngine.swap(this.setupWorld());
-        this.setState({
-            running: true,
-            score: 0
-        });
-    }
-
-    jump() {
-      Matter.Body.applyForce(this.entities.squirrel.body, 
-                             this.entities.squirrel.body.position, 
-                             {x: 0.0, y: -0.1});
-
-    }
-
     render() {
         return (
             <View style={styles.container}>
                 <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
+
+                <TouchableOpacity 
+                  style={styles.fullScreenButton}>
+                </TouchableOpacity>
+
+                
                 <GameEngine
                     ref={(ref) => { this.gameEngine = ref; }}
                     style={styles.gameContainer}
@@ -107,10 +84,7 @@ export default class App extends Component {
                     entities={this.entities}>
                     <StatusBar hidden={true} />
                 </GameEngine>
-                <TouchableOpacity 
-                  style={styles.fullScreenButton}
-                  >
-                </TouchableOpacity>
+                
 
             </View>
         );

@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet, Text, View, StatusBar, Alert, TouchableOpacity,
 import Matter from "matter-js";
 import { GameEngine } from "react-native-game-engine";
 import Squirrel from './src/components/Squirrel';
+import Hurdle from './src/components/Hurdle';
 import Floor from './src/components/Floor';
 import Physics, { resetPipes } from './src/components/Physics';
 import Constants from './src/Constants';
@@ -24,10 +25,10 @@ export default class App extends Component {
     setupWorld = () => {
         let engine = Matter.Engine.create({ enableSleeping: false });
         let world = engine.world;
-        world.gravity.y =1.5;
+        world.gravity.y =0;
 
         let squirrel = Matter.Bodies.rectangle( 
-          Constants.MAX_WIDTH / 5, 
+          Constants.MAX_WIDTH /8, 
           Constants.MAX_HEIGHT - 90, 
           Constants.SQUIRREL_WIDTH, 
           Constants.SQUIRREL_HEIGHT);
@@ -47,7 +48,11 @@ export default class App extends Component {
             45,
             { isStatic: true }
         );
-
+        
+        let box = Matter.Bodies.rectangle(
+            Constants.MAX_WIDTH -200,Constants.MAX_HEIGHT - 100,
+            50,50
+        );
 
         Matter.World.add(world, [squirrel, floor1, floor2]);
         Matter.Events.on(engine, 'collisionStart', (event) => {
@@ -62,6 +67,7 @@ export default class App extends Component {
             floor1: { body: floor1, renderer: Floor },
             floor2: { body: floor2, renderer: Floor },
             squirrel: { body: squirrel, pose: 1, renderer: Squirrel},
+            //hurdle_box: { body: box, renderer: Hurdle}
         }
     }
 

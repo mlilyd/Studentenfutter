@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, StatusBar, TouchableOpacity, Image } from 'react-native';
 import Matter from "matter-js";
 import { GameEngine } from "react-native-game-engine";
-import Squirrel from './src/components/Squirrel';
+import Sprite from './src/components/Sprite';
 import Floor from './src/components/Floor';
 import Physics from './src/components/Physics';
 import Constants from './src/Constants';
@@ -30,7 +30,7 @@ export default class App extends Component {
 
         //define bodies -> each entity/sprite consists of rectangles ...
         let squirrel = Matter.Bodies.rectangle( 
-          Constants.MAX_WIDTH /2, 
+          Constants.MAX_WIDTH / 4, 
           Constants.MAX_HEIGHT - 90, 
           Constants.SQUIRREL_WIDTH, 
           Constants.SQUIRREL_HEIGHT);
@@ -54,13 +54,13 @@ export default class App extends Component {
         
         //add rectangle bodies to world    
         Matter.World.add(world, [squirrel, floor1, floor2]);
-
+        
         //define entitities: 
         return {
             physics: { engine: engine, world: world },
             floor1: { body: floor1, renderer: Floor },
             floor2: { body: floor2, renderer: Floor },
-            squirrel: { body: squirrel, pose: 1, renderer: Squirrel},
+            squirrel: { body: squirrel, img_file: 'squirrel', renderer: Sprite},
         }
     }
 

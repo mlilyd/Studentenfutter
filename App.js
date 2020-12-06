@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Text, View, StatusBar, Alert, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, StatusBar, TouchableOpacity, Image } from 'react-native';
 import Matter from "matter-js";
 import { GameEngine } from "react-native-game-engine";
 import Squirrel from './src/components/Squirrel';
-import Hurdle from './src/components/Hurdle';
 import Floor from './src/components/Floor';
-import Physics, { resetPipes } from './src/components/Physics';
+import Physics from './src/components/Physics';
 import Constants from './src/Constants';
 import bg from './src/assets/bg.png';
 
@@ -22,16 +21,20 @@ export default class App extends Component {
         this.entities = this.setupWorld();
     }
 
+    //setup world defines various entities
     setupWorld = () => {
         let engine = Matter.Engine.create({ enableSleeping: false });
         let world = engine.world;
+        //before the first user tap, gravity is 0
         world.gravity.y =0;
 
+        //define bodies -> each entity/sprite consists of rectangles ...
         let squirrel = Matter.Bodies.rectangle( 
           Constants.MAX_WIDTH /2, 
           Constants.MAX_HEIGHT - 90, 
           Constants.SQUIRREL_WIDTH, 
           Constants.SQUIRREL_HEIGHT);
+        
 
         let floor1 = Matter.Bodies.rectangle(
             Constants.MAX_WIDTH / 2,
@@ -49,25 +52,15 @@ export default class App extends Component {
             { isStatic: true }
         );
         
-        let box = Matter.Bodies.rectangle(
-            Constants.MAX_WIDTH -200,Constants.MAX_HEIGHT - 100,
-            50,50
-        );
-
+        //add rectangle bodies to world    
         Matter.World.add(world, [squirrel, floor1, floor2]);
-        Matter.Events.on(engine, 'collisionStart', (event) => {
-            var pairs = event.pairs;
 
-            this.gameEngine.dispatch({ type: "game-over"});
-
-        });
-
+        //define entitities: 
         return {
             physics: { engine: engine, world: world },
             floor1: { body: floor1, renderer: Floor },
             floor2: { body: floor2, renderer: Floor },
             squirrel: { body: squirrel, pose: 1, renderer: Squirrel},
-            //hurdle_box: { body: box, renderer: Hurdle}
         }
     }
 
@@ -97,6 +90,7 @@ export default class App extends Component {
     }
 }
 
+//css styles
 const styles = StyleSheet.create({
     container: {
         flex: 1,

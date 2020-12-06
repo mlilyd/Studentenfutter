@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Image, Animated } from "react-native";
-import image from "../assets/log.png"
+import { Image } from "react-native";
+import image from "../assets/log.png";
 
 export default class Squirrel extends Component {
     constructor(props){

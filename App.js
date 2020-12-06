@@ -60,6 +60,11 @@ export default class App extends Component {
             physics: { engine: engine, world: world },
             floor1: { body: floor1, renderer: Floor },
             floor2: { body: floor2, renderer: Floor },
+            /* to add other sprites that are not randomly generated you need to add an entry like the squirrel e.g.: 
+               sprite: { body: <define MatterJS rectangle above>, 
+                         img_file: <name as defined in Sprite.js>,
+                         renderer: Sprite}
+            */
             squirrel: { body: squirrel, img_file: 'squirrel', renderer: Sprite},
         }
     }

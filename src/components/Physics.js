@@ -57,7 +57,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
     
     tick += 1;
     //add hurdle after every 183 ticks.
-    if (tick%183 == 0 && world.gravity.y != 0){
+    if (tick%120 == 0 && world.gravity.y != 0){
         generateHurdles(squirrel, world, entities);  
     }
 
@@ -81,8 +81,8 @@ const Physics = (entities, { touches, time, dispatch }) => {
     Object.keys(entities).forEach(key => {
         if (key.indexOf("floor") === 0 || key.indexOf("hurdle") === 0){
             if (world.gravity.y != 0){
-            if (entities[key].body.position.x <= -1 * Constants.MAX_WIDTH/2){
-                Matter.Body.setPosition(entities[key].body, { x: Constants.MAX_WIDTH +3, y: entities[key].body.position.y})
+            if (entities[key].body.position.x <= -1 * Constants.MAX_WIDTH/2 ){
+                Matter.Body.setPosition(entities[key].body, { x: Constants.MAX_WIDTH + (Constants.MAX_WIDTH/2) - 15, y: entities[key].body.position.y})
             } else {
                 Matter.Body.translate(entities[key].body, {x: -15, y: 0});
                 

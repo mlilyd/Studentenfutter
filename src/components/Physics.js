@@ -41,9 +41,9 @@ const Physics = (entities, { touches, time, dispatch }) => {
     touches.filter(t => t.type === "press").forEach(t => {
         if (world.gravity.y == 0){
             world.gravity.y = 1.7;
-            world.gravity.x = -0.01;
+            world.gravity.x = 0;
         }
-            Matter.Body.setVelocity(squirrel, {x: 3, y: -20});
+            Matter.Body.setVelocity(squirrel, {x: 0, y: -20});
 
         });
     
@@ -53,7 +53,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
     if (tick%183 == 0 && world.gravity.y != 0){
         generateHurdles(squirrel, world, entities);  
     }
-    if (hurdleCount == 4){
+    if (hurdleCount == 2){
         resetHurdles();
     }
 
@@ -71,9 +71,9 @@ const Physics = (entities, { touches, time, dispatch }) => {
         if (key.indexOf("floor") === 0 || key.indexOf("hurdle") === 0){
             if (world.gravity.y != 0){
             if (entities[key].body.position.x <= -1 * Constants.MAX_WIDTH / 2){
-                Matter.Body.setPosition(entities[key].body, { x: Constants.MAX_WIDTH + (Constants.MAX_WIDTH / 2), y: entities[key].body.position.y})
+                Matter.Body.setPosition(entities[key].body, { x: Constants.MAX_WIDTH + (Constants.MAX_WIDTH/2) + 3, y: entities[key].body.position.y})
             } else {
-                Matter.Body.translate(entities[key].body, {x: -2, y: 0});
+                Matter.Body.translate(entities[key].body, {x: -7, y: 0});
                 
             }
                 

@@ -28,7 +28,7 @@ export default class App extends Component {
         world.gravity.y =0;
 
         let squirrel = Matter.Bodies.rectangle( 
-          Constants.MAX_WIDTH /8, 
+          Constants.MAX_WIDTH /2, 
           Constants.MAX_HEIGHT - 90, 
           Constants.SQUIRREL_WIDTH, 
           Constants.SQUIRREL_HEIGHT);

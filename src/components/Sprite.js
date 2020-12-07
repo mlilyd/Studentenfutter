@@ -3,7 +3,10 @@ import {Image} from "react-native";
 
 let Images = {
     log: require("../assets/log.png"),
-    squirrel: require("../assets/squirrel.png")
+    squirrel: require("../assets/squirrel.png"),
+    heart: require("../assets/heart.png"),
+    nut: require("../assets/nut.png"),
+    trash: require("../assets/trash.png")
 };
 
 export default class Sprite extends Component {

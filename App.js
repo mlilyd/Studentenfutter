@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StatusBar, TouchableOpacity, Image } from 'react-native';
-import Matter from "matter-js";
+import { StyleSheet, View, StatusBar, TouchableOpacity, Image,Text } from 'react-native';
+import Matter, { Pairs } from "matter-js";
 import { GameEngine } from "react-native-game-engine";
 import Sprite from './src/components/Sprite';
 import Floor from './src/components/Floor';
 import Physics from './src/components/Physics';
 import Constants from './src/Constants';
 import bg from './src/assets/bg.png';
+import heart from './src/assets/heart.png';
 
 export default class App extends Component {
     constructor(props){
         super(props);
 
+        this.a="";
+        this.b="";
+        
         this.state = {
             running: true,
             score: 0,
+            heartCounter:0
         };
 
         this.gameEngine = null;
@@ -33,7 +38,9 @@ export default class App extends Component {
           Constants.MAX_WIDTH / 4, 
           Constants.MAX_HEIGHT - 90, 
           Constants.SQUIRREL_WIDTH, 
-          Constants.SQUIRREL_HEIGHT);
+          Constants.SQUIRREL_HEIGHT,
+          {label:"squirrel"});
+          
         
 
         let floor1 = Matter.Bodies.rectangle(
@@ -41,7 +48,7 @@ export default class App extends Component {
             Constants.MAX_HEIGHT - 70,
             Constants.MAX_WIDTH + 4,
             45,
-            { isStatic: true }
+            { isStatic: true, label:"floor1" }
         );
 
         let floor2 = Matter.Bodies.rectangle(
@@ -49,9 +56,9 @@ export default class App extends Component {
             Constants.MAX_HEIGHT - 70,
             Constants.MAX_WIDTH + 4,
             45,
-            { isStatic: true }
+            { isStatic: true, label:"floor2" }
         );
-        
+
         //add rectangle bodies to world    
         Matter.World.add(world, [squirrel, floor1, floor2]);
         
@@ -65,7 +72,7 @@ export default class App extends Component {
                          img_file: <name as defined in Sprite.js>,
                          renderer: Sprite}
             */
-            squirrel: { body: squirrel, img_file: 'squirrel', renderer: Sprite},
+            squirrel: { body: squirrel, img_file: 'squirrel', renderer: Sprite}
         }
     }
 
@@ -73,6 +80,9 @@ export default class App extends Component {
         return (
             <View style={styles.container}>
                 <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
+                <Image source={heart} style={styles.heartCounter} resizeMode="contain" />
+                <Text>{this.a}</Text>
+                <Text>{this.b}</Text>
 
                 <TouchableOpacity 
                   style={styles.fullScreenButton}>
@@ -109,6 +119,15 @@ const styles = StyleSheet.create({
         right: 0,
         width: Constants.MAX_WIDTH,
         height: Constants.MAX_HEIGHT
+    },
+    heartCounter: {
+        position: 'absolute',
+        top: 40,
+        bottom:20,
+        left:40,
+        right:50,
+        width:10,
+        height:10
     },
     gameContainer: {
         position: 'absolute',

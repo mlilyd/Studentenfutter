@@ -1,8 +1,9 @@
 import Matter from "matter-js";
 import Constants from "../Constants";
-import Hurdle from "./Hurdle";
+import Sprite from "./Sprite";
 
 let hurdleCount = 0;
+let heartCount=0;
 let tick = 0;
 
 export const randomBetween = (min, max) => {
@@ -21,14 +22,32 @@ export const generateHurdles = (squirrel, world, entities) => {
         x,
         Constants.MAX_HEIGHT-100,
         60,50,
-        { isStatic: true }
+        { isStatic: true, label:"hurdle" }
     );
     
     hurdleCount += 1;
     Matter.World.add(world, [hurdle]);
 
     entities["hurdle" + (hurdleCount)] = {
-        body: hurdle, renderer: Hurdle
+        body: hurdle, img_file: 'log', renderer: Sprite
+    }
+
+}
+
+export const generateHearts = (squirrel, world, entities) =>{
+    
+    let x = randomBetween(squirrel.position.x+Constants.SQUIRREL_WIDTH+ 5, Constants.MAX_WIDTH);
+    
+
+    let heart = Matter.Bodies.rectangle(x,2/3*Constants.MAX_HEIGHT,10,10,
+        { isStatic: true , label:"heart"}
+    );
+    
+    heartCount += 1;
+    Matter.World.add(world, [heart]);
+
+    entities["heart" + (heartCount)] = {
+        body: heart, img_file: 'heart', renderer: Sprite
     }
 
 }
@@ -56,6 +75,9 @@ const Physics = (entities, { touches, time, dispatch }) => {
     if (hurdleCount == 2){
         resetHurdles();
     }
+    if(tick%400 == 0 && world.gravity.y != 0 && heartCount<5){
+        generateHearts(squirrel, world, entities);
+    }
 
     if (squirrel.position.x >= Constants.MAX_WIDTH){
         Matter.Body.setVelocity(squirrel, {x: -10, y:0});
@@ -64,11 +86,12 @@ const Physics = (entities, { touches, time, dispatch }) => {
     if (squirrel.position.x < 30){
         Matter.Body.setVelocity(squirrel, {x: 10, y:0});
     }
+   
     
     Matter.Engine.update(engine, time.delta);
 
     Object.keys(entities).forEach(key => {
-        if (key.indexOf("floor") === 0 || key.indexOf("hurdle") === 0){
+        if (key.indexOf("floor") === 0 || key.indexOf("hurdle") === 0 || key.indexOf("heart") === 0){
             if (world.gravity.y != 0){
             if (entities[key].body.position.x <= -1 * Constants.MAX_WIDTH / 2){
                 Matter.Body.setPosition(entities[key].body, { x: Constants.MAX_WIDTH + (Constants.MAX_WIDTH/2) + 3, y: entities[key].body.position.y})
@@ -76,8 +99,9 @@ const Physics = (entities, { touches, time, dispatch }) => {
                 Matter.Body.translate(entities[key].body, {x: -7, y: 0});
                 
             }
-                
+            
             }
+        
         }
     })
 

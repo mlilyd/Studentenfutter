@@ -1,116 +1,135 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { Component } from 'react';
+import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, TouchableOpacity, Image } from 'react-native';
+import Game from './Game';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+export default class App extends Component{
+    constructor(props){
+        super(props) 
 
-import { GameEngine } from "react-native-game-engine";
+      this.state = {
+        showComponent: false,
+      };
+      this._onButtonClick = this._onButtonClick.bind(this);
+    }
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
+    _onButtonClick() {
+        this.setState({
+          showComponent: true,
+        });
+      }
+    
+  
+    render(){
+        return(
+            <View style={styles.container}>
+                <View style={styles.buttonContainer}>
+                <Button
+                    onPress={() => {
+                        this._onButtonClick();
+                    }}
+                    title="Spielen"
+                    />
+                    {this.state.showComponent ?
+                    <Game /> :
+                    null }
+                </View>
             </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Hello</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
+
+    //     <div>
+    //     <Button onClick={this._onButtonClick} title="Press"/>
+    //     {this.state.showComponent ?
+    //        <Game /> :
+    //        null
+    //     }
+    //   </div>
+
+        // <View style={styles.container}>
+        //     <View style={styles.buttonContainer}>
+        //         <Game />
+        //       {/* <Button
+        //         onPress={() => {
+        //             var game = new Game();
+        //             alert('You tapped the button!');
+        //         }}
+        //         title="Spielen"
+        //         /> */}
+        //     </View>
+        //     <View style={styles.buttonContainer}>
+        //       <Button
+        //         onPress={() => {
+        //             alert('You tapped button!');
+        //         }}
+        //         title="Karteikarten"
+        //         />
+        //     </View>
+        // </View>
+        
+        );
+    };
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    backgroundImage: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: Constants.MAX_WIDTH,
+        height: Constants.MAX_HEIGHT
+    },
+    gameContainer: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    gameOverText: {
+        color: 'white',
+        fontSize: 48,
+        fontFamily: '04b_19'
+    },
+    gameOverSubText: {
+        color: 'white',
+        fontSize: 24,
+        fontFamily: '04b_19'
+    },
+    fullScreen: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'black',
+        opacity: 0.8,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    score: {
+        position: 'absolute',
+        color: 'white',
+        fontSize: 72,
+        top: 50,
+        left: Constants.MAX_WIDTH / 2 - 20,
+        textShadowColor: '#444444',
+        textShadowOffset: { width: 2, height: 2},
+        textShadowRadius: 2,
+        fontFamily: '04b_19'
+    },
+    fullScreenButton: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        flex: 1
+    }
 });
-
-export default App;
+  
+//   export default App;

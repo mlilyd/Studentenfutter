@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.studentenfutter"
+        applicationId "com.test"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

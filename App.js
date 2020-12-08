@@ -35,11 +35,17 @@ export default class App extends Component{
             {/* <TouchableOpacity style={styles.button} onPress={this.mountScene(<Game />)}><Text>press</Text></TouchableOpacity> */}
 
                 <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
-                <Button
+                <Button style={styles.buttons} color='#35916b'
                     onPress={ _ => {
                         this.mountScene(<Game />);
                     }}
-                    title="Spielenn"
+                    title="Spielen"
+                />
+                <View style={styles.separator} />
+                <Button color='#35916b'
+                    onPress={ _ => {alert('Karten');
+                    }}
+                    title="Karteikarten"
                 />
                 </View>
 
@@ -94,7 +100,7 @@ export default class App extends Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#41c48e',
     },
     backgroundImage: {
         position: 'absolute',
@@ -151,6 +157,14 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         flex: 1
+    },
+    buttonContainer: {
+        top: 200
+    },
+    separator: {
+        marginVertical: 20,
+        borderBottomColor: '#41c48e',
+        borderBottomWidth: StyleSheet.hairlineWidth,
     }
 });
   

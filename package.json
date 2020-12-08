@@ -11,12 +11,11 @@
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
-    "@react-navigation/core": "^5.14.4",
     "@react-navigation/native": "^3.8.3",
     "@react-navigation/stack": "^5.12.8",
     "matter-js": "^0.14.2",
     "react": "16.13.1",
-    "react-native": "^0.63.3",
+    "react-native": "0.63.4",
     "react-native-game-engine": "^1.2.0",
     "react-native-gesture-handler": "^1.9.0",
     "react-native-reanimated": "^1.13.2",

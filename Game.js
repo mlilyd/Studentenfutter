@@ -1,43 +1,54 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, TouchableOpacity, Image } from 'react-native';
-import Matter from "matter-js";
+import { StyleSheet, View, StatusBar, TouchableOpacity, Image,Text } from 'react-native';
+import Matter, { Pairs } from "matter-js";
 import { GameEngine } from "react-native-game-engine";
-import Squirrel from './src/components/Squirrel';
+import Sprite from './src/components/Sprite';
 import Floor from './src/components/Floor';
-import Physics, { resetPipes } from './src/components/Physics';
+import Physics from './src/components/Physics';
 import Constants from './src/Constants';
 import bg from './src/assets/bg.png';
+import heart from './src/assets/heart.png';
 
-export default class Game extends Component {
+export default class App extends Component {
     constructor(props){
         super(props);
 
+        this.a="";
+        this.b="";
+        
         this.state = {
             running: true,
             score: 0,
+            heartCounter:0
         };
 
         this.gameEngine = null;
         this.entities = this.setupWorld();
     }
 
+    //setup world defines various entities
     setupWorld = () => {
         let engine = Matter.Engine.create({ enableSleeping: false });
         let world = engine.world;
-        world.gravity.y =1.5;
+        //before the first user tap, gravity is 0
+        world.gravity.y =0;
 
+        //define bodies -> each entity/sprite consists of rectangles ...
         let squirrel = Matter.Bodies.rectangle( 
-          Constants.MAX_WIDTH / 5, 
+          Constants.MAX_WIDTH / 4, 
           Constants.MAX_HEIGHT - 90, 
           Constants.SQUIRREL_WIDTH, 
-          Constants.SQUIRREL_HEIGHT);
+          Constants.SQUIRREL_HEIGHT,
+          {label:"squirrel"});
+          
+        
 
         let floor1 = Matter.Bodies.rectangle(
             Constants.MAX_WIDTH / 2,
             Constants.MAX_HEIGHT - 70,
             Constants.MAX_WIDTH + 4,
             45,
-            { isStatic: true }
+            { isStatic: true, label:"floor1" }
         );
 
         let floor2 = Matter.Bodies.rectangle(
@@ -45,31 +56,33 @@ export default class Game extends Component {
             Constants.MAX_HEIGHT - 70,
             Constants.MAX_WIDTH + 4,
             45,
-            { isStatic: true }
+            { isStatic: true, label:"floor2" }
         );
 
-
+        //add rectangle bodies to world    
         Matter.World.add(world, [squirrel, floor1, floor2]);
-        Matter.Events.on(engine, 'collisionStart', (event) => {
-            var pairs = event.pairs;
-
-            this.gameEngine.dispatch({ type: "game-over"});
-
-        });
-
+        
+        //define entitities: 
         return {
             physics: { engine: engine, world: world },
             floor1: { body: floor1, renderer: Floor },
             floor2: { body: floor2, renderer: Floor },
-            squirrel: { body: squirrel, pose: 1, renderer: Squirrel},
+            /* to add other sprites that are not randomly generated you need to add an entry like the squirrel e.g.: 
+               sprite: { body: <define MatterJS rectangle above>, 
+                         img_file: <name as defined in Sprite.js>,
+                         renderer: Sprite}
+            */
+            squirrel: { body: squirrel, img_file: 'squirrel', renderer: Sprite}
         }
     }
 
     render() {
         return (
             <View style={styles.container}>
-
                 <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
+                <Image source={heart} style={styles.heartCounter} resizeMode="contain" />
+                <Text>{this.a}</Text>
+                <Text>{this.b}</Text>
 
                 <TouchableOpacity 
                   style={styles.fullScreenButton}>
@@ -92,6 +105,7 @@ export default class Game extends Component {
     }
 }
 
+//css styles
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -105,6 +119,15 @@ const styles = StyleSheet.create({
         right: 0,
         width: Constants.MAX_WIDTH,
         height: Constants.MAX_HEIGHT
+    },
+    heartCounter: {
+        position: 'absolute',
+        top: 40,
+        bottom:20,
+        left:40,
+        right:50,
+        width:10,
+        height:10
     },
     gameContainer: {
         position: 'absolute',

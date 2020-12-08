@@ -42,7 +42,7 @@ export default class Game extends Component {
           
         let floor1 = Matter.Bodies.rectangle(
             Constants.MAX_WIDTH / 2,
-            Constants.MAX_HEIGHT * 0.9,
+            Constants.MAX_HEIGHT * 0.87,
             Constants.MAX_WIDTH + 4,
             45,
             { isStatic: true, label:"floor1" }
@@ -50,7 +50,7 @@ export default class Game extends Component {
 
         let floor2 = Matter.Bodies.rectangle(
             Constants.MAX_WIDTH + (Constants.MAX_WIDTH / 2),
-            Constants.MAX_HEIGHT *0.9,
+            Constants.MAX_HEIGHT *0.87,
             Constants.MAX_WIDTH + 4,
             45,
             { isStatic: true, label:"floor2" }
@@ -93,13 +93,13 @@ export default class Game extends Component {
         if (e.type === "game-over"){
             //Alert.alert("Game Over");
             this.setState({
-                running: false
+                running: false,
+                heart: 1
             });
-        }
-        if (e.type === "add-heart"){
+        } else if (e.type === 'add-heart'){
             this.setState({
-                heart: this.state.heart + 1
-            });
+                heart: this.state.heart+1
+            })
         }
     }
 
@@ -134,7 +134,7 @@ export default class Game extends Component {
                     <StatusBar hidden={false} />
                 </GameEngine>
 
-                {!this.state.running || this.state.heart === 0 &&
+                {!this.state.running &&
                 <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
                     <View style={styles.fullScreen}>
                         <Text style={styles.gameOverText}>Game Over</Text>

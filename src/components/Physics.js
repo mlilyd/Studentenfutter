@@ -59,10 +59,10 @@ const Physics = (entities, { touches, time, dispatch }) => {
 
     touches.filter(t => t.type === "press").forEach(t => {
         if (world.gravity.y == 0){
-            world.gravity.y = 1.7;
+            world.gravity.y = 1.25;
             world.gravity.x = 0;
         }
-            Matter.Body.setVelocity(squirrel, {x: 0, y: -20});
+            Matter.Body.setVelocity(squirrel, {x: 0, y: -25});
 
         });
     
@@ -96,7 +96,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
             if (entities[key].body.position.x <= -1 * Constants.MAX_WIDTH / 2){
                 Matter.Body.setPosition(entities[key].body, { x: Constants.MAX_WIDTH + (Constants.MAX_WIDTH*.4775), y: entities[key].body.position.y})
             } else {
-                Matter.Body.translate(entities[key].body, {x: -7, y: 0});
+                Matter.Body.translate(entities[key].body, {x: -10, y: 0});
                 
             }
             

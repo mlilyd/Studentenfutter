@@ -1,159 +1,107 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StatusBar, TouchableOpacity, Image,Text } from 'react-native';
-import Matter, { Pairs } from "matter-js";
-import { GameEngine } from "react-native-game-engine";
-import Sprite from './src/components/Sprite';
-import Floor from './src/components/Floor';
-import Physics from './src/components/Physics';
-import Constants from './src/Constants';
-import bg from './src/assets/bg.png';
-import heart from './src/assets/heart.png';
+import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, TouchableOpacity, Image, Modal } from 'react-native';
+import Game from './Game';
 
-export default class App extends Component {
+
+export default class App extends Component{
     constructor(props){
-        super(props);
-
-        this.a="test";
-        this.b="test"; 
+        super(props) 
 
         this.state = {
-            running: true,
-            score: 0
-        };
-
-        this.heartCounter = 1;
-        this.gameEngine = null;
-        this.entities = this.setupWorld();
-    }
-
-    //setup world defines various entities
-    setupWorld = () => {
-        let engine = Matter.Engine.create({ enableSleeping: false });
-        let world = engine.world;
-        //before the first user tap, gravity is 0
-        world.gravity.y =0;
-
-        //define bodies -> each entity/sprite consists of rectangles ...
-        let squirrel = Matter.Bodies.rectangle( 
-          Constants.MAX_WIDTH / 4, 
-          Constants.MAX_HEIGHT - 90, 
-          Constants.SQUIRREL_WIDTH, 
-          Constants.SQUIRREL_HEIGHT,
-          {label:"squirrel"});
-          
-        
-
-        let floor1 = Matter.Bodies.rectangle(
-            Constants.MAX_WIDTH / 2,
-            Constants.MAX_HEIGHT - 70,
-            Constants.MAX_WIDTH + 4,
-            45,
-            { isStatic: true, label:"floor1" }
-        );
-
-        let floor2 = Matter.Bodies.rectangle(
-            Constants.MAX_WIDTH + (Constants.MAX_WIDTH / 2),
-            Constants.MAX_HEIGHT - 70,
-            Constants.MAX_WIDTH + 4,
-            45,
-            { isStatic: true, label:"floor2" }
-        );
-
-        //add rectangle bodies to world 
-        
-        Matter.World.add(world, [squirrel, floor1, floor2]);
-        Matter.Events.on(engine, 'collisionStart', (event) => {
-            let pairs = event.pairs;
-            pairs.forEach(function(pair){
-                if(pair.bodyA === "squirrel"){
-                    switch (pair.bodyB.label){
-                        case 'heart':
-                            this.gameEngine.dispatch({type: 'add-heart'});
-                            break;
-                        case 'hurdle':
-                            this.gameEngine.dispatch({type: 'game-over'});
-                    }
-                }
-            });
-        });
-        
-        //define entitities: 
-        return {
-            physics: { engine: engine, world: world },
-            floor1: { body: floor1, renderer: Floor },
-            floor2: { body: floor2, renderer: Floor },
-            /* to add other sprites that are not randomly generated you need to add an entry like the squirrel e.g.: 
-               sprite: { body: <define MatterJS rectangle above>, 
-                         img_file: <name as defined in Sprite.js>,
-                         renderer: Sprite}
-            */
-            squirrel: { body: squirrel, img_file: 'squirrel', renderer: Sprite}
+            sceneVisible: false,
+            scene: null
+          };
         }
-    }
-
-    onEvent = (e) => {
-        if (e.type === "game-over"){
-            //Alert.alert("Game Over");
+      
+        mountScene = scene => {
             this.setState({
-                running: false
+              sceneVisible: true,
+              scene: scene
             });
-        }
-        if (e.type === "add-heart"){
-            this.heartCounter += 1;
-        }
-    }
-
-    reset = () => {
-        this.gameEngine.swap(this.setupWorld());
-        this.setState({
-            running: true
-        });
-    }
-
-    render() {
-        return (
-            <View style={styles.container}>
-                <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
-                
-                
-                <Text style={styles.heartCounter}> 
-                    <Image source={heart} style={styles.heartCounter_img} resizeMode="contain" /> : {this.heartCounter}
-                </Text>
-                
-                <Text>{this.a}, {this.b}</Text>
-
-
-                <TouchableOpacity 
-                  style={styles.fullScreenButton}>
-                </TouchableOpacity>
-
-                
-                <GameEngine
-                    ref={(ref) => { this.gameEngine = ref; }}
-                    style={styles.gameContainer}
-                    systems={[Physics]}
-                    running={this.state.running}
-                    onEvent={this.onEvent}
-                    entities={this.entities}>
-                    <StatusBar hidden={true} />
-                </GameEngine>
-                {!this.state.running && <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
-                    <View style={styles.fullScreen}>
-                        <Text style={styles.gameOverText}>Game Over</Text>
-                    </View>
-                </TouchableOpacity>}
+          };
         
+        unMountScene = () => {
+        this.setState({
+            sceneVisible: false,
+            scene: null
+        });
+        };
+        
+            
+    render(){
+        return(
+            <View style={styles.container}>
+
+            {/* <TouchableOpacity style={styles.button} onPress={this.mountScene(<Game />)}><Text>press</Text></TouchableOpacity> */}
+
+                <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
+                <Button style={styles.buttons} color='#35916b'
+                    onPress={ _ => {
+                        this.mountScene(<Game />);
+                    }}
+                    title="Spielen"
+                />
+                <View style={styles.separator} />
+                <Button color='#35916b'
+                    onPress={ _ => {alert('Karten');
+                    }}
+                    title="Karteikarten"
+                />
+                </View>
+
+                <Modal
+                    animationType={"slide"}
+                    transparent={false}
+                    visible={this.state.sceneVisible}
+                    onRequestClose={_ => {}}
+                    >
+                    {this.state.scene}
+
+                    {/* <CloseButton onPress={this.unMountScene} /> */}
+                </Modal>
 
             </View>
+
+            
+
+    //     <div>
+    //     <Button onClick={this._onButtonClick} title="Press"/>
+    //     {this.state.showComponent ?
+    //        <Game /> :
+    //        null
+    //     }
+    //   </div>
+
+        // <View style={styles.container}>
+        //     <View style={styles.buttonContainer}>
+        //         <Game />
+        //       {/* <Button
+        //         onPress={() => {
+        //             var game = new Game();
+        //             alert('You tapped the button!');
+        //         }}
+        //         title="Spielen"
+        //         /> */}
+        //     </View>
+        //     <View style={styles.buttonContainer}>
+        //       <Button
+        //         onPress={() => {
+        //             alert('You tapped button!');
+        //         }}
+        //         title="Karteikarten"
+        //         />
+        //     </View>
+        // </View>
+        
         );
-    }
-}
+    };
+};
 
 //css styles
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#41c48e',
     },
     backgroundImage: {
         position: 'absolute',
@@ -162,25 +110,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         width: Constants.MAX_WIDTH,
-        height: Constants.MAX_HEIGHT,
-    },
-    heartCounter_img: {
-        position: 'relative',
-        top: 0,
-        bottom:0,
-        left:0,
-        right:0,
-        width:10,
-        height:10
-    },
-    heartCounter: {
-        position: 'absolute',
-        top: 40,
-        bottom:20,
-        left: 40,
-        right:50,
-        width:200,
-        height:30
+        height: Constants.MAX_HEIGHT
     },
     gameContainer: {
         position: 'absolute',
@@ -228,5 +158,15 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         flex: 1
+    },
+    buttonContainer: {
+        top: 200
+    },
+    separator: {
+        marginVertical: 20,
+        borderBottomColor: '#41c48e',
+        borderBottomWidth: StyleSheet.hairlineWidth,
     }
 });
+  
+//   export default App;

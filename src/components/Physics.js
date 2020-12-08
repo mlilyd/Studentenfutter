@@ -16,7 +16,7 @@ export const resetHurdles = () => {
 
 export const generateHurdles = (squirrel, world, entities) => {
     
-    let x = randomBetween(squirrel.position.x+Constants.SQUIRREL_WIDTH+ 5, Constants.MAX_WIDTH);
+    let x = randomBetween(Constants.MAX_WIDTH+ 200, Constants.MAX_WIDTH+20);
     
     let hurdle = Matter.Bodies.rectangle(
         x,

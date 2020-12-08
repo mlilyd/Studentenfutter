@@ -13,15 +13,15 @@ export default class App extends Component {
     constructor(props){
         super(props);
 
-        this.a="";
-        this.b="";
-        
+        this.a="test";
+        this.b="test"; 
+
         this.state = {
             running: true,
-            score: 0,
-            heartCounter:0
+            score: 0
         };
 
+        this.heartCounter = 1;
         this.gameEngine = null;
         this.entities = this.setupWorld();
     }
@@ -59,8 +59,23 @@ export default class App extends Component {
             { isStatic: true, label:"floor2" }
         );
 
-        //add rectangle bodies to world    
+        //add rectangle bodies to world 
+        
         Matter.World.add(world, [squirrel, floor1, floor2]);
+        Matter.Events.on(engine, 'collisionStart', (event) => {
+            let pairs = event.pairs;
+            pairs.forEach(function(pair){
+                if(pair.bodyA === "squirrel"){
+                    switch (pair.bodyB.label){
+                        case 'heart':
+                            this.gameEngine.dispatch({type: 'add-heart'});
+                            break;
+                        case 'hurdle':
+                            this.gameEngine.dispatch({type: 'game-over'});
+                    }
+                }
+            });
+        });
         
         //define entitities: 
         return {
@@ -76,13 +91,37 @@ export default class App extends Component {
         }
     }
 
+    onEvent = (e) => {
+        if (e.type === "game-over"){
+            //Alert.alert("Game Over");
+            this.setState({
+                running: false
+            });
+        }
+        if (e.type === "add-heart"){
+            this.heartCounter += 1;
+        }
+    }
+
+    reset = () => {
+        this.gameEngine.swap(this.setupWorld());
+        this.setState({
+            running: true
+        });
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
-                <Image source={heart} style={styles.heartCounter} resizeMode="contain" />
-                <Text>{this.a}</Text>
-                <Text>{this.b}</Text>
+                
+                
+                <Text style={styles.heartCounter}> 
+                    <Image source={heart} style={styles.heartCounter_img} resizeMode="contain" /> : {this.heartCounter}
+                </Text>
+                
+                <Text>{this.a}, {this.b}</Text>
+
 
                 <TouchableOpacity 
                   style={styles.fullScreenButton}>
@@ -98,7 +137,12 @@ export default class App extends Component {
                     entities={this.entities}>
                     <StatusBar hidden={true} />
                 </GameEngine>
-                
+                {!this.state.running && <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
+                    <View style={styles.fullScreen}>
+                        <Text style={styles.gameOverText}>Game Over</Text>
+                    </View>
+                </TouchableOpacity>}
+        
 
             </View>
         );
@@ -118,16 +162,25 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         width: Constants.MAX_WIDTH,
-        height: Constants.MAX_HEIGHT
+        height: Constants.MAX_HEIGHT,
+    },
+    heartCounter_img: {
+        position: 'relative',
+        top: 0,
+        bottom:0,
+        left:0,
+        right:0,
+        width:10,
+        height:10
     },
     heartCounter: {
         position: 'absolute',
         top: 40,
         bottom:20,
-        left:40,
+        left: 40,
         right:50,
-        width:10,
-        height:10
+        width:200,
+        height:30
     },
     gameContainer: {
         position: 'absolute',

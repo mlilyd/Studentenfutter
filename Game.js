@@ -9,19 +9,18 @@ import Constants from './src/Constants';
 import bg from './src/assets/bg.png';
 import heart from './src/assets/heart.png';
 
-export default class App extends Component {
+export default class Game extends Component {
     constructor(props){
         super(props);
-
-        this.a="test";
-        this.b="test"; 
-        
+       
         this.state = {
             running: true,
             score: 0,
+            heart: 1,
+            question: false
+
         };
 
-        this.heartCounter = 1;
         this.gameEngine = null;
         this.entities = this.setupWorld();
     }
@@ -43,7 +42,7 @@ export default class App extends Component {
           
         let floor1 = Matter.Bodies.rectangle(
             Constants.MAX_WIDTH / 2,
-            Constants.MAX_HEIGHT - 70,
+            Constants.MAX_HEIGHT * 0.9,
             Constants.MAX_WIDTH + 4,
             45,
             { isStatic: true, label:"floor1" }
@@ -51,7 +50,7 @@ export default class App extends Component {
 
         let floor2 = Matter.Bodies.rectangle(
             Constants.MAX_WIDTH + (Constants.MAX_WIDTH / 2),
-            Constants.MAX_HEIGHT - 70,
+            Constants.MAX_HEIGHT *0.9,
             Constants.MAX_WIDTH + 4,
             45,
             { isStatic: true, label:"floor2" }
@@ -60,18 +59,19 @@ export default class App extends Component {
         //add rectangle bodies to world    
         Matter.World.add(world, [squirrel, floor1, floor2]);
         Matter.Events.on(engine, 'collisionStart', (event) => {
-            let pairs = event.pairs;
-            pairs.forEach(function(pair){
-                if(pair.bodyA === "squirrel"){
-                    switch (pair.bodyB.label){
-                        case 'heart':
-                            this.gameEngine.dispatch({type: 'add-heart'});
-                            break;
-                        case 'hurdle':
-                            this.gameEngine.dispatch({type: 'game-over'});
-                    }
-                }
-            });
+           let pairs = event.pairs;
+           let gameEngine = this.gameEngine;
+           pairs.forEach(function(pair) {
+               switch(pair.bodyB.label){
+                   case 'hurdle':
+                       gameEngine.dispatch( {type: 'game-over'});
+                       break;
+                    case 'heart':
+                        gameEngine.dispatch( {type: 'add-heart'});
+                        break;
+               }
+           });
+           //this.gameEngine.dispatch( {type:'game-over'});
         });
 
         //define entitities: 
@@ -88,6 +88,7 @@ export default class App extends Component {
         }
     }
 
+
     onEvent = (e) => {
         if (e.type === "game-over"){
             //Alert.alert("Game Over");
@@ -96,7 +97,9 @@ export default class App extends Component {
             });
         }
         if (e.type === "add-heart"){
-            this.heartCounter += 1;
+            this.setState({
+                heart: this.state.heart + 1
+            });
         }
     }
 
@@ -113,12 +116,9 @@ export default class App extends Component {
                 <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
                 
                 <Text style={styles.heartCounter}> 
-                    <Image source={heart} style={styles.heartCounter_img} resizeMode="contain" /> : {this.heartCounter}
+                    <Image source={heart} style={styles.heartCounter_img} resizeMode="contain" /> : {this.state.heart}
                 </Text>
                 
-                <Text>{this.a}</Text>
-                <Text>{this.b}</Text>
-
                 <TouchableOpacity 
                   style={styles.fullScreenButton}>
                 </TouchableOpacity>
@@ -131,10 +131,15 @@ export default class App extends Component {
                     running={this.state.running}
                     onEvent={this.onEvent}
                     entities={this.entities}>
-                    <StatusBar hidden={true} />
+                    <StatusBar hidden={false} />
                 </GameEngine>
-                
 
+                {!this.state.running || this.state.heart === 0 &&
+                <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
+                    <View style={styles.fullScreen}>
+                        <Text style={styles.gameOverText}>Game Over</Text>
+                    </View>
+                </TouchableOpacity>}
             </View>
         );
     }

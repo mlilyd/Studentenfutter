@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, TouchableOpacity, Image } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, TouchableOpacity, Image, Modal } from 'react-native';
 import Game from './Game';
 
 
@@ -7,34 +7,56 @@ export default class App extends Component{
     constructor(props){
         super(props) 
 
-      this.state = {
-        showComponent: false,
-      };
-      this._onButtonClick = this._onButtonClick.bind(this);
-    }
-
-    _onButtonClick() {
+        this.state = {
+            sceneVisible: false,
+            scene: null
+          };
+        }
+      
+        mountScene = scene => {
+            this.setState({
+              sceneVisible: true,
+              scene: scene
+            });
+          };
+        
+        unMountScene = () => {
         this.setState({
-          showComponent: true,
+            sceneVisible: false,
+            scene: null
         });
-      }
-    
-  
+        };
+        
+            
     render(){
         return(
             <View style={styles.container}>
-                <View style={styles.buttonContainer}>
+
+            {/* <TouchableOpacity style={styles.button} onPress={this.mountScene(<Game />)}><Text>press</Text></TouchableOpacity> */}
+
+                <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
                 <Button
-                    onPress={() => {
-                        this._onButtonClick();
+                    onPress={ _ => {
+                        this.mountScene(<Game />);
                     }}
-                    title="Spielen"
-                    />
-                    {this.state.showComponent ?
-                    <Game /> :
-                    null }
+                    title="Spielenn"
+                />
                 </View>
+
+                <Modal
+                    animationType={"slide"}
+                    transparent={false}
+                    visible={this.state.sceneVisible}
+                    onRequestClose={_ => {}}
+                    >
+                    {this.state.scene}
+
+                    {/* <CloseButton onPress={this.unMountScene} /> */}
+                </Modal>
+
             </View>
+
+            
 
     //     <div>
     //     <Button onClick={this._onButtonClick} title="Press"/>

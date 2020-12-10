@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { StyleSheet, View, StatusBar, TouchableOpacity, Image,Text } from 'react-native';
 import Matter from "matter-js";
 import { GameEngine } from "react-native-game-engine";
+
 import Sprite from './src/components/Sprite';
 import Floor from './src/components/Floor';
 import Physics from './src/components/Physics';
 import Constants from './src/Constants';
+
 import bg from './src/assets/bg.png';
 import heart from './src/assets/heart.png';
 
@@ -13,19 +15,20 @@ export default class Game extends Component {
     constructor(props){
         super(props);
        
+        //game state values
         this.state = {
-            running: true,
-            score: 0,
-            heart: 1,
-            question: false
+            running: true,    //whether squirrel is running or not
+            score: 0,         //how many scores
+            heart: 1,         //how many hearts
+            question: false,  //whether currently answering question or not
+            gameover: false,  //whether game is over or not -> different from running because game should be able to be paused(?)
 
         };
-
         this.gameEngine = null;
         this.entities = this.setupWorld();
     }
 
-    //setup world defines various entities
+    //setup world, defines game entities, such as floor, squirrel
     setupWorld = () => {
         let engine = Matter.Engine.create({ enableSleeping: false });
         let world = engine.world;
@@ -34,10 +37,10 @@ export default class Game extends Component {
 
         //define bodies -> each entity/sprite consists of rectangles ...
         let squirrel = Matter.Bodies.rectangle( 
-          Constants.MAX_WIDTH / 4, 
-          Constants.MAX_HEIGHT * 0.9, 
-          Constants.SQUIRREL_WIDTH, 
-          Constants.SQUIRREL_HEIGHT,
+          Constants.MAX_WIDTH / 4,     // x value
+          Constants.MAX_HEIGHT * 0.9,  // y value
+          Constants.SQUIRREL_WIDTH,    // width 
+          Constants.SQUIRREL_HEIGHT,   // height
           {label:"squirrel"});
           
         let floor1 = Matter.Bodies.rectangle(
@@ -58,14 +61,19 @@ export default class Game extends Component {
 
         //add rectangle bodies to world    
         Matter.World.add(world, [squirrel, floor1, floor2]);
+
+        //collision detection -> sends event signals that will be handled in onEvent. 
+        //Different entity should trigger different events. 
         Matter.Events.on(engine, 'collisionStart', (event) => {
            let pairs = event.pairs;
            let gameEngine = this.gameEngine;
            pairs.forEach(function(pair) {
                switch(pair.bodyB.label){
+                   //if squirrel hits log, game over
                    case 'hurdle':
                        gameEngine.dispatch( {type: 'game-over'});
                        break;
+                    //if squirrel hits heart, increase game state heart
                     case 'heart':
                         gameEngine.dispatch( {type: 'add-heart'});
                         break;
@@ -84,25 +92,30 @@ export default class Game extends Component {
                          img_file: <name as defined in Sprite.js>,
                          renderer: Sprite}
             */
-            squirrel: { body: squirrel, img_file: 'squirrel', renderer: Sprite}
+            squirrel: { body: squirrel, img_file: "squirrel_1", renderer: Sprite}
         }
     }
 
-
+    // takes signal from collision detection and do differents things based on the event. 
+    //event management should be handled through game states.
     onEvent = (e) => {
-        if (e.type === "game-over"){
-            //Alert.alert("Game Over");
-            this.setState({
-                running: false,
-                heart: 1
-            });
-        } else if (e.type === 'add-heart'){
-            this.setState({
-                heart: this.state.heart+1
-            })
+        switch (e.type){
+            //if squirrel hits log, game over
+            case 'game-over':
+                this.setState({
+                    running: false,
+                });
+                break;
+            //if squirrel hits heart, add heart
+            case 'add-heart':
+                this.setState({
+                    heart: this.state.heart+1,
+                });
+                break;
         }
     }
 
+    //reset game state
     reset = () => {
         this.gameEngine.swap(this.setupWorld());
         this.setState({
@@ -145,7 +158,7 @@ export default class Game extends Component {
     }
 }
 
-//css styles
+//////////////////////CSS styles/////////////////////////////////
 const styles = StyleSheet.create({
     container: {
         flex: 1,

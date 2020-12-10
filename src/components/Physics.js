@@ -4,9 +4,10 @@ import Sprite from "./Sprite";
 
 let hurdleCount = 0;
 let heartCount = 0;
+let noHeart = true;
 let pose = 1;
 let tick = 0;
-
+let squirrel_init_y = 0;
 ///////////////////////////////// helping functions //////////////////////////////////////////////////////////////
 export const randomBetween = (min, max) => {
     return Math.floor(Math.random() * (max-min+1) + min);
@@ -16,9 +17,13 @@ export const resetHurdles = () => {
     hurdleCount = 0;
 }
 
-export const generateHurdles = (squirrel, world, entities) => {
+export const resetHeart = () => {
+    heartCount = 0;
+}
+
+export const generateHurdles = (world, entities) => {
     
-    let x = randomBetween(Constants.MAX_WIDTH+ 200, Constants.MAX_WIDTH+20);
+    let x = randomBetween(Constants.MAX_WIDTH, Constants.MAX_WIDTH+200);
     
     let hurdle = Matter.Bodies.rectangle(
         x, Constants.MAX_HEIGHT*0.87,
@@ -41,16 +46,18 @@ export const generateHearts = (squirrel, world, entities) =>{
     
     let heart = Matter.Bodies.rectangle(
                 x, 2/3*Constants.MAX_HEIGHT,
-                10,10,
+                20,20,
                 { isStatic: true , label:"heart"}
     );
     
-    heartCount += 1;
+    
     Matter.World.add(world, [heart]);
 
-    entities["heart" + (heartCount)] = {
+    entities["heart"] = {
         body: heart, img_file: 'heart', renderer: Sprite
     }
+
+    heartCount += 1;
 
 }
 
@@ -63,17 +70,15 @@ const Physics = (entities, { touches, time, dispatch }) => {
     touches.filter(t => t.type === "press").forEach(t => {
         if (world.gravity.y == 0){
             world.gravity.y = 1.05;
-            world.gravity.x = 0;
         }
-            Matter.Body.setVelocity(squirrel, {x: 0, y: -25});
-
+             Matter.Body.setVelocity(squirrel, {x: 0, y: -25});            
         });
         
     Matter.Engine.update(engine, time.delta);
 
     //generate random sprites     
     if (tick%183 == 0 && world.gravity.y != 0){
-        generateHurdles(squirrel, world, entities);  
+        generateHurdles(world, entities);  
     }
     if (hurdleCount == 2){
         resetHurdles();
@@ -84,7 +89,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
     
     tick += 1;
 
-    /*
+    
     //making sure squirrel stays on screen by pushing squirrel towards the center if it gets too close to the edge of the screen
     //not sure if necessary
     if (squirrel.position.x >= Constants.MAX_WIDTH){
@@ -94,17 +99,17 @@ const Physics = (entities, { touches, time, dispatch }) => {
     if (squirrel.position.x < 30){
         Matter.Body.setVelocity(squirrel, {x: 10, y:0});
     }
-    */
+
 
     /* has flickering issues! Maybe need to adjust sprite renderer
-    //squirrel animation: updates squirrel animation to a new frame every 3 ticks
+    ///squirrel animation: updates squirrel animation to a new frame every 3 ticks
     if (tick% 3 == 0 && world.gravity.y > 0) {
         pose += 1;
         if (pose%7 == 0)
             pose = 1;
         entities.squirrel.img_file = "squirrel_" + (pose);  
     }
-    */
+    //*/
     
     //moves floor to the left of the screen to simulate movement
     Object.keys(entities).forEach(key => {

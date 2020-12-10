@@ -5,7 +5,7 @@ import { GameEngine } from "react-native-game-engine";
 
 import Sprite from './src/components/Sprite';
 import Floor from './src/components/Floor';
-import Physics from './src/components/Physics';
+import Physics, {resetHeart} from './src/components/Physics';
 import Constants from './src/Constants';
 
 import bg from './src/assets/bg.png';
@@ -19,14 +19,14 @@ export default class Game extends Component {
         this.state = {
             running: true,    //whether squirrel is running or not
             score: 0,         //how many scores
-            heart: 1,         //how many hearts
+            heart: 3,         //how many hearts
             question: false,  //whether currently answering question or not
             gameover: false,  //whether game is over or not -> different from running because game should be able to be paused(?)
 
         };
         this.gameEngine = null;
         this.entities = this.setupWorld();
-    }
+        }
 
     //setup world, defines game entities, such as floor, squirrel
     setupWorld = () => {
@@ -34,7 +34,7 @@ export default class Game extends Component {
         let world = engine.world;
         //before the first user tap, gravity is 0
         world.gravity.y =0;
-
+        
         //define bodies -> each entity/sprite consists of rectangles ...
         let squirrel = Matter.Bodies.rectangle( 
           Constants.MAX_WIDTH / 4,     // x value
@@ -71,27 +71,22 @@ export default class Game extends Component {
                switch(pair.bodyB.label){
                    //if squirrel hits log, game over
                    case 'hurdle':
-                       gameEngine.dispatch( {type: 'game-over'});
+                       gameEngine.dispatch( {type: 'min-heart'});
                        break;
                     //if squirrel hits heart, increase game state heart
                     case 'heart':
                         gameEngine.dispatch( {type: 'add-heart'});
+                        heartMarker = pair.bodyB.count;
                         break;
                }
            });
-           //this.gameEngine.dispatch( {type:'game-over'});
         });
 
-        //define entitities: 
+        //add entitities to entities list
         return {
-            physics: { engine: engine, world: world },
+            physics: { engine: engine, world: world, running: this.state.running},
             floor1: { body: floor1, renderer: Floor },
             floor2: { body: floor2, renderer: Floor },
-            /* to add other sprites that are not randomly generated you need to add an entry like the squirrel e.g.: 
-               sprite: { body: <define MatterJS rectangle above>, 
-                         img_file: <name as defined in Sprite.js>,
-                         renderer: Sprite}
-            */
             squirrel: { body: squirrel, img_file: "squirrel_1", renderer: Sprite}
         }
     }
@@ -104,6 +99,7 @@ export default class Game extends Component {
             case 'game-over':
                 this.setState({
                     running: false,
+                    heart: 1,
                 });
                 break;
             //if squirrel hits heart, add heart
@@ -111,16 +107,33 @@ export default class Game extends Component {
                 this.setState({
                     heart: this.state.heart+1,
                 });
+                delete this.entities['heart'];
+                resetHeart();
                 break;
+            case 'min-heart':
+                this.setState({
+                    heart: this.state.heart-1,
+                    running: false
+                });
+                this.checkHeart();
+
         }
     }
 
     //reset game state
     reset = () => {
         this.gameEngine.swap(this.setupWorld());
+        resetHeart();
         this.setState({
             running: true
         });
+
+    }
+
+    checkHeart = () => {
+        if (this.state.heart <= 0){
+            this.gameEngine.dispatch( {type: 'game-over'});
+        }
     }
 
     render() {
@@ -147,7 +160,7 @@ export default class Game extends Component {
                     <StatusBar hidden={false} />
                 </GameEngine>
 
-                {!this.state.running &&
+                {this.state.gameover &&
                 <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
                     <View style={styles.fullScreen}>
                         <Text style={styles.gameOverText}>Game Over</Text>

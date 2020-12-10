@@ -20,7 +20,7 @@ export const generateHurdles = (squirrel, world, entities) => {
     
     let hurdle = Matter.Bodies.rectangle(
         x,
-        Constants.MAX_HEIGHT-100,
+        Constants.MAX_HEIGHT*0.87,
         60,50,
         { isStatic: true, label:"hurdle" }
     );
@@ -94,7 +94,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
         if (key.indexOf("floor") === 0 || key.indexOf("hurdle") === 0 || key.indexOf("heart") === 0){
             if (world.gravity.y != 0){
             if (entities[key].body.position.x <= -1 * Constants.MAX_WIDTH / 2){
-                Matter.Body.setPosition(entities[key].body, { x: Constants.MAX_WIDTH + (Constants.MAX_WIDTH*.4775), y: entities[key].body.position.y})
+                Matter.Body.setPosition(entities[key].body, { x: Constants.MAX_WIDTH + (Constants.MAX_WIDTH*.4505), y: entities[key].body.position.y})
             } else {
                 Matter.Body.translate(entities[key].body, {x: -10, y: 0});
                 

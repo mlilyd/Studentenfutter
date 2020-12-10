@@ -35,14 +35,14 @@ export default class Game extends Component {
         //define bodies -> each entity/sprite consists of rectangles ...
         let squirrel = Matter.Bodies.rectangle( 
           Constants.MAX_WIDTH / 4, 
-          Constants.MAX_HEIGHT - 90, 
+          Constants.MAX_HEIGHT * 0.9, 
           Constants.SQUIRREL_WIDTH, 
           Constants.SQUIRREL_HEIGHT,
           {label:"squirrel"});
           
         let floor1 = Matter.Bodies.rectangle(
             Constants.MAX_WIDTH / 2,
-            Constants.MAX_HEIGHT * 0.87,
+            Constants.MAX_HEIGHT * 0.9,
             Constants.MAX_WIDTH + 4,
             45,
             { isStatic: true, label:"floor1" }
@@ -50,7 +50,7 @@ export default class Game extends Component {
 
         let floor2 = Matter.Bodies.rectangle(
             Constants.MAX_WIDTH + (Constants.MAX_WIDTH / 2),
-            Constants.MAX_HEIGHT *0.87,
+            Constants.MAX_HEIGHT *0.9,
             Constants.MAX_WIDTH + 4,
             45,
             { isStatic: true, label:"floor2" }

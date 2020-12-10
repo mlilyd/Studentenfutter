@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, TouchableOpacity, Image, Modal } from 'react-native';
 import Game from './Game';
+import Cards from './Cards';
 
 
 export default class App extends Component{
@@ -43,7 +44,8 @@ export default class App extends Component{
                 />
                 <View style={styles.separator} />
                 <Button color='#35916b'
-                    onPress={ _ => {alert('Karten');
+                    onPress={ _ => {
+                        this.mountScene(<Cards />)
                     }}
                     title="Karteikarten"
                 />

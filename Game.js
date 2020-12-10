@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StatusBar, TouchableOpacity, Image,Text } from 'react-native';
+import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard } from 'react-native';
 import Matter from "matter-js";
 import { GameEngine } from "react-native-game-engine";
 
@@ -10,6 +10,7 @@ import Constants from './src/Constants';
 
 import bg from './src/assets/bg.png';
 import heart from './src/assets/heart.png';
+import nut from './src/assets/nut.png';
 
 export default class Game extends Component {
     constructor(props){
@@ -20,6 +21,7 @@ export default class Game extends Component {
             running: true,    //whether squirrel is running or not
             score: 0,         //how many scores
             heart: 1,         //how many hearts
+            nut: 0,             //how many nuts
             question: false,  //whether currently answering question or not
             gameover: false,  //whether game is over or not -> different from running because game should be able to be paused(?)
 
@@ -77,6 +79,10 @@ export default class Game extends Component {
                     case 'heart':
                         gameEngine.dispatch( {type: 'add-heart'});
                         break;
+                    //if squirrel hits trash, display question
+                    case 'trash':
+                        gameEngine.dispatch( {type: 'question'});
+                        break;
                }
            });
            //this.gameEngine.dispatch( {type:'game-over'});
@@ -104,12 +110,21 @@ export default class Game extends Component {
             case 'game-over':
                 this.setState({
                     running: false,
+                    gameover: true,
                 });
                 break;
             //if squirrel hits heart, add heart
             case 'add-heart':
                 this.setState({
                     heart: this.state.heart+1,
+                });
+                break;
+            //if squirrel hits trash, display question
+            case 'question':
+                this.setState({
+                    question: true,
+                    running: false,
+                    gameover: false,
                 });
                 break;
         }
@@ -131,6 +146,10 @@ export default class Game extends Component {
                 <Text style={styles.heartCounter}> 
                     <Image source={heart} style={styles.heartCounter_img} resizeMode="contain" /> : {this.state.heart}
                 </Text>
+
+                <Text style={styles.nutCounter}> 
+                    <Image source={nut} style={styles.nutCounter_img} resizeMode="contain" /> : {this.state.nut}
+                </Text>
                 
                 <TouchableOpacity 
                   style={styles.fullScreenButton}>
@@ -147,10 +166,17 @@ export default class Game extends Component {
                     <StatusBar hidden={false} />
                 </GameEngine>
 
-                {!this.state.running &&
+                {this.state.gameover && !this.state.running &&
                 <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
                     <View style={styles.fullScreen}>
                         <Text style={styles.gameOverText}>Game Over</Text>
+                    </View>
+                </TouchableOpacity>}
+
+                {this.state.question && !this.state.running &&
+                <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
+                    <View style={styles.fullScreen}>
+                        <Text style={styles.questionText}>Question</Text>
                     </View>
                 </TouchableOpacity>}
             </View>
@@ -191,6 +217,24 @@ const styles = StyleSheet.create({
         width:200,
         height:30
     },
+    nutCounter_img: {
+        position: 'relative',
+        top: 0,
+        bottom:0,
+        left:0,
+        right:0,
+        width:13,
+        height:13
+    },
+    nutCounter: {
+        position: 'absolute',
+        top: 40,
+        bottom:20,
+        left: 100,
+        right:200,
+        width:200,
+        height:30
+    },
     gameContainer: {
         position: 'absolute',
         top: 0,
@@ -208,6 +252,12 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontFamily: '04b_19'
     },
+    questionText: {
+        color: 'white',
+        fontSize: 48,
+        fontFamily: '04b_19'
+    },
+
     fullScreen: {
         position: 'absolute',
         top: 0,

@@ -1,4 +1,4 @@
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 // import { generateUID } from "./helper";
 
 const FLASHCARDS_STORAGE_KEY = "flashcards_data";

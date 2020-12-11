@@ -13,7 +13,7 @@ const AddDeck = ({ handleAddDecks, navigation }) => {
 
     const handleAddDeck = () => {
         handleAddDecks(title)
-        navigation.navigate('Home')
+        navigation.navigate('CardsHome')
     }
   
   return (

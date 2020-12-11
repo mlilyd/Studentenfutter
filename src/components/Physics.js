@@ -4,13 +4,17 @@ import Sprite from "./Sprite";
 
 let hurdleCount = 0;
 let heartCount = 0;
-let noHeart = true;
 let pose = 1;
 let tick = 0;
 let squirrel_init_y = 0;
+let running = false;
 ///////////////////////////////// helping functions //////////////////////////////////////////////////////////////
 export const randomBetween = (min, max) => {
     return Math.floor(Math.random() * (max-min+1) + min);
+}
+
+export const setRunning = (b) => {
+    running = b;
 }
 
 export const resetHurdles = () => {
@@ -68,8 +72,9 @@ const Physics = (entities, { touches, time, dispatch }) => {
     let squirrel = entities.squirrel.body;
 
     touches.filter(t => t.type === "press").forEach(t => {
-        if (world.gravity.y == 0){
+        if (!running){
             world.gravity.y = 1.05;
+            running = true;
         }
              Matter.Body.setVelocity(squirrel, {x: 0, y: -25});            
         });
@@ -110,7 +115,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
         entities.squirrel.img_file = "squirrel_" + (pose);  
     }
     //*/
-    
+    if (running){
     //moves floor to the left of the screen to simulate movement
     Object.keys(entities).forEach(key => {
         // key.indexOf(<entity key>) defines which game entities should move to the left
@@ -127,7 +132,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
             }
         
         }
-    })
+    })}
 
     return entities;
 };

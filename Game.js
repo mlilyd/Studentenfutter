@@ -5,7 +5,7 @@ import { GameEngine } from "react-native-game-engine";
 
 import Sprite from './src/components/Sprite';
 import Floor from './src/components/Floor';
-import Physics, {resetHeart} from './src/components/Physics';
+import Physics, {resetHeart, setRunning} from './src/components/Physics';
 import Constants from './src/Constants';
 
 import bg from './src/assets/bg.png';
@@ -38,7 +38,7 @@ export default class Game extends Component {
         //define bodies -> each entity/sprite consists of rectangles ...
         let squirrel = Matter.Bodies.rectangle( 
           Constants.MAX_WIDTH / 4,     // x value
-          Constants.MAX_HEIGHT * 0.9,  // y value
+          Constants.MAX_HEIGHT * 0.84,  // y value
           Constants.SQUIRREL_WIDTH,    // width 
           Constants.SQUIRREL_HEIGHT,   // height
           {label:"squirrel"});
@@ -71,12 +71,11 @@ export default class Game extends Component {
                switch(pair.bodyB.label){
                    //if squirrel hits log, game over
                    case 'hurdle':
-                       gameEngine.dispatch( {type: 'min-heart'});
+                       gameEngine.dispatch( {type: 'game-over'});
                        break;
                     //if squirrel hits heart, increase game state heart
                     case 'heart':
                         gameEngine.dispatch( {type: 'add-heart'});
-                        heartMarker = pair.bodyB.count;
                         break;
                }
            });
@@ -98,8 +97,7 @@ export default class Game extends Component {
             //if squirrel hits log, game over
             case 'game-over':
                 this.setState({
-                    running: false,
-                    heart: 1,
+                    gameover: true
                 });
                 break;
             //if squirrel hits heart, add heart
@@ -110,23 +108,29 @@ export default class Game extends Component {
                 delete this.entities['heart'];
                 resetHeart();
                 break;
+            //in cases which squirrel loses a heart, stop running until the next user tap (not game running, but physics running!)
             case 'min-heart':
                 this.setState({
-                    heart: this.state.heart-1,
-                    running: false
+                    heart: this.state.heart-1
                 });
                 this.checkHeart();
+                setRunning(false);
 
         }
     }
 
-    //reset game state
+    //reset game states
     reset = () => {
         this.gameEngine.swap(this.setupWorld());
         resetHeart();
         this.setState({
-            running: true
+            running: true,    //whether squirrel is running or not
+            score: 0,         //how many scores
+            heart: 3,         //how many hearts
+            question: false,  //whether currently answering question or not
+            gameover: false,  //whether game is over or not -> different from running because game should be able to be paused(?)
         });
+        setRunning(false);
 
     }
 

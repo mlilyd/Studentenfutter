@@ -5,7 +5,7 @@ import { GameEngine } from "react-native-game-engine";
 
 import Sprite from './src/components/Sprite';
 import Floor from './src/components/Floor';
-import Physics, {resetHeart, setRunning} from './src/components/Physics';
+import Physics, {resetHeart, pause_game} from './src/components/Physics';
 import Constants from './src/Constants';
 
 import bg from './src/assets/bg.png';
@@ -18,7 +18,7 @@ export default class Game extends Component {
        
         //game state values
         this.state = {
-            running: true,    //whether game is running or not. pausing game is handled by variable pause from physicsjs
+            running: true,    //whether game is running or not. To pause game, use pause_game from Physicsjs
             score: 0,         //how many scores
             heart: 1,         //how many hearts
             nut: 0,           //how many nuts
@@ -101,7 +101,7 @@ export default class Game extends Component {
             //if squirrel hits log, game over
             case 'game-over':
                 this.setState({
-                    gameover: true
+                    running: false
                 });
                 break;
             //if squirrel hits heart, add heart
@@ -109,6 +109,7 @@ export default class Game extends Component {
                 this.setState({
                     heart: this.state.heart+1,
                 });
+                //remove heart from screen once hit
                 delete this.entities['heart'];
                 resetHeart();
                 break;
@@ -116,8 +117,9 @@ export default class Game extends Component {
             case 'question':
                 this.setState({
                     question: true,
-                    gameover: false,
+                    running: true
                 });
+                pause_game(true);
                 break;
             //in cases which squirrel loses a heart, stop running until the next user tap (not game running, but physics running!)
             case 'min-heart':
@@ -125,7 +127,7 @@ export default class Game extends Component {
                     heart: this.state.heart-1
                 });
                 this.checkHeart();
-                setRunning(false);
+                pause_game(true);
 
         }
     }
@@ -141,7 +143,7 @@ export default class Game extends Component {
             nut: 0,           //how many nuts
             question: false,  //whether currently answering question or not
         });
-        setRunning(false);
+        pause_game(true);
 
     }
 

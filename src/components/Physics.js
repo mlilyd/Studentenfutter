@@ -7,7 +7,7 @@ let heartCount = 0;
 let trashCount = 0;
 
 let tick = 0;
-let paused = false;
+let paused = true;
 
 let pose = 1;
 let squirrel_init_y = 0;
@@ -86,6 +86,10 @@ export const generateTrash = (squirrel, world, entities) => {
         body: trash, img_file: 'trash', renderer: Sprite
     }
 
+    delete entities['heart'];
+    delete entities['hurdle1'];
+    delete entities['hurdle2'];
+
 }
 
 ////////////////////////////////////// define physics  /////////////////////////////////////////////////////////
@@ -99,6 +103,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
             world.gravity.y = 1.05;
             paused = false;
         }
+            //Matter.Body.translate(squirrel, {x:0, y: -100});
              Matter.Body.setVelocity(squirrel, {x: 0, y: -25});            
         });
         

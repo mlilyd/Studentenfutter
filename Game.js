@@ -233,7 +233,11 @@ export default class Game extends Component {
                     <View style={styles.fullScreen}>
                         <Text style={styles.questionText}>Question</Text>
                         <Text style={styles.questionSubText}>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod? </Text>
+<<<<<<< HEAD
                         <TextInput style={styles.textInput} placeholder="Your answer" value={this.state.answer}/>
+=======
+                        <TextInput style={styles.textInput} placeholder="Your answer"/>
+>>>>>>> e929287b8dcd5802cf0938c76b10e45da38df347
                         <Text style={styles.submitButton} onPress={this.checkAnswer}>Submit</Text>
                     </View>}
             </View>

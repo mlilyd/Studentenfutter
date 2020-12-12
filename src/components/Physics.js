@@ -34,6 +34,18 @@ export const setQuestion = (b) => {
     question = b;
 }
 
+<<<<<<< HEAD
+=======
+export const resetHurdles = (entities) => {
+    hurdleCount = 0;
+
+    //Matter.World.remove(entities.world, entities.hurdle1.body);
+    //Matter.World.remove(entities.world, entities.hurdle2.body);
+    delete entities['hurdle1'];
+    delete entities['hurdle2'];
+}
+
+>>>>>>> e929287b8dcd5802cf0938c76b10e45da38df347
 export const resetHeart = () => {
     heartCount = 0;
 }
@@ -117,6 +129,7 @@ export const generateHearts = (squirrel, world, entities) =>{
 
 }
 
+<<<<<<< HEAD
 export const generateTrash = (world, entities) => {
 
     let hurdle_x = Constants.MAX_WIDTH; 
@@ -140,6 +153,14 @@ export const generateTrash = (world, entities) => {
         }
 
     let x = randomBetween(hurdle_x+200, hurdle_x+500);
+=======
+export const generateTrash = (squirrel, world, entities) => {
+    delete entities['heart'];
+    delete entities['hurdle1'];
+    delete entities['hurdle2'];
+
+    let x = randomBetween(Constants.MAX_WIDTH, Constants.MAX_WIDTH+200);
+>>>>>>> e929287b8dcd5802cf0938c76b10e45da38df347
     
     let trash = Matter.Bodies.rectangle(
         x, Constants.MAX_HEIGHT*0.849,
@@ -154,6 +175,10 @@ export const generateTrash = (world, entities) => {
         body: trash, img_file: 'question', renderer: Sprite
     }
 
+<<<<<<< HEAD
+=======
+    
+>>>>>>> e929287b8dcd5802cf0938c76b10e45da38df347
 
 }
 
@@ -177,8 +202,16 @@ const Physics = (entities, { touches, time, dispatch }) => {
     if (tick%500 == 0 && !paused || tick == 0){
         generateHurdles(world, entities);  
     }
+<<<<<<< HEAD
     if(tick%200 == 0 && !paused && heartCount<5){
         //generateHearts(squirrel, world, entities);
+=======
+    if (hurdleCount == 2){
+        resetHurdles(entities);
+    }
+    if(tick%400 == 0 && !paused && heartCount<5){
+        generateHearts(squirrel, world, entities);
+>>>>>>> e929287b8dcd5802cf0938c76b10e45da38df347
     }
     if(tick%75 == 0 && !paused && trashCount<6){
         generateTrash(world, entities);
@@ -190,6 +223,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
         case '':
             break;
         case 'heart':
+<<<<<<< HEAD
             if (typeof entities.heart === 'object' && entities.heart !== null)
             {
                 let trash = entities.heart.body;
@@ -203,6 +237,13 @@ const Physics = (entities, { touches, time, dispatch }) => {
                 let trash = entities.trash.body;
                 Matter.World.remove(world, trash);
             }
+=======
+            //Matter.World.remove(entities.world, entities.heart.body);
+            delete entities.heart;
+            break;
+        case 'trash':
+            //Matter.World.remove(entities.world, entities.trash.body);
+>>>>>>> e929287b8dcd5802cf0938c76b10e45da38df347
             delete entities.trash;
             break;
     }

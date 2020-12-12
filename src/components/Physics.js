@@ -153,16 +153,16 @@ const Physics = (entities, { touches, time, dispatch }) => {
     Matter.Engine.update(engine, time.delta);
 
     //generate random sprites     
-    if (tick%500 == 0 && !paused || tick == 0){
+    if (tick%183 == 0 && !paused || tick == 0){
         generateHurdles(world, entities);  
     }
     if (hurdleCount == 3){
         resetHurdles(entities, world);
     }
     if(tick%200 == 0 && !paused && heartCount<5){
-        //generateHearts(squirrel, world, entities);
+        generateHearts(squirrel, world, entities);
     }
-    if(tick%75 == 0 && !paused && trashCount<6){
+    if(tick%300 == 0 && !paused && trashCount<6){
         generateTrash(world, entities);
     }
     
@@ -174,7 +174,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
         case 'heart':
             if (typeof entities.heart === 'object' && entities.heart !== null)
             {
-                let trash = entities.heart.body;
+                let heart = entities.heart.body;
                 Matter.World.remove(world, heart);
             }
             delete entities.heart;

@@ -9,6 +9,8 @@ let trashCount = 0;
 let tick = 0;
 let paused = true;
 let question = false;
+let to_delete = '';
+let correct_answer = false;
 
 let pose = 1;
 let squirrel_init_y = 0;
@@ -20,6 +22,13 @@ export const randomBetween = (min, max) => {
 
 export const pause_game = (b) => {
     paused = b;
+}
+
+export const isCorrect = (b) => {
+    correct_answer = b;
+}
+export const delete_entity = (b) => {
+    to_delete = b;
 }
 
 export const setQuestion = (b) => {
@@ -55,7 +64,7 @@ export const generateHurdles = (world, entities) => {
 
 export const generateHearts = (squirrel, world, entities) =>{
     
-    let x = randomBetween(squirrel.position.x+Constants.SQUIRREL_WIDTH+ 5, Constants.MAX_WIDTH);
+    let x = randomBetween(Constants.MAX_WIDTH, Constants.MAX_WIDTH+200);
     
     let heart = Matter.Bodies.rectangle(
                 x, 2/3*Constants.MAX_HEIGHT,
@@ -76,11 +85,11 @@ export const generateHearts = (squirrel, world, entities) =>{
 
 export const generateTrash = (squirrel, world, entities) => {
     
-    let x = randomBetween(squirrel.position.x+Constants.SQUIRREL_WIDTH+ 5, Constants.MAX_WIDTH);
+    let x = randomBetween(Constants.MAX_WIDTH, Constants.MAX_WIDTH+200);
     
     let trash = Matter.Bodies.rectangle(
         x, Constants.MAX_HEIGHT*0.849,
-        25,44,
+        19,25,
         { isStatic: true, label:"trash" }
     );
     
@@ -88,7 +97,7 @@ export const generateTrash = (squirrel, world, entities) => {
     Matter.World.add(world, [trash]);
     
     entities["trash"] = {
-        body: trash, img_file: 'trash', renderer: Sprite
+        body: trash, img_file: 'question', renderer: Sprite
     }
 
     delete entities['heart'];
@@ -129,7 +138,23 @@ const Physics = (entities, { touches, time, dispatch }) => {
     
     tick += 1;
 
-    
+    switch (to_delete){
+        case '':
+            break;
+        case 'heart':
+            delete entities.heart;
+            break;
+        case 'trash':
+            delete entities.trash;
+            break;
+    }
+
+    if (correct_answer){
+        if (typeof entities.trash === 'object' && entities.trash !== null){
+        entities.trash.img_file = 'nut';
+        entities.trash.body.label = 'nut';
+        correct_answer = false;
+    }}
     //making sure squirrel stays on screen by pushing squirrel towards the center if it gets too close to the edge of the screen
     //not sure if necessary
     if (squirrel.position.x >= Constants.MAX_WIDTH){

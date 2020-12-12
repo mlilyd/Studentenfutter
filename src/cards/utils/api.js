@@ -3,8 +3,6 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 const FLASHCARDS_STORAGE_KEY = "flashcards_data";
 
-// implement php and MySQL her
-
 function initialData() {
   return {
     "632mgp7hm68vzvg2amz1hq": {
@@ -187,4 +185,23 @@ export async function removeDeck(deckId) {
     return data;
   }
   return {};
+}
+
+export async function removeCard(deckId, index) {
+  const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
+  if (results) {
+    const data = JSON.parse(results);
+    
+    for (i=0; i<data[deckId]["questions"].length; i++) {
+      if (i == index) {
+        data[deckId]["questions"].splice(i, 1);
+      }
+    };
+
+    await AsyncStorage.setItem(FLASHCARDS_STORAGE_KEY, JSON.stringify(data));
+
+    return data;
+  }
+  return {};
+
 }

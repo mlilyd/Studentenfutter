@@ -2,7 +2,8 @@ import {
   getDecks,
   saveDeckTitle,
   saveCardToDeck,
-  removeDeck
+  removeDeck,
+  removeCard
 } from "../../utils/api";
 
 export const GET_ALL_DECKS = "GET_ALL_DECKS";
@@ -12,6 +13,7 @@ export const DELETE_DECK = "DELETE_DECK";
 export const RESET_NEW_DECK_ID = "RESET_NEW_DECK_ID";
 export const SELECT_DECK = "SELECT_DECK";
 export const SELECT_QUESTION = "SELECT_QUESTION";
+export const DELETE_CARD = "DELETE_CARD";
 
 export function selectQuestion(id) {
   return {
@@ -52,6 +54,14 @@ export function handleDeleteDeck(deckId) {
   };
 }
 
+export function handleDeleteCard(deckId, card) {
+  return dispatch => {
+    return removeCard(deckId, card).then(() => {
+      dispatch(deleteCard(deckId, card));
+    });
+  };
+}
+
 export function getAllDecks(decks) {
   return {
     type: GET_ALL_DECKS,
@@ -79,6 +89,14 @@ export function deleteDeck(deckId) {
     type: DELETE_DECK,
     deckId
   };
+}
+
+export function deleteCard(deckId, card) {
+  return {
+    type: DELETE_CARD,
+    deckId,
+    card
+  }
 }
 
 export function resetNewDeckId() {

@@ -5,7 +5,7 @@ import { GameEngine } from "react-native-game-engine";
 
 import Sprite from './src/components/Sprite';
 import Floor from './src/components/Floor';
-import Physics, {resetHeart, pause_game, delete_entity, isCorrect} from './src/components/Physics';
+import Physics, {resetHeart, pause_game, delete_entity, isCorrect, resetTrash} from './src/components/Physics';
 import Constants from './src/Constants';
 
 import bg from './src/assets/bg.png';
@@ -233,11 +233,7 @@ export default class Game extends Component {
                     <View style={styles.fullScreen}>
                         <Text style={styles.questionText}>Question</Text>
                         <Text style={styles.questionSubText}>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod? </Text>
-<<<<<<< HEAD
                         <TextInput style={styles.textInput} placeholder="Your answer" value={this.state.answer}/>
-=======
-                        <TextInput style={styles.textInput} placeholder="Your answer"/>
->>>>>>> e929287b8dcd5802cf0938c76b10e45da38df347
                         <Text style={styles.submitButton} onPress={this.checkAnswer}>Submit</Text>
                     </View>}
             </View>

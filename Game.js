@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard, TextInput  } from 'react-native';
+import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard, TextInput, Button  } from 'react-native';
 import Matter from "matter-js";
 import { GameEngine } from "react-native-game-engine";
 
@@ -18,10 +18,11 @@ export default class Game extends Component {
        
         //game state values
         this.state = {
-            running: true,    //whether game is running or not. To pause game, use pause_game from Physicsjs
-            heart: 1,         //how many hearts
-            nut: 0,           //how many nuts
-            question: false,  //whether currently answering question or not
+        running: true,            //whether game is running or not. To pause game, use pause_game from Physicsjs
+            heart: 1,             //how many hearts
+            nut: 0,               //how many nuts
+            question: false,      //whether currently answering question or not
+            answer: 'your answer' //answer from textinput
         };
         this.gameEngine = null;
         this.entities = this.setupWorld();
@@ -183,7 +184,7 @@ export default class Game extends Component {
 
     //checks that answer is correct, called when submit button on question view is tapped.
     checkAnswer = () => {
-        let correct = true;
+        let correct = (this.state.answer == 'your answer');
         if (correct){
             this.gameEngine.dispatch( {type: 'right-answer'});
         } else {
@@ -220,21 +221,21 @@ export default class Game extends Component {
                 </GameEngine>
 
                 {!this.state.running &&
-                <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
                     <View style={styles.fullScreen}>
                         <Text style={styles.gameOverText}>Game Over</Text>
-                    </View>
-                </TouchableOpacity>}
+
+                        <Button title="Home" />
+                        <Button title="Retry?" onPress={this.reset}/>
+                        
+                    </View>}
 
                 {this.state.question &&
-                <TouchableOpacity style={styles.fullScreenButton} onPress={this.checkAnswer}>
                     <View style={styles.fullScreen}>
                         <Text style={styles.questionText}>Question</Text>
                         <Text style={styles.questionSubText}>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod? </Text>
-                        <TextInput style={styles.textInput} placeholder="Your answer"/>
-                        <Text style={styles.submitButton}>Submit</Text>
-                    </View>
-                </TouchableOpacity>}
+                        <TextInput style={styles.textInput} placeholder="Your answer" value={this.state.answer}/>
+                        <Text style={styles.submitButton} onPress={this.checkAnswer}>Submit</Text>
+                    </View>}
             </View>
         );
     }

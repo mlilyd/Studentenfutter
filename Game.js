@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard, TextInput  } from 'react-native';
+import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard, TextInput, Button  } from 'react-native';
 import Matter from "matter-js";
 import { GameEngine } from "react-native-game-engine";
 
@@ -220,21 +220,21 @@ export default class Game extends Component {
                 </GameEngine>
 
                 {!this.state.running &&
-                <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
                     <View style={styles.fullScreen}>
                         <Text style={styles.gameOverText}>Game Over</Text>
-                    </View>
-                </TouchableOpacity>}
+
+                        <Button title="Home" />
+                        <Button title="Retry?" onPress={this.reset}/>
+                        
+                    </View>}
 
                 {this.state.question &&
-                <TouchableOpacity style={styles.fullScreenButton} onPress={this.checkAnswer}>
                     <View style={styles.fullScreen}>
                         <Text style={styles.questionText}>Question</Text>
                         <Text style={styles.questionSubText}>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod? </Text>
                         <TextInput style={styles.textInput} placeholder="Your answer"/>
-                        <Text style={styles.submitButton}>Submit</Text>
-                    </View>
-                </TouchableOpacity>}
+                        <Text style={styles.submitButton} onPress={this.checkAnswer}>Submit</Text>
+                    </View>}
             </View>
         );
     }

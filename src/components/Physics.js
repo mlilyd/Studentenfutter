@@ -35,8 +35,13 @@ export const setQuestion = (b) => {
     question = b;
 }
 
-export const resetHurdles = () => {
+export const resetHurdles = (entities) => {
     hurdleCount = 0;
+
+    //Matter.World.remove(entities.world, entities.hurdle1.body);
+    //Matter.World.remove(entities.world, entities.hurdle2.body);
+    delete entities['hurdle1'];
+    delete entities['hurdle2'];
 }
 
 export const resetHeart = () => {
@@ -84,7 +89,10 @@ export const generateHearts = (squirrel, world, entities) =>{
 }
 
 export const generateTrash = (squirrel, world, entities) => {
-    
+    delete entities['heart'];
+    delete entities['hurdle1'];
+    delete entities['hurdle2'];
+
     let x = randomBetween(Constants.MAX_WIDTH, Constants.MAX_WIDTH+200);
     
     let trash = Matter.Bodies.rectangle(
@@ -100,9 +108,7 @@ export const generateTrash = (squirrel, world, entities) => {
         body: trash, img_file: 'question', renderer: Sprite
     }
 
-    delete entities['heart'];
-    delete entities['hurdle1'];
-    delete entities['hurdle2'];
+    
 
 }
 
@@ -127,7 +133,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
         generateHurdles(world, entities);  
     }
     if (hurdleCount == 2){
-        resetHurdles();
+        resetHurdles(entities);
     }
     if(tick%400 == 0 && !paused && heartCount<5){
         generateHearts(squirrel, world, entities);
@@ -142,9 +148,11 @@ const Physics = (entities, { touches, time, dispatch }) => {
         case '':
             break;
         case 'heart':
+            //Matter.World.remove(entities.world, entities.heart.body);
             delete entities.heart;
             break;
         case 'trash':
+            //Matter.World.remove(entities.world, entities.trash.body);
             delete entities.trash;
             break;
     }

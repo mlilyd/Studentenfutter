@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard } from 'react-native';
+import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard, TextInput  } from 'react-native';
 import Matter from "matter-js";
 import { GameEngine } from "react-native-game-engine";
 
@@ -218,6 +218,9 @@ export default class Game extends Component {
                 <TouchableOpacity style={styles.fullScreenButton} onPress={this.checkAnswer}>
                     <View style={styles.fullScreen}>
                         <Text style={styles.questionText}>Question</Text>
+                        <Text style={styles.questionSubText}>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod? </Text>
+                        <TextInput style={styles.textInput} placeholder="Your answer"/>
+                        <Text style={styles.submitButton}>Submit</Text>
                     </View>
                 </TouchableOpacity>}
             </View>
@@ -231,6 +234,22 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+    textInput: {
+        position:'absolute',
+        borderColor: '#CCCCCC',
+        backgroundColor:'#CCCCCC',
+        borderTopWidth: 1,
+        textAlign:'center',
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        height: 200,
+        width: 350,
+        fontSize: 25,
+        bottom:'15%',
+        paddingLeft: 20,
+        paddingRight: 20
+      },
     backgroundImage: {
         position: 'absolute',
         top: 0,
@@ -294,9 +313,21 @@ const styles = StyleSheet.create({
         fontFamily: '04b_19'
     },
     questionText: {
+        position:'absolute',
+        top:'5%',
         color: 'white',
         fontSize: 48,
         fontFamily: '04b_19'
+    },
+    questionSubText: {
+        position:'absolute',
+        color: 'white',
+        fontSize: 24,
+        fontFamily: '04b_19',
+        textAlign:'left',
+        top:'25%',
+        paddingLeft: 20,
+        paddingRight: 20
     },
 
     fullScreen: {
@@ -328,5 +359,14 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         flex: 1
-    }
+    },
+    submitButton: {
+        position:'absolute',
+        borderWidth: 1,
+        borderColor: '#F5F5F5',
+        backgroundColor: '#F5F5F5',
+        bottom: 10,
+        padding: 15,
+        margin: 5
+      },
 });

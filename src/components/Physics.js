@@ -8,6 +8,7 @@ let trashCount = 0;
 
 let tick = 0;
 let paused = true;
+let question = false;
 
 let pose = 1;
 let squirrel_init_y = 0;
@@ -19,6 +20,10 @@ export const randomBetween = (min, max) => {
 
 export const pause_game = (b) => {
     paused = b;
+}
+
+export const setQuestion = (b) => {
+    question = b;
 }
 
 export const resetHurdles = () => {
@@ -82,7 +87,7 @@ export const generateTrash = (squirrel, world, entities) => {
     trashCount += 1;
     Matter.World.add(world, [trash]);
     
-    entities["trash" + (trashCount)] = {
+    entities["trash"] = {
         body: trash, img_file: 'trash', renderer: Sprite
     }
 
@@ -99,27 +104,26 @@ const Physics = (entities, { touches, time, dispatch }) => {
     let squirrel = entities.squirrel.body;
 
     touches.filter(t => t.type === "press").forEach(t => {
-        if (paused){
+        if (paused && !question){
             world.gravity.y = 1.05;
             paused = false;
         }
-            //Matter.Body.translate(squirrel, {x:0, y: -100});
              Matter.Body.setVelocity(squirrel, {x: 0, y: -25});            
         });
         
     Matter.Engine.update(engine, time.delta);
 
     //generate random sprites     
-    if (tick%183 == 0 && world.gravity.y != 0){
+    if (tick%183 == 0 && !paused){
         generateHurdles(world, entities);  
     }
     if (hurdleCount == 2){
         resetHurdles();
     }
-    if(tick%400 == 0 && world.gravity.y != 0 && heartCount<5){
+    if(tick%400 == 0 && !paused && heartCount<5){
         generateHearts(squirrel, world, entities);
     }
-    if(tick%500 == 0 && world.gravity.y != 0 && trashCount<6){
+    if(tick%500 == 0 && !paused && trashCount<6){
         generateTrash(squirrel, world, entities);
     }
     

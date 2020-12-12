@@ -19,7 +19,6 @@ export default class Game extends Component {
         //game state values
         this.state = {
             running: true,    //whether game is running or not. To pause game, use pause_game from Physicsjs
-            score: 0,         //how many scores
             heart: 1,         //how many hearts
             nut: 0,           //how many nuts
             question: false,  //whether currently answering question or not
@@ -128,6 +127,21 @@ export default class Game extends Component {
                 });
                 this.checkHeart();
                 pause_game(true);
+            
+            case 'wrong-answer':
+                this.setState({
+                    heart: this.state.heart-1,
+                    question: false
+                });
+                this.checkHeart();
+                pause_game(false);
+            
+            case 'right-answer':
+                this.setState({
+                    nut: this.state.nut+1,
+                    question: false
+                });
+                pause_game(false);
 
         }
     }
@@ -147,9 +161,21 @@ export default class Game extends Component {
 
     }
 
+    //checks that heart is at least 1, otherwise game over
     checkHeart = () => {
-        if (this.state.heart <= 0){
+        if (this.state.heart < 1){
             this.gameEngine.dispatch( {type: 'game-over'});
+        }
+    }
+
+    //checks that answer is correct, called when submit button on question view is tapped.
+    checkAnswer = () => {
+        delete this.entities.trash;
+        let correct = true;
+        if (correct){
+            this.gameEngine.dispatch( {type: 'right-answer'});
+        } else {
+            this.gameEngine.dispatch( {type: 'wrong-answer'});
         }
     }
 
@@ -189,7 +215,7 @@ export default class Game extends Component {
                 </TouchableOpacity>}
 
                 {this.state.question &&
-                <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
+                <TouchableOpacity style={styles.fullScreenButton} onPress={this.checkAnswer}>
                     <View style={styles.fullScreen}>
                         <Text style={styles.questionText}>Question</Text>
                     </View>

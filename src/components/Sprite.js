@@ -26,6 +26,7 @@ let Images = {
     squirrel_5: require("../assets/squirrel_5.png"),
     squirrel_6: require("../assets/squirrel_6.png"),
     squirrel_7: require("../assets/squirrel_7.png"),
+    question: require("../assets/question.png"),
     heart: require("../assets/heart.png"),
     nut: require("../assets/nut.png"),
     trash: require("../assets/trash.png")

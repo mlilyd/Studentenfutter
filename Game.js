@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard, TextInput  } from 'react-native';
+import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard, TextInput, Button  } from 'react-native';
 import Matter from "matter-js";
 import { GameEngine } from "react-native-game-engine";
 
 import Sprite from './src/components/Sprite';
 import Floor from './src/components/Floor';
-import Physics, {resetHeart, pause_game} from './src/components/Physics';
+import Physics, {resetHeart, pause_game, delete_entity, isCorrect, resetTrash} from './src/components/Physics';
 import Constants from './src/Constants';
 
 import bg from './src/assets/bg.png';
@@ -18,11 +18,11 @@ export default class Game extends Component {
        
         //game state values
         this.state = {
-            running: true,    //whether game is running or not. To pause game, use pause_game from Physicsjs
-            score: 0,         //how many scores
-            heart: 1,         //how many hearts
-            nut: 0,           //how many nuts
-            question: false,  //whether currently answering question or not
+        running: true,            //whether game is running or not. To pause game, use pause_game from Physicsjs
+            heart: 1,             //how many hearts
+            nut: 0,               //how many nuts
+            question: false,      //whether currently answering question or not
+            answer: 'your answer' //answer from textinput
         };
         this.gameEngine = null;
         this.entities = this.setupWorld();
@@ -71,15 +71,18 @@ export default class Game extends Component {
                switch(pair.bodyB.label){
                    //if squirrel hits log, game over
                    case 'hurdle':
-                       gameEngine.dispatch( {type: 'game-over'});
+                       gameEngine.dispatch( {type: 'game-over'} );
                        break;
                     //if squirrel hits heart, increase game state heart
                     case 'heart':
-                        gameEngine.dispatch( {type: 'add-heart'});
+                        gameEngine.dispatch( {type: 'add-heart'} );
                         break;
                     //if squirrel hits trash, display question
                     case 'trash':
-                        gameEngine.dispatch( {type: 'question'});
+                        gameEngine.dispatch( {type: 'question'} );
+                        break;
+                    case 'nut':
+                        gameEngine.dispatch( {type: 'add-nut'} );
                         break;
                }
            });
@@ -95,7 +98,7 @@ export default class Game extends Component {
     }
 
     // takes signal from collision detection and do differents things based on the event. 
-    //event management should be handled through game states.
+    // event management should be handled through game states.
     onEvent = (e) => {
         switch (e.type){
             //if squirrel hits log, game over
@@ -110,7 +113,7 @@ export default class Game extends Component {
                     heart: this.state.heart+1,
                 });
                 //remove heart from screen once hit
-                delete this.entities['heart'];
+                delete_entity('heart');
                 resetHeart();
                 break;
             //if squirrel hits trash, display question
@@ -128,7 +131,32 @@ export default class Game extends Component {
                 });
                 this.checkHeart();
                 pause_game(true);
-
+                break;
+            //if player gives wrong answer, set question to false, decrease heart state, and check heart. Trash is deleted, and game is unpaused
+            case 'wrong-answer':
+                delete_entity('trash');
+                this.setState({
+                    heart: this.state.heart-1,
+                    question: false
+                });
+                this.checkHeart();
+                pause_game(false);
+                break;
+            //if player gives right answer trash turns into nut, set question to false, and unpause game.
+            case 'right-answer':
+                isCorrect(true);
+                this.setState({
+                    question: false
+                });
+                pause_game(false);
+                break;
+            //if squirrel hit nut increase nut state
+            case 'add-nut':
+                delete_entity('trash');
+                this.setState({
+                    nut: this.state.nut+1
+                });
+                break;
         }
     }
 
@@ -147,9 +175,20 @@ export default class Game extends Component {
 
     }
 
+    //checks that heart is at least 1, otherwise game over
     checkHeart = () => {
-        if (this.state.heart <= 0){
+        if (this.state.heart < 1){
             this.gameEngine.dispatch( {type: 'game-over'});
+        }
+    }
+
+    //checks that answer is correct, called when submit button on question view is tapped.
+    checkAnswer = () => {
+        let correct = (this.state.answer == 'your answer');
+        if (correct){
+            this.gameEngine.dispatch( {type: 'right-answer'});
+        } else {
+            this.gameEngine.dispatch( {type: 'wrong-answer'});
         }
     }
 
@@ -182,21 +221,21 @@ export default class Game extends Component {
                 </GameEngine>
 
                 {!this.state.running &&
-                <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
                     <View style={styles.fullScreen}>
                         <Text style={styles.gameOverText}>Game Over</Text>
-                    </View>
-                </TouchableOpacity>}
+
+                        <Button title="Home" />
+                        <Button title="Retry?" onPress={this.reset}/>
+                        
+                    </View>}
 
                 {this.state.question &&
-                <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
                     <View style={styles.fullScreen}>
                         <Text style={styles.questionText}>Question</Text>
                         <Text style={styles.questionSubText}>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod? </Text>
-                        <TextInput style={styles.textInput} placeholder="Your answer"/>
-                        <Text style={styles.submitButton}>Submit</Text>
-                    </View>
-                </TouchableOpacity>}
+                        <TextInput style={styles.textInput} placeholder="Your answer" value={this.state.answer}/>
+                        <Text style={styles.submitButton} onPress={this.checkAnswer}>Submit</Text>
+                    </View>}
             </View>
         );
     }

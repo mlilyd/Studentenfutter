@@ -3,14 +3,17 @@ import Constants from "../Constants";
 import Sprite from "./Sprite";
 
 let hurdleCount = 0;
+let hurdlex = Constants.MAX_WIDTH;
 let heartCount = 0;
 let trashCount = 0;
 
 let tick = 0;
 let paused = true;
+let question = false;
+let to_delete = '';
+let correct_answer = false;
 
 let pose = 1;
-let squirrel_init_y = 0;
 
 ///////////////////////////////// helping functions //////////////////////////////////////////////////////////////
 export const randomBetween = (min, max) => {
@@ -21,17 +24,41 @@ export const pause_game = (b) => {
     paused = b;
 }
 
-export const resetHurdles = () => {
-    hurdleCount = 0;
+export const isCorrect = (b) => {
+    correct_answer = b;
+}
+export const delete_entity = (b) => {
+    to_delete = b;
+}
+
+export const setQuestion = (b) => {
+    question = b;
 }
 
 export const resetHeart = () => {
     heartCount = 0;
 }
 
+export const resetHurdles = (entities, world) => {
+    if (typeof entities.hurdle1 === 'object' && entities.hurdle1 !== null &&
+        typeof entities.hurdle2 === 'object' && entities.hurlde2 !== null &&
+        typeof entities.hurdle3 === 'object' && entities.hurlde3 !== null)
+    {
+        let hurdle1 = entities.hurdle1.body;
+        let hurdle2 = entities.hurdle2.body;
+        let hurdle3 = entities.hurdle3.body;
+
+        delete entities['hurdle1'];
+        delete entities['hurdle2'];
+        delete entities['hurdle3'];
+
+        Matter.World.remove(world, [hurdle1, hurdle2, hurdle3]);
+    }
+}
+
 export const generateHurdles = (world, entities) => {
-    
-    let x = randomBetween(Constants.MAX_WIDTH, Constants.MAX_WIDTH+200);
+
+    let x = randomBetween(hurdlex+50, hurdlex+200);
     
     let hurdle = Matter.Bodies.rectangle(
         x, Constants.MAX_HEIGHT*0.87,
@@ -39,18 +66,18 @@ export const generateHurdles = (world, entities) => {
         { isStatic: true, label:"hurdle" }
     );
     
-    hurdleCount += 1;
     Matter.World.add(world, [hurdle]);
     
-    entities["hurdle" + (hurdleCount)] = {
+    entities["hurdle"+(hurdleCount)] = {
         body: hurdle, img_file: 'log', renderer: Sprite
-    }
+    };
 
+    hurdleCount += 1;
 }
 
 export const generateHearts = (squirrel, world, entities) =>{
     
-    let x = randomBetween(squirrel.position.x+Constants.SQUIRREL_WIDTH+ 5, Constants.MAX_WIDTH);
+    let x = randomBetween(Constants.MAX_WIDTH, Constants.MAX_WIDTH+200);
     
     let heart = Matter.Bodies.rectangle(
                 x, 2/3*Constants.MAX_HEIGHT,
@@ -69,26 +96,43 @@ export const generateHearts = (squirrel, world, entities) =>{
 
 }
 
-export const generateTrash = (squirrel, world, entities) => {
-    
-    let x = randomBetween(squirrel.position.x+Constants.SQUIRREL_WIDTH+ 5, Constants.MAX_WIDTH);
+export const generateTrash = (world, entities) => {
+
+    let hurdle_x = Constants.MAX_WIDTH; 
+    if (typeof entities.hurdle1 === 'object' && entities.hurdle1 !== null &&
+        typeof entities.hurdle2 === 'object' && entities.hurlde2 !== null &&
+        typeof entities.hurdle3 === 'object' && entities.hurlde3 !== null)
+        {
+            let hurdle1 = entities.hurdle1.body;
+            let hurdle2 = entities.hurdle2.body;
+            let hurdle3 = entities.hurdle3.body;
+            
+            let i = randomBetween(1,3);
+            hurdle_x = entities['hurdle'+(i)].body.position.x;
+
+            delete entities['hurdle1'];
+            delete entities['hurdle2'];
+            delete entities['hurdle3'];
+
+            
+            Matter.World.remove(world, [hurdle1, hurdle2, hurdle3]);
+        }
+
+    let x = randomBetween(hurdle_x+200, hurdle_x+500);
     
     let trash = Matter.Bodies.rectangle(
         x, Constants.MAX_HEIGHT*0.849,
-        25,44,
+        19,25,
         { isStatic: true, label:"trash" }
     );
     
     trashCount += 1;
     Matter.World.add(world, [trash]);
     
-    entities["trash" + (trashCount)] = {
-        body: trash, img_file: 'trash', renderer: Sprite
+    entities["trash"] = {
+        body: trash, img_file: 'question', renderer: Sprite
     }
 
-    delete entities['heart'];
-    delete entities['hurdle1'];
-    delete entities['hurdle2'];
 
 }
 
@@ -99,33 +143,58 @@ const Physics = (entities, { touches, time, dispatch }) => {
     let squirrel = entities.squirrel.body;
 
     touches.filter(t => t.type === "press").forEach(t => {
-        if (paused){
+        if (paused && !question){
             world.gravity.y = 1.05;
             paused = false;
         }
-            //Matter.Body.translate(squirrel, {x:0, y: -100});
              Matter.Body.setVelocity(squirrel, {x: 0, y: -25});            
         });
         
     Matter.Engine.update(engine, time.delta);
 
     //generate random sprites     
-    if (tick%183 == 0 && world.gravity.y != 0){
+    if (tick%183 == 0 && !paused || tick == 0){
         generateHurdles(world, entities);  
     }
-    if (hurdleCount == 2){
-        resetHurdles();
+    if (hurdleCount == 3){
+        resetHurdles(entities, world);
     }
-    if(tick%400 == 0 && world.gravity.y != 0 && heartCount<5){
+    if(tick%200 == 0 && !paused && heartCount<5){
         generateHearts(squirrel, world, entities);
     }
-    if(tick%500 == 0 && world.gravity.y != 0 && trashCount<6){
-        generateTrash(squirrel, world, entities);
+    if(tick%300 == 0 && !paused && trashCount<6){
+        generateTrash(world, entities);
     }
     
     tick += 1;
 
-    
+    switch (to_delete){
+        case '':
+            break;
+        case 'heart':
+            if (typeof entities.heart === 'object' && entities.heart !== null)
+            {
+                let heart = entities.heart.body;
+                Matter.World.remove(world, heart);
+            }
+            delete entities.heart;
+            break;
+        case 'trash':
+            if (typeof entities.trash === 'object' && entities.trash !== null)
+            {
+                let trash = entities.trash.body;
+                Matter.World.remove(world, trash);
+            }
+            delete entities.trash;
+            break;
+    }
+
+    if (correct_answer){
+        if (typeof entities.trash === 'object' && entities.trash !== null){
+        entities.trash.img_file = 'nut';
+        entities.trash.body.label = 'nut';
+        correct_answer = false;
+    }}
     //making sure squirrel stays on screen by pushing squirrel towards the center if it gets too close to the edge of the screen
     //not sure if necessary
     if (squirrel.position.x >= Constants.MAX_WIDTH){

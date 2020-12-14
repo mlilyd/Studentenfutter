@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, TouchableOpacity, Image, Modal } from 'react-native';
 import Game from './Game';
-
+import Cards from './Cards';
+import bg from './src/assets/bg.png';
+import squirrel from './src/assets/squirrel_3.png';
+import nut from './src/assets/nut.png';
 
 export default class App extends Component{
     constructor(props){
@@ -31,9 +34,10 @@ export default class App extends Component{
     render(){
         return(
             <View style={styles.container}>
-
-            {/* <TouchableOpacity style={styles.button} onPress={this.mountScene(<Game />)}><Text>press</Text></TouchableOpacity> */}
-
+            <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
+            <Text style={styles.title}>STUDENTEN</Text>
+            <Text style={styles.title}>FUTTER</Text>
+            <Image source={nut} style={styles.nut}/>
                 <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
                 <Button style={styles.buttons} color='#35916b'
                     onPress={ _ => {
@@ -41,9 +45,10 @@ export default class App extends Component{
                     }}
                     title="Spielen"
                 />
-                <View style={styles.separator} />
+                <Image source={squirrel} style={styles.squirrel}/>
                 <Button color='#35916b'
-                    onPress={ _ => {alert('Karten');
+                    onPress={ _ => {
+                        this.mountScene(<Cards />)
                     }}
                     title="Karteikarten"
                 />
@@ -97,11 +102,25 @@ export default class App extends Component{
     };
 };
 
-//css styles
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#41c48e',
+    },
+    title: {
+        top: 90,
+        fontSize: 50,
+        fontFamily: 'Century Gothic',
+        color: 'rgb(100,185,255)',
+        textAlign: 'center'
+    },
+    squirrel: {
+        top: 120,
+        left: 250
+    },
+    nut: {
+        top: 390,
+        left: 300
     },
     backgroundImage: {
         position: 'absolute',
@@ -164,7 +183,7 @@ const styles = StyleSheet.create({
     },
     separator: {
         marginVertical: 20,
-        borderBottomColor: '#41c48e',
+        borderBottomColor: 'rgb(176,226,255)',
         borderBottomWidth: StyleSheet.hairlineWidth,
     }
 });

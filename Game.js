@@ -22,7 +22,11 @@ export default class Game extends Component {
             heart: 1,             //how many hearts
             nut: 0,               //how many nuts
             question: false,      //whether currently answering question or not
-            answer: 'your answer' //answer from textinput
+            answer: false,        //whether currently showing answer
+
+            question_text: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod?',
+            right_answer: 'right answer',
+            your_answer: ''
         };
         this.gameEngine = null;
         this.entities = this.setupWorld();
@@ -79,7 +83,7 @@ export default class Game extends Component {
                         break;
                     //if squirrel hits trash, display question
                     case 'trash':
-                        gameEngine.dispatch( {type: 'question'} );
+                        gameEngine.dispatch( {type: 'show-question'} );
                         break;
                     case 'nut':
                         gameEngine.dispatch( {type: 'add-nut'} );
@@ -117,12 +121,19 @@ export default class Game extends Component {
                 resetHeart();
                 break;
             //if squirrel hits trash, display question
-            case 'question':
+            case 'show-question':
                 this.setState({
                     question: true,
                     running: true
                 });
                 pause_game(true);
+                break;
+            case 'show-answer':
+                this.setState({
+                    question: false,
+                    answer: true,
+                    running: true
+                });
                 break;
             //in cases which squirrel loses a heart, stop running until the next user tap (not game running, but physics running!)
             case 'min-heart':
@@ -137,18 +148,20 @@ export default class Game extends Component {
                 delete_entity('trash');
                 this.setState({
                     heart: this.state.heart-1,
-                    question: false
+                    question: false,
+                    answer: false
                 });
                 this.checkHeart();
-                pause_game(false);
+                pause_game(true);
                 break;
             //if player gives right answer trash turns into nut, set question to false, and unpause game.
             case 'right-answer':
                 isCorrect(true);
                 this.setState({
-                    question: false
+                    question: false,
+                    answer: false
                 });
-                pause_game(false);
+                pause_game(true);
                 break;
             //if squirrel hit nut increase nut state
             case 'add-nut':
@@ -182,14 +195,30 @@ export default class Game extends Component {
         }
     }
 
-    //checks that answer is correct, called when submit button on question view is tapped.
-    checkAnswer = () => {
-        let correct = (this.state.answer == 'your answer');
-        if (correct){
-            this.gameEngine.dispatch( {type: 'right-answer'});
-        } else {
-            this.gameEngine.dispatch( {type: 'wrong-answer'});
-        }
+    ///// QUESTION/ANSWER HANDLING //////////////
+    /*// set question_text and answer.... how do I do this??? 
+    getQuestion = () => {
+        //get deck somehow?? 
+        //get set of questions from a deck...
+        //choose random question i
+        let set = deck.questions[i] 
+        this.setState({
+            question_text: set['question'],
+            right_answer: set['answer']
+        });
+    }
+    */
+
+    showAnswer = () => {
+        this.gameEngine.dispatch( {type: 'show-answer'});
+    }
+
+    wrongAnswer = () => {
+        this.gameEngine.dispatch( {type: 'wrong-answer'});
+    }
+
+    rightAnswer = () => {
+        this.gameEngine.dispatch( {type: 'right-answer'});
     }
 
     render() {
@@ -232,10 +261,21 @@ export default class Game extends Component {
                 {this.state.question &&
                     <View style={styles.fullScreen}>
                         <Text style={styles.questionText}>Question</Text>
-                        <Text style={styles.questionSubText}>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod? </Text>
-                        <TextInput style={styles.textInput} placeholder="Your answer" value={this.state.answer}/>
-                        <Text style={styles.submitButton} onPress={this.checkAnswer}>Submit</Text>
+                        <Text style={styles.questionSubText}> {this.state.question_text} </Text>
+                        <TextInput style={styles.textInput} placeholder="Your answer" value={this.state.your_answer}/>
+                        <Text style={styles.submitButton} onPress={this.showAnswer}>Submit</Text>
                     </View>}
+
+                {this.state.answer &&
+                <View style={styles.fullScreen}>
+                    <Text style={styles.questionText}>Your Answer:</Text>
+                    <Text style={styles.questionSubText}> {this.state.your_answer} </Text>
+                    <Text style={styles.questionText}>Right Answer:</Text>
+                    <Text style={styles.questionSubText}> {this.state.right_answer} </Text>
+
+                    <Button title="Correct" onPress={this.rightAnswer}/>
+                    <Button title="Wrong" onPress={this.wrongAnswer}/>
+                </View>}
             </View>
         );
     }

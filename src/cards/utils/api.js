@@ -141,3 +141,11 @@ export async function removeCard(deckId, index) {
   return {};
 
 }
+
+export async function setPicker() {
+  const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
+  if (results) {
+      const data = JSON.parse(results);
+  }
+
+}

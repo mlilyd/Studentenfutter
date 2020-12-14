@@ -11,6 +11,7 @@ import Constants from './src/Constants';
 import bg from './src/assets/bg.png';
 import heart from './src/assets/heart.png';
 import nut from './src/assets/nut.png';
+import {getDecks} from './src/cards/utils/api';
 
 export default class Game extends Component {
     constructor(props){
@@ -30,6 +31,12 @@ export default class Game extends Component {
         };
         this.gameEngine = null;
         this.entities = this.setupWorld();
+
+        //set deck as per user selection
+        let decks = Constants.DECKS;
+        let chosen_deck = "632mgp7hm68vzvg2amz1hq"; //need to be changed
+        this.deck = decks[0][chosen_deck];
+        //this.deck = .... //import function to get selected deck 
         }
 
     //setup world, defines game entities, such as floor, squirrel
@@ -122,6 +129,7 @@ export default class Game extends Component {
                 break;
             //if squirrel hits trash, display question
             case 'show-question':
+                this.getQuestion();
                 this.setState({
                     question: true,
                     running: true
@@ -196,18 +204,17 @@ export default class Game extends Component {
     }
 
     ///// QUESTION/ANSWER HANDLING //////////////
-    /*// set question_text and answer.... how do I do this??? 
+    // set question_text and answer.... how do I do this??? 
     getQuestion = () => {
-        //get deck somehow?? 
-        //get set of questions from a deck...
+        //get set of questions from deck
         //choose random question i
-        let set = deck.questions[i] 
+        let set = this.deck.questions[Math.floor(Math.random() * this.deck.questions.length)]; 
         this.setState({
             question_text: set['question'],
             right_answer: set['answer']
         });
     }
-    */
+    
 
     showAnswer = () => {
         this.gameEngine.dispatch( {type: 'show-answer'});

@@ -259,10 +259,8 @@ export default class Game extends Component {
                 {!this.state.running &&
                     <View style={styles.fullScreen}>
                         <Text style={styles.gameOverText}>Game Over</Text>
-
-                        <Button title="Home" />
-                        <Button title="Retry?" onPress={this.reset}/>
-                        
+                        <Text style={styles.home}>Home</Text>
+                        <Text style={styles.retry} onPress={this.reset}>Retry</Text>   
                     </View>}
 
                 {this.state.question &&
@@ -270,18 +268,19 @@ export default class Game extends Component {
                         <Text style={styles.questionText}>Question</Text>
                         <Text style={styles.questionSubText}> {this.state.question_text} </Text>
                         <TextInput style={styles.textInput} placeholder="Your answer" value={this.state.your_answer}/>
-                        <Text style={styles.submitButton} onPress={this.showAnswer}>Submit</Text>
+                        <Text style={styles.submitButton} onPress={this.showAnswer}>Check answer</Text>
                     </View>}
 
                 {this.state.answer &&
                 <View style={styles.fullScreen}>
-                    <Text style={styles.questionText}>Your Answer:</Text>
-                    <Text style={styles.questionSubText}> {this.state.your_answer} </Text>
-                    <Text style={styles.questionText}>Right Answer:</Text>
-                    <Text style={styles.questionSubText}> {this.state.right_answer} </Text>
+                    <Text style={styles.answerText}>Your Answer:</Text>
+                    <Text style={styles.answerSubText}> {this.state.your_answer} </Text>
+                    <Text style={styles.ranswerText}>Right Answer:</Text>
+                    <Text style={styles.ranswerSubText}> {this.state.right_answer} </Text>
 
-                    <Button title="Correct" onPress={this.rightAnswer}/>
-                    <Button title="Wrong" onPress={this.wrongAnswer}/>
+                    <Text style={styles.right} onPress={this.rightAnswer}>Right</Text>
+                    <Text style={styles.wrong} onPress={this.wrongAnswer}>Wrong</Text>
+                   
                 </View>}
             </View>
         );
@@ -306,7 +305,7 @@ const styles = StyleSheet.create({
         height: 200,
         width: 350,
         fontSize: 25,
-        bottom:'15%',
+        bottom:'25%',
         paddingLeft: 20,
         paddingRight: 20
       },
@@ -363,9 +362,11 @@ const styles = StyleSheet.create({
         right: 0,
     },
     gameOverText: {
+        position:'absolute',
         color: 'white',
         fontSize: 48,
-        fontFamily: '04b_19'
+        fontFamily: '04b_19',
+        top:'30%'
     },
     gameOverSubText: {
         color: 'white',
@@ -379,6 +380,20 @@ const styles = StyleSheet.create({
         fontSize: 48,
         fontFamily: '04b_19'
     },
+    answerText: {
+        position:'absolute',
+        top:'5%',
+        color: 'white',
+        fontSize: 48,
+        fontFamily: '04b_19'
+    },
+    ranswerText: {
+        position:'absolute',
+        top:'45%',
+        color: 'white',
+        fontSize: 48,
+        fontFamily: '04b_19'
+    },
     questionSubText: {
         position:'absolute',
         color: 'white',
@@ -386,6 +401,26 @@ const styles = StyleSheet.create({
         fontFamily: '04b_19',
         textAlign:'left',
         top:'25%',
+        paddingLeft: 20,
+        paddingRight: 20
+    },
+    answerSubText: {
+        position:'absolute',
+        color: 'white',
+        fontSize: 24,
+        fontFamily: '04b_19',
+        textAlign:'left',
+        top:'25%',
+        paddingLeft: 20,
+        paddingRight: 20
+    },
+    ranswerSubText: {
+        position:'absolute',
+        color: 'white',
+        fontSize: 24,
+        fontFamily: '04b_19',
+        textAlign:'left',
+        top:'60%',
         paddingLeft: 20,
         paddingRight: 20
     },
@@ -425,8 +460,48 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#F5F5F5',
         backgroundColor: '#F5F5F5',
-        bottom: 10,
+        bottom: 20,
         padding: 15,
         margin: 5
+      },
+      right: {
+        position:'absolute',
+        borderWidth: 1,
+        borderColor: '#F5F5F5',
+        backgroundColor: '#F5F5F5',
+        bottom: 20,
+        padding:15,
+        margin: 5,
+        left:'15%'
+      },
+      wrong: {
+        position:'absolute',
+        borderWidth: 1,
+        borderColor: '#F5F5F5',
+        backgroundColor: '#F5F5F5',
+        bottom: 20,
+        padding:15,
+        margin: 5,
+        right:'15%'
+      },
+      home: {
+        position:'absolute',
+        borderWidth: 1,
+        borderColor: '#F5F5F5',
+        backgroundColor: '#F5F5F5',
+        bottom: '30%',
+        padding:15,
+        margin: 5,
+        fontWeight: 'bold'
+      },
+      retry: {
+        position:'absolute',
+        borderWidth: 1,
+        borderColor: '#F5F5F5',
+        backgroundColor: '#F5F5F5',
+        bottom: '15%',
+        padding:15,
+        margin: 5,
+        fontWeight: 'bold'
       },
 });

@@ -26,7 +26,7 @@ const Deck = props => {
     deleteDeck(selectedDeck)
     removeDeck(selectedDeck)
     selectDeck('')
-    navigation.navigate('CardsHome')
+    navigation.navigate('Karteikarten')
   } 
   console.log(deck)
   if (deck === undefined) return null;
@@ -43,7 +43,7 @@ const Deck = props => {
           </View>))}
         </View>
         {/* <Text style={styles.subtitle}>{deck.questions.length} cards</Text> */}
-        <Button style={styles.buttons} block ligh title='Add new card' onPress={() => navigation.navigate('AddCard')}>
+        <Button style={styles.buttons} block ligh title='Add new card' onPress={() => navigation.navigate('Karteikarte hinzufügen')}>
           <Text style={styles.buttonText}>Add Card</Text>
         </Button>
         <Button style={styles.buttons} block ligh title='Delete Deck' onPress={handleDeleteDeck}>

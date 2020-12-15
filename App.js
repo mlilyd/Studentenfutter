@@ -34,8 +34,8 @@ export default class App extends Component{
     });
     };
 
-    setPicker = () => {
-        var test = getDecktitles();
+    setPicker = async () => {
+        var test = await getDecktitles();
         console.log(test);
        
     }

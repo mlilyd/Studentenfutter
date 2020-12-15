@@ -27,7 +27,7 @@ export default class Game extends Component {
 
             question_text: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod?',
             right_answer: 'right answer',
-            your_answer: ''
+            your_answer: 'hi'
         };
         this.gameEngine = null;
         this.entities = this.setupWorld();
@@ -204,7 +204,7 @@ export default class Game extends Component {
     }
 
     ///// QUESTION/ANSWER HANDLING //////////////
-    // set question_text and answer.... how do I do this??? 
+    // set question_text and right_answer from deck
     getQuestion = () => {
         //get set of questions from deck
         //choose random question i
@@ -212,6 +212,13 @@ export default class Game extends Component {
         this.setState({
             question_text: set['question'],
             right_answer: set['answer']
+        });
+    }
+
+    // get user's answer from textinput 
+    getAnswer = (text) => {
+        this.setState({
+            your_answer: text
         });
     }
     
@@ -269,7 +276,7 @@ export default class Game extends Component {
                     <View style={styles.fullScreen}>
                         <Text style={styles.questionText}>Question</Text>
                         <Text style={styles.questionSubText}> {this.state.question_text} </Text>
-                        <TextInput style={styles.textInput} placeholder="Your answer" value={this.state.your_answer}/>
+                        <TextInput style={styles.textInput} placeholder="Your answer" onChangeText={text => this.getAnswer(text)}/>
                         <Text style={styles.submitButton} onPress={this.showAnswer}>Submit</Text>
                     </View>}
 

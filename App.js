@@ -3,7 +3,6 @@ import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, Touchable
 import { Picker } from '@react-native-community/picker';
 import Game from './Game';
 import Cards from './Cards';
-import AsyncStorage from "@react-native-community/async-storage";
 import { getDecktitles, getDecks } from './src/cards/utils/api';
 import bg from './src/assets/bg.png';
 import squirrel from './src/assets/squirrel_3.png';
@@ -16,8 +15,12 @@ export default class App extends Component{
         this.state = {
             sceneVisible: false,
             scene: null,
-            selection: "test"
+            selection: null,
+            decktitle: null
           };
+
+        this.decktitles = this.setPicker();
+
         }
       
     mountScene = scene => {
@@ -28,18 +31,28 @@ export default class App extends Component{
         };
     
     unMountScene = () => {
-    this.setState({
-        sceneVisible: false,
-        scene: null
-    });
+        this.setState({
+            sceneVisible: false,
+            scene: null
+        });
     };
 
     setPicker = async () => {
-        var test = await getDecktitles();
-        console.log(test);
-       
-    }
-       
+        try {
+            var decktitles = await getDecktitles();
+
+            // https://stackoverflow.com/questions/47658765/objects-are-not-valid-as-a-react-child-found-object-promise/47659112
+            this.setState({
+                decktitle: decktitles.map((object, index) => (
+                    <Picker.Item key={index} label={object} value={object}/>
+                ))
+            });
+
+        } catch (e) {
+            console.log(e);
+        }      
+    };
+
     render(){
 
         return(
@@ -49,6 +62,7 @@ export default class App extends Component{
             <Text style={styles.title}>FUTTER</Text>
             <Image source={nut} style={styles.nut}/>
 
+            {/* set difficulty */}
             <View style={styles.pickerContainer}>
                 <Picker
                     selectedValue={this.state.selection}
@@ -59,24 +73,18 @@ export default class App extends Component{
                 <Picker.Item label="L" value="L" />
                 </Picker>
             </View>
-            {/* <View style={styles.pickerContainer}>
+
+            {/* set deck title */}
+            <View style={styles.pickerContainer}>
                 <Picker
                     selectedValue={this.state.selection}
                     style={{ height: 50, width: 150 }}
                     onValueChange={(itemValue, itemIndex) => this.setState({selection:itemValue})}
-                >
-                <Picker.Item label="S" value="S" />
-                <Picker.Item label="L" value="L" />
-                </Picker>
-            </View> */}
+                >{this.state.decktitle}</Picker>
+            </View>
 
+            {/* play and cards buttons */}
             <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
-            <Button style={styles.buttons} color='#35916b'
-                    onPress={ _ => {
-                        this.setPicker();
-                    }}
-                    title="test"
-                />
                 <Button style={styles.buttons} color='#35916b'
                     onPress={ _ => {
                         this.mountScene(<Game />);
@@ -104,37 +112,6 @@ export default class App extends Component{
             </Modal>
 
             </View>
-
-            
-
-    //     <div>
-    //     <Button onClick={this._onButtonClick} title="Press"/>
-    //     {this.state.showComponent ?
-    //        <Game /> :
-    //        null
-    //     }
-    //   </div>
-
-        // <View style={styles.container}>
-        //     <View style={styles.buttonContainer}>
-        //         <Game />
-        //       {/* <Button
-        //         onPress={() => {
-        //             var game = new Game();
-        //             alert('You tapped the button!');
-        //         }}
-        //         title="Spielen"
-        //         /> */}
-        //     </View>
-        //     <View style={styles.buttonContainer}>
-        //       <Button
-        //         onPress={() => {
-        //             alert('You tapped button!');
-        //         }}
-        //         title="Karteikarten"
-        //         />
-        //     </View>
-        // </View>
         
         );
     };

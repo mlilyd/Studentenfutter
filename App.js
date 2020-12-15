@@ -4,7 +4,7 @@ import { Picker } from '@react-native-community/picker';
 import Game from './Game';
 import Cards from './Cards';
 import AsyncStorage from "@react-native-community/async-storage";
-import { setPicker } from './src/cards/utils/api';
+import { getDecktitles, getDecks } from './src/cards/utils/api';
 import bg from './src/assets/bg.png';
 import squirrel from './src/assets/squirrel_3.png';
 import nut from './src/assets/nut.png';
@@ -33,6 +33,12 @@ export default class App extends Component{
         scene: null
     });
     };
+
+    setPicker = () => {
+        var test = getDecktitles();
+        console.log(test);
+       
+    }
        
     render(){
 
@@ -53,8 +59,24 @@ export default class App extends Component{
                 <Picker.Item label="L" value="L" />
                 </Picker>
             </View>
+            {/* <View style={styles.pickerContainer}>
+                <Picker
+                    selectedValue={this.state.selection}
+                    style={{ height: 50, width: 150 }}
+                    onValueChange={(itemValue, itemIndex) => this.setState({selection:itemValue})}
+                >
+                <Picker.Item label="S" value="S" />
+                <Picker.Item label="L" value="L" />
+                </Picker>
+            </View> */}
 
             <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
+            <Button style={styles.buttons} color='#35916b'
+                    onPress={ _ => {
+                        this.setPicker();
+                    }}
+                    title="test"
+                />
                 <Button style={styles.buttons} color='#35916b'
                     onPress={ _ => {
                         this.mountScene(<Game />);

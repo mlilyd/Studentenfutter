@@ -142,10 +142,17 @@ export async function removeCard(deckId, index) {
 
 }
 
-export async function setPicker() {
+export async function getDecktitles() {
   const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
-  if (results) {
-      const data = JSON.parse(results);
+  if (results && results !== '{}') {
+      var data = JSON.parse(results);
+      // var decktitles = [];
+      // for (i=0; i<data.length; i++) {
+      //   decktitles.push(data[i]);
+      // }
+      // console.log(data);
+      return data[0];
   }
 
+  return {};
 }

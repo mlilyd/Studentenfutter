@@ -46,7 +46,7 @@ const Deck = props => {
     deleteDeck(selectedDeck)
     removeDeck(selectedDeck)
     selectDeck('')
-    navigation.navigate('CardsHome')
+    navigation.navigate('Karteikarten')
   } 
   console.log(deck)
   if (deck === undefined) return null;
@@ -56,7 +56,7 @@ const Deck = props => {
     removeCard(selectedDeck, index)
     // delete deck.questions[index]
     selectDeck('')
-    navigation.navigate('CardsHome')
+    navigation.navigate('Karteikarten')
   }
 
   return (
@@ -78,16 +78,17 @@ const Deck = props => {
             removed prior quiz button and number of cards display */}
         <View>{deck.questions.map((object, index) => (
           <View key={index} style={styles.cardsFrame}>
-            <Text style={styles.cardtextQuestion}>{index+1}. Frage: {object.question + " "}</Text> 
-            <Text style={styles.cardtextAnswer}>Antwort: {object.answer}</Text>
+            <Text style={styles.cardtext}>{index+1}. Frage: {object.question + " "}</Text> 
+            <Text style={styles.cardtext}>Antwort: {object.answer}</Text>
+            <Text style={styles.cardtextDiff}>Schwierigkeit: {object.difficulty}</Text>
             <Button style={styles.buttonsDelete} block ligh title='Delete card' onPress={() => deletionWarn(index)}><Text>X</Text></Button>
           </View>))}
         </View>
-        <Button style={styles.buttons} block ligh title='Add new card' onPress={() => navigation.navigate('AddCard')}>
-          <Text style={styles.buttonText}>Add Card</Text>
+        <Button style={styles.buttons} block ligh title='Add new card' onPress={() => navigation.navigate('Karteikarte hinzufügen')}>
+          <Text style={styles.buttonText}>Karteikarte hinzufügen</Text>
         </Button>
         <Button style={styles.buttons} block ligh title='Delete Deck' onPress={handleDeleteDeck}>
-          <Text style={styles.buttonText} >Delete Deck</Text>
+          <Text style={styles.buttonText}>Karteikartenset löschen</Text>
         </Button></View>
         {/* <Text style={styles.subtitle}>{deck.questions.length} cards</Text> */}
         </Card>
@@ -109,33 +110,36 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: '600',
     textAlign: 'center',
-    margin: 30,
+    margin: 20,
     //marginTop: 80,
     color: '	rgb(64,64,64)',
   },
   buttons: {
     margin: 5,
+    marginBottom: 20,
     //height: "10%",
     fontSize: 62,
     fontWeight: '600',
     textAlign: 'center',
+    backgroundColor: 'rgb(00,161,200)'
   },
   buttonsDelete: {
     backgroundColor: 'rgb(00,191,200)',
     //margin: 5,
-    marginLeft: 150,
-    marginRight: 150,
+    marginLeft: 130,
+    marginRight: 130,
+    marginBottom: 10,
     //height: "10%",
     //fontSize: 6,
     fontWeight: '600',
     //textAlign: 'left',
   },
   buttonText: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '600',
   },
   cardsFrame: {
-    margin: 3,
+    margin: 15,
     padding: 2,
     borderColor: 'rgb(0,191,200)',
     borderWidth: 2,
@@ -147,16 +151,17 @@ const styles = StyleSheet.create({
     margin: 20,
     color: '#CC3300'
   },
-  cardtextQuestion: {
+  cardtext: {
     //padding: 1,
-    fontSize: 10,
+    fontSize: 12,
     textAlign: 'center',
-    margin: 10
+    margin: 5
   },
-  cardtextAnswer: {
+  cardtextDiff: {
     //padding: 1,
     fontSize: 10,
-    textAlign: 'center',
-    margin: 10
+    textAlign: 'right',
+    margin: 5,
+    color: 'grey'
   }
 });

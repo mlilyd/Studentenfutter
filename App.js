@@ -1,8 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, TouchableOpacity, Image, Modal } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import Game from './Game';
 import Cards from './Cards';
-
+import AsyncStorage from "@react-native-community/async-storage";
+import { setPicker } from './src/cards/utils/api';
+import bg from './src/assets/bg.png';
+import squirrel from './src/assets/squirrel_3.png';
+import nut from './src/assets/nut.png';
 
 export default class App extends Component{
     constructor(props){
@@ -10,57 +15,71 @@ export default class App extends Component{
 
         this.state = {
             sceneVisible: false,
-            scene: null
+            scene: null,
+            selection: "test"
           };
         }
       
-        mountScene = scene => {
-            this.setState({
-              sceneVisible: true,
-              scene: scene
-            });
-          };
-        
-        unMountScene = () => {
+    mountScene = scene => {
         this.setState({
-            sceneVisible: false,
-            scene: null
+            sceneVisible: true,
+            scene: scene
         });
         };
-        
-            
+    
+    unMountScene = () => {
+    this.setState({
+        sceneVisible: false,
+        scene: null
+    });
+    };
+       
     render(){
+
         return(
             <View style={styles.container}>
+            <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
+            <Text style={styles.title}>STUDENTEN</Text>
+            <Text style={styles.title}>FUTTER</Text>
+            <Image source={nut} style={styles.nut}/>
 
-            {/* <TouchableOpacity style={styles.button} onPress={this.mountScene(<Game />)}><Text>press</Text></TouchableOpacity> */}
+            <View style={styles.pickerContainer}>
+                <Picker
+                    selectedValue={this.state.selection}
+                    style={{ height: 50, width: 150 }}
+                    onValueChange={(itemValue, itemIndex) => this.setState({selection:itemValue})}
+                >
+                <Picker.Item label="S" value="S" />
+                <Picker.Item label="L" value="L" />
+                </Picker>
+            </View>
 
-                <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
+            <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
                 <Button style={styles.buttons} color='#35916b'
                     onPress={ _ => {
                         this.mountScene(<Game />);
                     }}
                     title="Spielen"
                 />
-                <View style={styles.separator} />
+                <Image source={squirrel} style={styles.squirrel}/>
                 <Button color='#35916b'
                     onPress={ _ => {
                         this.mountScene(<Cards />)
                     }}
                     title="Karteikarten"
                 />
-                </View>
+            </View>
 
-                <Modal
-                    animationType={"slide"}
-                    transparent={false}
-                    visible={this.state.sceneVisible}
-                    onRequestClose={_ => {}}
-                    >
-                    {this.state.scene}
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.sceneVisible}
+                onRequestClose={_ => {}}
+                >
+                {this.state.scene}
 
-                    {/* <CloseButton onPress={this.unMountScene} /> */}
-                </Modal>
+                {/* <CloseButton onPress={this.unMountScene} /> */}
+            </Modal>
 
             </View>
 
@@ -103,6 +122,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#41c48e',
+    },
+    title: {
+        top: 90,
+        fontSize: 50,
+        fontFamily: 'Century Gothic',
+        color: 'rgb(100,185,255)',
+        textAlign: 'center'
+    },
+    squirrel: {
+        top: 210,
+        left: 250
+    },
+    nut: {
+        top: 390,
+        left: 300
     },
     backgroundImage: {
         position: 'absolute',
@@ -161,13 +195,17 @@ const styles = StyleSheet.create({
         flex: 1
     },
     buttonContainer: {
-        top: 200
+        top: 20
     },
     separator: {
         marginVertical: 20,
-        borderBottomColor: '#41c48e',
+        borderBottomColor: 'rgb(176,226,255)',
         borderBottomWidth: StyleSheet.hairlineWidth,
-    }
+    },
+    pickerContainer: {
+        paddingTop: 40,
+        alignItems: "center"
+      }
 });
   
 //   export default App;

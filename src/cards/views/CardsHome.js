@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators, compose } from 'redux';
 import * as actions from '../store/actions/decks'
 import {  Button, Text } from 'native-base';
-
+//import App from 'App';
 
 
 function Home(props){
@@ -14,15 +14,27 @@ function Home(props){
 
   const openDeck = (id) => {
     selectDeck(id)
-    navigation.navigate('Deck')
+    navigation.navigate('gewähltes Karteikartenset')
   }
+  mountScene = scene => {
+    this.setState({
+      sceneVisible: true,
+      scene: scene
+    });
+  };
+  
+  unMountScene = () => {
+    this.setState({
+      sceneVisible: false,
+      scene: null
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
 
-            <Button rounded light style={ styles.newDeckButton} onPress={() => navigation.navigate('AddDeck')} ><Text>+</Text></Button>
-
-
+            <Button rounded light style={ styles.newDeckButton} onPress={() => navigation.navigate('Karteikartenset hinzufügen')} ><Text>+</Text></Button>
+            
       <ScrollView >
 <View style={{height: '100%'}}>
       {decks.map(deck => {
@@ -59,19 +71,20 @@ const styles = StyleSheet.create({
     height: 100,
     fontWeight: '600',
     textAlign: 'center',
+    backgroundColor: 'rgb(198,226,255)',
+    color: 'black'
   },
   titles: {
     fontWeight: '600',
     fontSize: 28,
-    margin: 10,
-    color: 'rgb(64,64,64)'
+    margin: 10
   },
   newDeckButton: {
     bottom:50,
     right: 20,
     position: 'absolute',
     zIndex:1,
-    backgroundColor: 'green',
+    backgroundColor: 'rgb(00,255,152)',
     fontWeight: '600',
     fontSize: 120,
 }

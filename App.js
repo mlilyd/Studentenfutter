@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, Touchable
 import { Picker } from '@react-native-community/picker';
 import Game from './Game';
 import Cards from './Cards';
-import { getDecktitles, getDecks } from './src/cards/utils/api';
+import { getDecktitles, getGameCards } from './src/cards/utils/api';
 import bg from './src/assets/bg.png';
 import squirrel from './src/assets/squirrel_3.png';
 import nut from './src/assets/nut.png';
@@ -15,7 +15,8 @@ export default class App extends Component{
         this.state = {
             sceneVisible: false,
             scene: null,
-            selection: null,
+            selectionDifficulty: "L",
+            selectionDeck: "Hauptstädte",
             decktitle: null
           };
 
@@ -53,6 +54,20 @@ export default class App extends Component{
         }      
     };
 
+    handleStartGame = async () => {
+        try {
+            var cards = await getGameCards(this.state.selectionDifficulty, this.state.selectionDeck);
+
+            // https://www.pluralsight.com/guides/how-to-send-state-of-current-component-as-a-parameter-to-another-external-method-using-react
+            // add parameter to <Game /> and access it in class
+            this.mountScene(<Game data={cards}/>);
+
+        } catch (e) {
+            console.log(e);
+        }      
+
+    };
+
     render(){
 
         return(
@@ -65,21 +80,21 @@ export default class App extends Component{
             {/* set difficulty */}
             <View style={styles.pickerContainer}>
                 <Picker
-                    selectedValue={this.state.selection}
+                    selectedValue={this.state.selectionDifficulty}
                     style={{ height: 50, width: 150 }}
-                    onValueChange={(itemValue, itemIndex) => this.setState({selection:itemValue})}
+                    onValueChange={(itemValue, itemIndex) => this.setState({selectionDifficulty:itemValue})}
                 >
-                <Picker.Item label="S" value="S" />
-                <Picker.Item label="L" value="L" />
+                    <Picker.Item label="L" value="L" />
+                    <Picker.Item label="S" value="S" />
                 </Picker>
             </View>
 
             {/* set deck title */}
             <View style={styles.pickerContainer}>
                 <Picker
-                    selectedValue={this.state.selection}
+                    selectedValue={this.state.selectionDeck}
                     style={{ height: 50, width: 150 }}
-                    onValueChange={(itemValue, itemIndex) => this.setState({selection:itemValue})}
+                    onValueChange={(itemValue, itemIndex) => this.setState({selectionDeck:itemValue})}
                 >{this.state.decktitle}</Picker>
             </View>
 
@@ -87,7 +102,7 @@ export default class App extends Component{
             <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
                 <Button style={styles.buttons} color='#35916b'
                     onPress={ _ => {
-                        this.mountScene(<Game />);
+                        this.handleStartGame();
                     }}
                     title="Spielen"
                 />

@@ -48,7 +48,7 @@ const Deck = props => {
     selectDeck('')
     navigation.navigate('Karteikarten')
   } 
-  console.log(deck)
+
   if (deck === undefined) return null;
   
   const handleDeleteCard = (index) => {

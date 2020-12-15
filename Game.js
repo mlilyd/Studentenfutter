@@ -16,7 +16,10 @@ import {getDecks} from './src/cards/utils/api';
 export default class Game extends Component {
     constructor(props){
         super(props);
-       
+
+        // cards from App.js!
+        console.log("CARDS IN GAME.JS! \n", this.props.data);
+
         //game state values
         this.state = {
         running: true,            //whether game is running or not. To pause game, use pause_game from Physicsjs

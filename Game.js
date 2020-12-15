@@ -221,7 +221,6 @@ export default class Game extends Component {
             your_answer: text
         });
     }
-    
 
     showAnswer = () => {
         this.gameEngine.dispatch({ type: 'show-answer' });
@@ -276,6 +275,10 @@ export default class Game extends Component {
                         <Text style={styles.questionSubText}> {this.state.question_text} </Text>
                         <TextInput style={styles.textInput} placeholder="Your answer" onChangeText={text => this.getAnswer(text)}/>
                         <Text style={styles.submitButton} onPress={this.showAnswer}>Submit</Text>
+
+                        <TextInput style={styles.textInput} placeholder="Your answer" value={this.state.your_answer.value} />
+                        <Text style={styles.submitButton} onPress={this.showAnswer}>Check answer</Text>
+
                     </View>}
 
                 {this.state.answer &&

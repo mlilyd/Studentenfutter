@@ -9,111 +9,111 @@ import bg from './src/assets/bg.png';
 import squirrel from './src/assets/squirrel_3.png';
 import nut from './src/assets/nut.png';
 
-export default class App extends Component{
-    constructor(props){
-        super(props) 
+export default class App extends Component {
+    constructor(props) {
+        super(props)
 
         this.state = {
             sceneVisible: false,
             scene: null,
             selection: "test"
-          };
-        }
-      
+        };
+    }
+
     mountScene = scene => {
         this.setState({
             sceneVisible: true,
             scene: scene
         });
-        };
-    
-    unMountScene = () => {
-    this.setState({
-        sceneVisible: false,
-        scene: null
-    });
     };
-       
-    render(){
 
-        return(
+    unMountScene = () => {
+        this.setState({
+            sceneVisible: false,
+            scene: null
+        });
+    };
+
+    render() {
+
+        return (
             <View style={styles.container}>
-            <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
-            <Text style={styles.title}>STUDENTEN</Text>
-            <Text style={styles.title}>FUTTER</Text>
-            <Image source={nut} style={styles.nut}/>
+                <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
+                <Text style={styles.title}>STUDENTEN</Text>
+                <Text style={styles.title}>FUTTER</Text>
+                <Image source={nut} style={styles.nut} />
 
-            <View style={styles.pickerContainer}>
-                <Picker
-                    selectedValue={this.state.selection}
-                    style={{ height: 50, width: 150 }}
-                    onValueChange={(itemValue, itemIndex) => this.setState({selection:itemValue})}
+                <View style={styles.pickerContainer}>
+                    <Picker
+                        selectedValue={this.state.selection}
+                        style={{ height: 50, width: 150 }}
+                        onValueChange={(itemValue, itemIndex) => this.setState({ selection: itemValue })}
+                    >
+                        <Picker.Item label="S" value="S" />
+                        <Picker.Item label="L" value="L" />
+                    </Picker>
+                </View>
+
+                <View style={styles.buttonContainer} sceneVisible={this.state.sceneVisible}>
+                    <Button style={styles.buttons} color='#35916b'
+                        onPress={_ => {
+                            this.mountScene(<Game />);
+                        }}
+                        title="Spielen"
+                    />
+                    <Image source={squirrel} style={styles.squirrel} />
+                    <Button color='#35916b'
+                        onPress={_ => {
+                            this.mountScene(<Cards />)
+                        }}
+                        title="Karteikarten"
+                    />
+                </View>
+
+                <Modal
+                    animationType={"slide"}
+                    transparent={false}
+                    visible={this.state.sceneVisible}
+                    onRequestClose={_ => { }}
                 >
-                <Picker.Item label="S" value="S" />
-                <Picker.Item label="L" value="L" />
-                </Picker>
-            </View>
+                    {this.state.scene}
 
-            <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
-                <Button style={styles.buttons} color='#35916b'
-                    onPress={ _ => {
-                        this.mountScene(<Game />);
-                    }}
-                    title="Spielen"
-                />
-                <Image source={squirrel} style={styles.squirrel}/>
-                <Button color='#35916b'
-                    onPress={ _ => {
-                        this.mountScene(<Cards />)
-                    }}
-                    title="Karteikarten"
-                />
-            </View>
-
-            <Modal
-                animationType={"slide"}
-                transparent={false}
-                visible={this.state.sceneVisible}
-                onRequestClose={_ => {}}
-                >
-                {this.state.scene}
-
-                {/* <CloseButton onPress={this.unMountScene} /> */}
-            </Modal>
+                    {/* <CloseButton onPress={this.unMountScene} /> */}
+                </Modal>
 
             </View>
 
-            
 
-    //     <div>
-    //     <Button onClick={this._onButtonClick} title="Press"/>
-    //     {this.state.showComponent ?
-    //        <Game /> :
-    //        null
-    //     }
-    //   </div>
 
-        // <View style={styles.container}>
-        //     <View style={styles.buttonContainer}>
-        //         <Game />
-        //       {/* <Button
-        //         onPress={() => {
-        //             var game = new Game();
-        //             alert('You tapped the button!');
-        //         }}
-        //         title="Spielen"
-        //         /> */}
-        //     </View>
-        //     <View style={styles.buttonContainer}>
-        //       <Button
-        //         onPress={() => {
-        //             alert('You tapped button!');
-        //         }}
-        //         title="Karteikarten"
-        //         />
-        //     </View>
-        // </View>
-        
+            //     <div>
+            //     <Button onClick={this._onButtonClick} title="Press"/>
+            //     {this.state.showComponent ?
+            //        <Game /> :
+            //        null
+            //     }
+            //   </div>
+
+            // <View style={styles.container}>
+            //     <View style={styles.buttonContainer}>
+            //         <Game />
+            //       {/* <Button
+            //         onPress={() => {
+            //             var game = new Game();
+            //             alert('You tapped the button!');
+            //         }}
+            //         title="Spielen"
+            //         /> */}
+            //     </View>
+            //     <View style={styles.buttonContainer}>
+            //       <Button
+            //         onPress={() => {
+            //             alert('You tapped button!');
+            //         }}
+            //         title="Karteikarten"
+            //         />
+            //     </View>
+            // </View>
+
         );
     };
 };
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
         top: 50,
         left: Constants.MAX_WIDTH / 2 - 20,
         textShadowColor: '#444444',
-        textShadowOffset: { width: 2, height: 2},
+        textShadowOffset: { width: 2, height: 2 },
         textShadowRadius: 2,
         fontFamily: '04b_19'
     },
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     pickerContainer: {
         paddingTop: 40,
         alignItems: "center"
-      }
+    }
 });
-  
+
 //   export default App;

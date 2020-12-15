@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {Animated, Image} from "react-native";
+import React, { Component } from "react";
+import { Animated, Image } from "react-native";
 
 /* 
 Using the Sprite class: 
@@ -33,16 +33,16 @@ let Images = {
 };
 
 export default class Sprite extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 
-    render(){
+    render() {
         const width = this.props.body.bounds.max.x - this.props.body.bounds.min.x;
         const height = this.props.body.bounds.max.y - this.props.body.bounds.min.y;
         const x = this.props.body.position.x - width / 2;
         const y = this.props.body.position.y - height / 2;
-        
+
         let image = Images[this.props.img_file];
 
         return (

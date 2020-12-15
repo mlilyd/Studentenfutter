@@ -17,43 +17,43 @@ import bg from './src/assets/bg.png';
 
 const Stack = createStackNavigator()
 
-export default function Cards(){
-    mountScene = scene => {
-        this.setState({
-          sceneVisible: true,
-          scene: scene
-        });
-      };
-    
-    unMountScene = () => {
+export default function Cards() {
+  mountScene = scene => {
     this.setState({
-        sceneVisible: false,
-        scene: null
+      sceneVisible: true,
+      scene: scene
     });
-    };
-    
-    return (
-        <Provider store={store}>
-        <NavigationContainer>
-          <Stack.Navigator style={styles.container}>
-              <Stack.Screen name="Karteikarten" component={CardsHome} />
-              <Stack.Screen name="gewähltes Karteikartenset" component={Deck} />
-              <Stack.Screen name="Karteikarte hinzufügen" component={AddCard} />
-              <Stack.Screen name="Karteikartenset hinzufügen" component={AddDeck} />
-          </Stack.Navigator>
-        </NavigationContainer>
-    
-        </Provider>
-      );
+  };
 
-    }
-    
-    const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-      },
+  unMountScene = () => {
+    this.setState({
+      sceneVisible: false,
+      scene: null
     });
-       
+  };
+
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator style={styles.container}>
+          <Stack.Screen name="Karteikarten" component={CardsHome} />
+          <Stack.Screen name="gewähltes Karteikartenset" component={Deck} />
+          <Stack.Screen name="Karteikarte hinzufügen" component={AddCard} />
+          <Stack.Screen name="Karteikartenset hinzufügen" component={AddDeck} />
+        </Stack.Navigator>
+      </NavigationContainer>
+
+    </Provider>
+  );
+
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+});
+
 

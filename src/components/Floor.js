@@ -22,10 +22,10 @@ export default class Floor extends Component {
                     overflow: 'hidden',
                     flexDirection: 'row'
                 }}>
-                {Array.apply(null, Array(imageIterations)).map(( el, idx) => {
+                {Array.apply(null, Array(imageIterations)).map((el, idx) => {
                     return <Image style={{ width: height, height: height }} key={idx} resizeMode="stretch" source={image} />
                 })}
             </View>
-    );
-  }
+        );
+    }
 }

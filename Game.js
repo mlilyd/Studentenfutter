@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard, TextInput, Button  } from 'react-native';
+import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard, TextInput, Button } from 'react-native';
 import Matter from "matter-js";
 import { GameEngine } from "react-native-game-engine";
 
 import Sprite from './src/components/Sprite';
 import Floor from './src/components/Floor';
-import Physics, {resetHeart, pause_game, delete_entity, isCorrect, resetTrash} from './src/components/Physics';
+import Physics, { resetHeart, pause_game, delete_entity, isCorrect, resetTrash } from './src/components/Physics';
 import Constants from './src/Constants';
 
 import bg from './src/assets/bg.png';
 import heart from './src/assets/heart.png';
 import nut from './src/assets/nut.png';
-import {getDecks} from './src/cards/utils/api';
+import { getDecks } from './src/cards/utils/api';
 
 export default class Game extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-       
+
         //game state values
         this.state = {
-        running: true,            //whether game is running or not. To pause game, use pause_game from Physicsjs
+            running: true,            //whether game is running or not. To pause game, use pause_game from Physicsjs
             heart: 1,             //how many hearts
             nut: 0,               //how many nuts
             question: false,      //whether currently answering question or not
@@ -37,37 +37,37 @@ export default class Game extends Component {
         let chosen_deck = "632mgp7hm68vzvg2amz1hq"; //need to be changed
         this.deck = decks[0][chosen_deck];
         //this.deck = .... //import function to get selected deck 
-        }
+    }
 
     //setup world, defines game entities, such as floor, squirrel
     setupWorld = () => {
         let engine = Matter.Engine.create({ enableSleeping: false });
         let world = engine.world;
         //before the first user tap, gravity is 0
-        world.gravity.y =0;
-        
+        world.gravity.y = 0;
+
         //define bodies -> each entity/sprite consists of rectangles ...
-        let squirrel = Matter.Bodies.rectangle( 
-          Constants.MAX_WIDTH / 4,     // x value
-          Constants.MAX_HEIGHT * 0.84,  // y value
-          Constants.SQUIRREL_WIDTH,    // width 
-          Constants.SQUIRREL_HEIGHT,   // height
-          {label:"squirrel"});
-          
+        let squirrel = Matter.Bodies.rectangle(
+            Constants.MAX_WIDTH / 4,     // x value
+            Constants.MAX_HEIGHT * 0.84,  // y value
+            Constants.SQUIRREL_WIDTH,    // width 
+            Constants.SQUIRREL_HEIGHT,   // height
+            { label: "squirrel" });
+
         let floor1 = Matter.Bodies.rectangle(
             Constants.MAX_WIDTH / 2,
             Constants.MAX_HEIGHT * 0.9,
             Constants.MAX_WIDTH + 4,
             45,
-            { isStatic: true, label:"floor1" }
+            { isStatic: true, label: "floor1" }
         );
 
         let floor2 = Matter.Bodies.rectangle(
             Constants.MAX_WIDTH + (Constants.MAX_WIDTH / 2),
-            Constants.MAX_HEIGHT *0.9,
+            Constants.MAX_HEIGHT * 0.9,
             Constants.MAX_WIDTH + 4,
             45,
-            { isStatic: true, label:"floor2" }
+            { isStatic: true, label: "floor2" }
         );
 
         //add rectangle bodies to world    
@@ -76,42 +76,42 @@ export default class Game extends Component {
         //collision detection -> sends event signals that will be handled in onEvent. 
         //Different entity should trigger different events. 
         Matter.Events.on(engine, 'collisionStart', (event) => {
-           let pairs = event.pairs;
-           let gameEngine = this.gameEngine;
-           pairs.forEach(function(pair) {
-               switch(pair.bodyB.label){
-                   //if squirrel hits log, game over
-                   case 'hurdle':
-                       gameEngine.dispatch( {type: 'game-over'} );
-                       break;
+            let pairs = event.pairs;
+            let gameEngine = this.gameEngine;
+            pairs.forEach(function (pair) {
+                switch (pair.bodyB.label) {
+                    //if squirrel hits log, game over
+                    case 'hurdle':
+                        gameEngine.dispatch({ type: 'game-over' });
+                        break;
                     //if squirrel hits heart, increase game state heart
                     case 'heart':
-                        gameEngine.dispatch( {type: 'add-heart'} );
+                        gameEngine.dispatch({ type: 'add-heart' });
                         break;
                     //if squirrel hits trash, display question
                     case 'trash':
-                        gameEngine.dispatch( {type: 'show-question'} );
+                        gameEngine.dispatch({ type: 'show-question' });
                         break;
                     case 'nut':
-                        gameEngine.dispatch( {type: 'add-nut'} );
+                        gameEngine.dispatch({ type: 'add-nut' });
                         break;
-               }
-           });
+                }
+            });
         });
 
         //add entitities to entities list
         return {
-            physics: { engine: engine, world: world, running: this.state.running},
+            physics: { engine: engine, world: world, running: this.state.running },
             floor1: { body: floor1, renderer: Floor },
             floor2: { body: floor2, renderer: Floor },
-            squirrel: { body: squirrel, img_file: "squirrel_1", renderer: Sprite}
+            squirrel: { body: squirrel, img_file: "squirrel_1", renderer: Sprite }
         }
     }
 
     // takes signal from collision detection and do differents things based on the event. 
     // event management should be handled through game states.
     onEvent = (e) => {
-        switch (e.type){
+        switch (e.type) {
             //if squirrel hits log, game over
             case 'game-over':
                 this.setState({
@@ -121,7 +121,7 @@ export default class Game extends Component {
             //if squirrel hits heart, add heart
             case 'add-heart':
                 this.setState({
-                    heart: this.state.heart+1,
+                    heart: this.state.heart + 1,
                 });
                 //remove heart from screen once hit
                 delete_entity('heart');
@@ -146,7 +146,7 @@ export default class Game extends Component {
             //in cases which squirrel loses a heart, stop running until the next user tap (not game running, but physics running!)
             case 'min-heart':
                 this.setState({
-                    heart: this.state.heart-1
+                    heart: this.state.heart - 1
                 });
                 this.checkHeart();
                 pause_game(true);
@@ -155,7 +155,7 @@ export default class Game extends Component {
             case 'wrong-answer':
                 delete_entity('trash');
                 this.setState({
-                    heart: this.state.heart-1,
+                    heart: this.state.heart - 1,
                     question: false,
                     answer: false
                 });
@@ -175,7 +175,7 @@ export default class Game extends Component {
             case 'add-nut':
                 delete_entity('trash');
                 this.setState({
-                    nut: this.state.nut+1
+                    nut: this.state.nut + 1
                 });
                 break;
         }
@@ -198,8 +198,8 @@ export default class Game extends Component {
 
     //checks that heart is at least 1, otherwise game over
     checkHeart = () => {
-        if (this.state.heart < 1){
-            this.gameEngine.dispatch( {type: 'game-over'});
+        if (this.state.heart < 1) {
+            this.gameEngine.dispatch({ type: 'game-over' });
         }
     }
 
@@ -208,7 +208,7 @@ export default class Game extends Component {
     getQuestion = () => {
         //get set of questions from deck
         //choose random question i
-        let set = this.deck.questions[Math.floor(Math.random() * this.deck.questions.length)]; 
+        let set = this.deck.questions[Math.floor(Math.random() * this.deck.questions.length)];
         this.setState({
             question_text: set['question'],
             right_answer: set['answer']
@@ -224,35 +224,35 @@ export default class Game extends Component {
     
 
     showAnswer = () => {
-        this.gameEngine.dispatch( {type: 'show-answer'});
+        this.gameEngine.dispatch({ type: 'show-answer' });
     }
 
     wrongAnswer = () => {
-        this.gameEngine.dispatch( {type: 'wrong-answer'});
+        this.gameEngine.dispatch({ type: 'wrong-answer' });
     }
 
     rightAnswer = () => {
-        this.gameEngine.dispatch( {type: 'right-answer'});
+        this.gameEngine.dispatch({ type: 'right-answer' });
     }
 
     render() {
         return (
             <View style={styles.container}>
                 <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
-                
-                <Text style={styles.heartCounter}> 
+
+                <Text style={styles.heartCounter}>
                     <Image source={heart} style={styles.heartCounter_img} resizeMode="contain" /> : {this.state.heart}
                 </Text>
 
-                <Text style={styles.nutCounter}> 
+                <Text style={styles.nutCounter}>
                     <Image source={nut} style={styles.nutCounter_img} resizeMode="contain" /> : {this.state.nut}
                 </Text>
-                
-                <TouchableOpacity 
-                  style={styles.fullScreenButton}>
+
+                <TouchableOpacity
+                    style={styles.fullScreenButton}>
                 </TouchableOpacity>
 
-                
+
                 <GameEngine
                     ref={(ref) => { this.gameEngine = ref; }}
                     style={styles.gameContainer}
@@ -266,10 +266,8 @@ export default class Game extends Component {
                 {!this.state.running &&
                     <View style={styles.fullScreen}>
                         <Text style={styles.gameOverText}>Game Over</Text>
-
-                        <Button title="Home" />
-                        <Button title="Retry?" onPress={this.reset}/>
-                        
+                        <Text style={styles.home}>Home</Text>
+                        <Text style={styles.retry} onPress={this.reset}>Retry</Text>
                     </View>}
 
                 {this.state.question &&
@@ -281,15 +279,16 @@ export default class Game extends Component {
                     </View>}
 
                 {this.state.answer &&
-                <View style={styles.fullScreen}>
-                    <Text style={styles.questionText}>Your Answer:</Text>
-                    <Text style={styles.questionSubText}> {this.state.your_answer} </Text>
-                    <Text style={styles.questionText}>Right Answer:</Text>
-                    <Text style={styles.questionSubText}> {this.state.right_answer} </Text>
+                    <View style={styles.fullScreen}>
+                        <Text style={styles.answerText}>Your Answer:</Text>
+                        <Text style={styles.answerSubText}> {this.state.your_answer} </Text>
+                        <Text style={styles.ranswerText}>Right Answer:</Text>
+                        <Text style={styles.ranswerSubText}> {this.state.right_answer} </Text>
 
-                    <Button title="Correct" onPress={this.rightAnswer}/>
-                    <Button title="Wrong" onPress={this.wrongAnswer}/>
-                </View>}
+                        <Text style={styles.right} onPress={this.rightAnswer}>Right</Text>
+                        <Text style={styles.wrong} onPress={this.wrongAnswer}>Wrong</Text>
+
+                    </View>}
             </View>
         );
     }
@@ -302,21 +301,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     textInput: {
-        position:'absolute',
+        position: 'absolute',
         borderColor: '#CCCCCC',
-        backgroundColor:'#CCCCCC',
+        backgroundColor: '#CCCCCC',
         borderTopWidth: 1,
-        textAlign:'center',
+        textAlign: 'center',
         borderBottomWidth: 1,
         borderLeftWidth: 1,
         borderRightWidth: 1,
         height: 200,
         width: 350,
         fontSize: 25,
-        bottom:'15%',
+        bottom: '25%',
         paddingLeft: 20,
         paddingRight: 20
-      },
+    },
     backgroundImage: {
         position: 'absolute',
         top: 0,
@@ -329,38 +328,38 @@ const styles = StyleSheet.create({
     heartCounter_img: {
         position: 'relative',
         top: 0,
-        bottom:0,
-        left:0,
-        right:0,
-        width:10,
-        height:10
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: 10,
+        height: 10
     },
     heartCounter: {
         position: 'absolute',
         top: 40,
-        bottom:20,
+        bottom: 20,
         left: 40,
-        right:50,
-        width:200,
-        height:30
+        right: 50,
+        width: 200,
+        height: 30
     },
     nutCounter_img: {
         position: 'relative',
         top: 0,
-        bottom:0,
-        left:0,
-        right:0,
-        width:13,
-        height:13
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: 13,
+        height: 13
     },
     nutCounter: {
         position: 'absolute',
         top: 40,
-        bottom:20,
+        bottom: 20,
         left: 100,
-        right:200,
-        width:200,
-        height:30
+        right: 200,
+        width: 200,
+        height: 30
     },
     gameContainer: {
         position: 'absolute',
@@ -370,9 +369,11 @@ const styles = StyleSheet.create({
         right: 0,
     },
     gameOverText: {
+        position: 'absolute',
         color: 'white',
         fontSize: 48,
-        fontFamily: '04b_19'
+        fontFamily: '04b_19',
+        top: '30%'
     },
     gameOverSubText: {
         color: 'white',
@@ -380,19 +381,53 @@ const styles = StyleSheet.create({
         fontFamily: '04b_19'
     },
     questionText: {
-        position:'absolute',
-        top:'5%',
+        position: 'absolute',
+        top: '5%',
+        color: 'white',
+        fontSize: 48,
+        fontFamily: '04b_19'
+    },
+    answerText: {
+        position: 'absolute',
+        top: '5%',
+        color: 'white',
+        fontSize: 48,
+        fontFamily: '04b_19'
+    },
+    ranswerText: {
+        position: 'absolute',
+        top: '45%',
         color: 'white',
         fontSize: 48,
         fontFamily: '04b_19'
     },
     questionSubText: {
-        position:'absolute',
+        position: 'absolute',
         color: 'white',
         fontSize: 24,
         fontFamily: '04b_19',
-        textAlign:'left',
-        top:'25%',
+        textAlign: 'left',
+        top: '25%',
+        paddingLeft: 20,
+        paddingRight: 20
+    },
+    answerSubText: {
+        position: 'absolute',
+        color: 'white',
+        fontSize: 24,
+        fontFamily: '04b_19',
+        textAlign: 'left',
+        top: '25%',
+        paddingLeft: 20,
+        paddingRight: 20
+    },
+    ranswerSubText: {
+        position: 'absolute',
+        color: 'white',
+        fontSize: 24,
+        fontFamily: '04b_19',
+        textAlign: 'left',
+        top: '60%',
         paddingLeft: 20,
         paddingRight: 20
     },
@@ -415,7 +450,7 @@ const styles = StyleSheet.create({
         top: 50,
         left: Constants.MAX_WIDTH / 2 - 20,
         textShadowColor: '#444444',
-        textShadowOffset: { width: 2, height: 2},
+        textShadowOffset: { width: 2, height: 2 },
         textShadowRadius: 2,
         fontFamily: '04b_19'
     },
@@ -428,12 +463,52 @@ const styles = StyleSheet.create({
         flex: 1
     },
     submitButton: {
-        position:'absolute',
+        position: 'absolute',
         borderWidth: 1,
         borderColor: '#F5F5F5',
         backgroundColor: '#F5F5F5',
-        bottom: 10,
+        bottom: 20,
         padding: 15,
         margin: 5
-      },
+    },
+    right: {
+        position: 'absolute',
+        borderWidth: 1,
+        borderColor: '#F5F5F5',
+        backgroundColor: '#F5F5F5',
+        bottom: 20,
+        padding: 15,
+        margin: 5,
+        left: '15%'
+    },
+    wrong: {
+        position: 'absolute',
+        borderWidth: 1,
+        borderColor: '#F5F5F5',
+        backgroundColor: '#F5F5F5',
+        bottom: 20,
+        padding: 15,
+        margin: 5,
+        right: '15%'
+    },
+    home: {
+        position: 'absolute',
+        borderWidth: 1,
+        borderColor: '#F5F5F5',
+        backgroundColor: '#F5F5F5',
+        bottom: '30%',
+        padding: 15,
+        margin: 5,
+        fontWeight: 'bold'
+    },
+    retry: {
+        position: 'absolute',
+        borderWidth: 1,
+        borderColor: '#F5F5F5',
+        backgroundColor: '#F5F5F5',
+        bottom: '15%',
+        padding: 15,
+        margin: 5,
+        fontWeight: 'bold'
+    },
 });

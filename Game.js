@@ -25,9 +25,9 @@ export default class Game extends Component {
             answer: false,        //whether currently showing answer
             question_number: 0,
 
-            question_text: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod?',
-            right_answer: 'right answer',
-            your_answer: 'hi'
+            question_text: '',
+            right_answer: '',
+            your_answer: ''
         };
         this.gameEngine = null;
         this.entities = this.setupWorld();

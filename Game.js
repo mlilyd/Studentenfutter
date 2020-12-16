@@ -11,7 +11,6 @@ import Constants from './src/Constants';
 import bg from './src/assets/bg.png';
 import heart from './src/assets/heart.png';
 import nut from './src/assets/nut.png';
-import { getDecks } from './src/cards/utils/api';
 
 export default class Game extends Component {
     constructor(props) {
@@ -206,11 +205,9 @@ export default class Game extends Component {
     }
 
     ///// QUESTION/ANSWER HANDLING //////////////
-    // set question_text and right_answer from deck
+    // set question_text and right_answer from data
     getQuestion = (question_number) => {
-        //get set of questions from deck
-        //choose random question i
-        // let set = this.deck.questions[Math.floor(Math.random() * this.deck.questions.length)];
+        //get set of questions 
         this.setState({
             question_text: this.props.data[question_number]["question"],
             right_answer: this.props.data[question_number]["answer"]

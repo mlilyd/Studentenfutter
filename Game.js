@@ -209,8 +209,8 @@ export default class Game extends Component {
     getQuestion = (question_number) => {
         //get set of questions 
         this.setState({
-            question_text: this.props.data[question_number]["question"],
-            right_answer: this.props.data[question_number]["answer"]
+            question_text: this.props.route.params.gameCard[question_number]["question"],
+            right_answer: this.props.route.params.gameCard[question_number]["answer"]
         });
     }
 
@@ -264,7 +264,7 @@ export default class Game extends Component {
                 {!this.state.running &&
                     <View style={styles.fullScreen}>
                         <Text style={styles.gameOverText}>Game Over</Text>
-                        <Text style={styles.home}>Home</Text>
+                        <Text style={styles.home} onPress={() => {this.props.navigation.navigate("Home")}}>Home</Text>
                         <Text style={styles.retry} onPress={this.reset}>Retry</Text>
                     </View>}
 

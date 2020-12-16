@@ -61,8 +61,10 @@ export default class Home extends Component{
             var cards = await getGameCards(this.state.selectionDifficulty, this.state.selectionDeck);
             // https://www.pluralsight.com/guides/how-to-send-state-of-current-component-as-a-parameter-to-another-external-method-using-react
             // add cards to <Game /> and access them in class
+            // this.mountScene(<Game data={cards}/>);
+
             // start Game.js
-            this.mountScene(<Game data={cards}/>);
+            this.props.navigation.navigate("Game", {gameCard: cards});
 
         } catch (e) {
             console.log(e);

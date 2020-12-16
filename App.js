@@ -8,6 +8,7 @@ import { store } from './src/cards/store';
 import { Provider } from 'react-redux';
 
 import Home from './Home';
+import Game from './Game';
 import Deck from './src/cards/views/Deck';
 import CardsHome from './src/cards/views/CardsHome';
 import AddCard from './src/cards/views/AddCard';
@@ -21,7 +22,8 @@ export default function Cards() {
         <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator style={styles.container}>
-              <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen name="Home" component={Home} options={{headerShown: false}} />
+              <Stack.Screen name="Game" component={Game} options={{headerShown: false}} />
               <Stack.Screen name="Karteikarten" component={CardsHome} />
               <Stack.Screen name="gewähltes Karteikartenset" component={Deck} />
               <Stack.Screen name="Karteikarte hinzufügen" component={AddCard} />

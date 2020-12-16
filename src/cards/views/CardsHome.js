@@ -36,20 +36,18 @@ function Home(props){
             <Button rounded light style={ styles.newDeckButton} onPress={() => navigation.navigate('Karteikartenset hinzufügen')} ><Text>+</Text></Button>
             
       <ScrollView >
-<View style={{height: '100%'}}>
-      {decks.map(deck => {
-        return (
-          <Button block light style={styles.buttons} key={deck.id} onPress={() => openDeck(deck.id)} >
-            <Text style={styles.titles}>{deck.title}</Text>
-            <Text>{deck.questions.length}</Text>
-          </Button>
-        )
-      })}
-
-      
-</View>
+        <View style={{height: '100%'}}>
+          {decks.map(deck => {
+            return (
+              <Button block light style={styles.buttons} key={deck.id} onPress={() => openDeck(deck.id)} >
+                <Text style={styles.titles}>{deck.title}</Text>
+                <Text>{deck.questions.length}</Text>
+              </Button>
+            )
+           })}
+        </View>
       </ScrollView>
-      </SafeAreaView>
+    </SafeAreaView>
   );
 }
 

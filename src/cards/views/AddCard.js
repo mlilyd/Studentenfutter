@@ -18,28 +18,29 @@ const AddCard = ({ handleAddCardToDeck, selectedDeck, navigation })=> {
         navigation.navigate('gewähltes Karteikartenset')
     }
   
-  return (
-    <View style={styles.container}>
-        <TextInput style={styles.input} title='What is the title of your card?' onChangeText={text => onChangeQuestion(text)}
-            value={question} />
-        <TextInput style={styles.input} title='What is the answer of your card?' onChangeText={text => onChangeAnswer(text)}
-            value={answer}/>
-        <Text style={styles.puretext}>Kartenschwierigkeit: </Text>
-        <View style={styles.pickerContainer}>
-            <Picker
-                selectedValue={difficulty}
-                style={{ height: 50, width: 150 }}
-                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-            >
-                <Picker.Item label="Leicht" value="L" />
-                <Picker.Item label="Schwer" value="S" />
-            </Picker>
+    return (
+        <View style={styles.container}>
+            <TextInput style={styles.input} title='What is the title of your card?' onChangeText={text => onChangeQuestion(text)}
+                value={question} />
+            <TextInput style={styles.input} title='What is the answer of your card?' onChangeText={text => onChangeAnswer(text)}
+                value={answer}/>
+            <Text style={styles.puretext}>Kartenschwierigkeit: </Text>
+            {/* https://reactnative.dev/docs/picker */}
+            <View style={styles.pickerContainer}>
+                <Picker
+                    selectedValue={difficulty}
+                    style={{ height: 50, width: 150 }}
+                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                >
+                    <Picker.Item label="Leicht" value="L" />
+                    <Picker.Item label="Schwer" value="S" />
+                </Picker>
+            </View>
+            <Button block light style={styles.buttons} onPress={handleAddCard} >
+            <Text style={styles.titles} >Neue Karteikarte hinzufügen</Text>
+            </Button>
         </View>
-        <Button block light style={styles.buttons} onPress={handleAddCard} >
-        <Text style={styles.titles} >Neue Karteikarte hinzufügen</Text>
-        </Button>
-    </View>
-  );
+    );
 }
 
 const mapStateToProps = state => state

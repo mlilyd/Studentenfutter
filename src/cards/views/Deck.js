@@ -11,18 +11,11 @@ import { Render } from 'matter-js';
 const Deck = props => {
   const { handleGetAllDecks, decks, selectedDeck, deleteDeck, deleteCard, navigation, selectDeck } = props;
   const deck = decks.filter(deck => deck.id === selectedDeck)[0]
-  // const cards = deck.questions.map((i) => (i.question + " " + i.answer + "\n")) 
-  // const del_card = 
 
-  // function cardsDel() {
-  //   var test = "";
-  //   for (let i = 0; i < (deck.questions.length-1); i++){
-  //     test += <Text style={styles.cardtext}>{deck.questions[i].question + deck.questions[i].answer}</Text>;
-  //   }
-  //   return test;
-  // }
 
   // source: https://reactnative.dev/docs/alert
+  // add warning alerts before deleting card or deck
+
   const deletionWarn = (index) =>
   Alert.alert(
     "Karteikarte löschen",
@@ -39,6 +32,7 @@ const Deck = props => {
     ],
     { cancelable: false }
   );
+  
   const deletionDeck = () =>
   Alert.alert(
     "Karteikartenset löschen",
@@ -66,6 +60,7 @@ const Deck = props => {
 
   if (deck === undefined) return null;
   
+  // added deletion of a card
   const handleDeleteCard = (index) => {
     deleteCard(selectedDeck, index)
     removeCard(selectedDeck, index)
@@ -75,17 +70,17 @@ const Deck = props => {
   }
 
   return (
-    // Scrollview added
+    // added scrollview
     <ScrollView
-  contentContainerStyle={{
-    minHeight: 10,
-    flexDirection: "column",
-    alignItems: "stretch",
-    marginTop: 16,
-  }}
-  alwaysBounceVertical={false}
-  showsVerticalScrollIndicator={true}
->
+      contentContainerStyle={{
+        minHeight: 10,
+        flexDirection: "column",
+        alignItems: "stretch",
+        marginTop: 16,
+      }}
+      alwaysBounceVertical={false}
+      showsVerticalScrollIndicator={true}
+    >
       <Card style={{ height: '100%' }}>
         <View style={{flex: 1}}>
         <Text style={styles.header}>{deck.title}</Text>
@@ -106,7 +101,7 @@ const Deck = props => {
           <Text style={styles.buttonText}>Karteikartenset löschen</Text>
         </Button></View>
         {/* <Text style={styles.subtitle}>{deck.questions.length} cards</Text> */}
-        </Card>
+      </Card>
     </ScrollView>
   );
 }

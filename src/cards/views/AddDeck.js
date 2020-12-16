@@ -16,7 +16,7 @@ const AddDeck = ({ handleAddDecks, navigation }) => {
         navigation.navigate('Karteikarten')
     }
   
-  return (
+    return (
       <View style={styles.container}>
           <TextInput style={styles.input} title='What is the title of your Deck?' onChangeText={text => onChangeTitle(text)}
               value={title} />
@@ -24,8 +24,8 @@ const AddDeck = ({ handleAddDecks, navigation }) => {
           <Button block light style={styles.buttons} title='Create New Deck' onPress={handleAddDeck} >
               <Text style={styles.titles}>Neues Set erstellen</Text>
           </Button>
-    </View>
-  );
+        </View>
+    );
 }
 
 const mapStateToProps = state => state
@@ -35,32 +35,30 @@ const mapDispatchToProps = dispatch => bindActionCreators({ ...actions }, dispat
 export default compose(connect(mapStateToProps, mapDispatchToProps))(AddDeck)
 
 const styles = StyleSheet.create({
-        container: {
+    container: {
         marginTop: 140,
-  
     },
-          buttons: {
-    margin: 15,
-    fontSize: 92,
-    height: 100,
-    fontWeight: '600',
-    textAlign: 'center',
-    backgroundColor: 'rgb(198,226,255)'
+    buttons: {
+        margin: 15,
+        fontSize: 92,
+        height: 100,
+        fontWeight: '600',
+        textAlign: 'center',
+        backgroundColor: 'rgb(198,226,255)'
     },
-            titles: {
-    fontWeight: '600',
-    fontSize: 26,
-                margin: 10,
-    color: 'rgb(64,64,64)'
+    titles: {
+        fontWeight: '600',
+        fontSize: 26,
+        margin: 10,
+        color: 'rgb(64,64,64)'
     },
     input: {
         alignContent: 'center',
         fontSize: 28,
         textAlign: 'center',
         borderBottomColor: 'rgb(64,64,64)',
-    borderBottomWidth: 1.5,
+        borderBottomWidth: 1.5,
         marginBottom: 30,
-    color: 'rgb(64,64,64)'
-        
-            }
+        color: 'rgb(64,64,64)'
+    }
 });

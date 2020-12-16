@@ -221,7 +221,7 @@ export async function getDecktitles() {
     Object.size = function(obj) {
       var size = 0, key;
       for (key in obj) {
-          if (obj.hasOwnProperty(key)) size++;
+        if (obj.hasOwnProperty(key)) size++;
       }
       return size;
     }
@@ -230,7 +230,7 @@ export async function getDecktitles() {
       // get all titles of decks and add them to array
       decktitles.push(Object.values(data)[i]["title"]);
     }
-      return decktitles;
+    return decktitles;
   }
 
   return {};
@@ -250,7 +250,7 @@ export async function getGameCards(difficulty, decktitle) {
     Object.size = function(obj) {
       var size = 0, key;
       for (key in obj) {
-          if (obj.hasOwnProperty(key)) size++;
+        if (obj.hasOwnProperty(key)) size++;
       }
       return size;
     }
@@ -277,5 +277,4 @@ export async function getGameCards(difficulty, decktitle) {
       return randomGameCards;
     }
   }
-
 }

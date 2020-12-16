@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, TouchableOpacity, Image, Modal } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Image, Modal } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import Game from './Game';
 import Cards from './Cards';
@@ -22,14 +22,14 @@ export default class App extends Component{
 
         this.decktitles = this.setPicker();
 
-        }
+    }
       
     mountScene = scene => {
         this.setState({
             sceneVisible: true,
             scene: scene
         });
-        };
+    };
     
     unMountScene = () => {
         this.setState({
@@ -38,10 +38,13 @@ export default class App extends Component{
         });
     };
 
+    // call to set picker/selection dynamically according to decks in storage
     setPicker = async () => {
         try {
+            // get dynamic deck titles
             var decktitles = await getDecktitles();
             // https://stackoverflow.com/questions/47658765/objects-are-not-valid-as-a-react-child-found-object-promise/47659112
+            // dynamically fill picker
             this.setState({
                 decktitle: decktitles.map((object, index) => (
                     <Picker.Item key={index} label={object} value={object}/>
@@ -53,11 +56,14 @@ export default class App extends Component{
         }      
     };
 
+    // call when pressing "Spielen", right before game will start
     handleStartGame = async () => {
         try {
+            // get user chosen cards to play the game
             var cards = await getGameCards(this.state.selectionDifficulty, this.state.selectionDeck);
             // https://www.pluralsight.com/guides/how-to-send-state-of-current-component-as-a-parameter-to-another-external-method-using-react
-            // add parameter to <Game /> and access it in class
+            // add cards to <Game /> and access them in class
+            // start Game.js
             this.mountScene(<Game data={cards}/>);
 
         } catch (e) {
@@ -158,53 +164,6 @@ const styles = StyleSheet.create({
         width: Constants.MAX_WIDTH,
         height: Constants.MAX_HEIGHT
     },
-    gameContainer: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-    },
-    gameOverText: {
-        color: 'white',
-        fontSize: 48,
-        fontFamily: '04b_19'
-    },
-    gameOverSubText: {
-        color: 'white',
-        fontSize: 24,
-        fontFamily: '04b_19'
-    },
-    fullScreen: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'black',
-        opacity: 0.8,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    score: {
-        position: 'absolute',
-        color: 'white',
-        fontSize: 72,
-        top: 50,
-        left: Constants.MAX_WIDTH / 2 - 20,
-        textShadowColor: '#444444',
-        textShadowOffset: { width: 2, height: 2},
-        textShadowRadius: 2,
-        fontFamily: '04b_19'
-    },
-    fullScreenButton: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        flex: 1
-    },
     buttonContainer: {
         top: 20
     },
@@ -219,5 +178,3 @@ const styles = StyleSheet.create({
         alignItems: "center"
       }
 });
-  
-//   export default App;

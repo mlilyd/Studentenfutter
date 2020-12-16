@@ -160,7 +160,7 @@ export default class Game extends Component {
                     answer: false
                 });
                 this.checkHeart();
-                if (this.state.question_number != this.props.route.params.gameCard.length) {
+                if (this.state.question_number != this.props.route.params.gameCard.length-1) {
                     this.setState({
                         question_number: this.state.question_number + 1
                     });
@@ -177,7 +177,7 @@ export default class Game extends Component {
                     question: false,
                     answer: false
                 });
-                if (this.state.question_number != this.props.route.params.gameCard.length) {
+                if (this.state.question_number != this.props.route.params.gameCard.length-1) {
                     this.setState({
                         question_number: this.state.question_number + 1
                     });

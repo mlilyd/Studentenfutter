@@ -96,7 +96,7 @@ export function deleteCard(deckId, card) {
     type: DELETE_CARD,
     deckId,
     card
-  }
+  };
 }
 
 export function resetNewDeckId() {

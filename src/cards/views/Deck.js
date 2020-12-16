@@ -11,18 +11,11 @@ import { Render } from 'matter-js';
 const Deck = props => {
   const { handleGetAllDecks, decks, selectedDeck, deleteDeck, deleteCard, navigation, selectDeck } = props;
   const deck = decks.filter(deck => deck.id === selectedDeck)[0]
-  // const cards = deck.questions.map((i) => (i.question + " " + i.answer + "\n")) 
-  // const del_card = 
 
-  // function cardsDel() {
-  //   var test = "";
-  //   for (let i = 0; i < (deck.questions.length-1); i++){
-  //     test += <Text style={styles.cardtext}>{deck.questions[i].question + deck.questions[i].answer}</Text>;
-  //   }
-  //   return test;
-  // }
 
   // source: https://reactnative.dev/docs/alert
+  // add warning alerts before deleting card or deck
+
   const deletionWarn = (index) =>
   Alert.alert(
     "Karteikarte löschen",
@@ -39,7 +32,23 @@ const Deck = props => {
     ],
     { cancelable: false }
   );
-
+  
+  const deletionDeck = () =>
+  Alert.alert(
+    "Karteikartenset löschen",
+    "Möchten Sie dieses Karteikartenset wirklich löschen?",
+    [
+      { 
+        text: "Ja", 
+        onPress: () => handleDeleteDeck()
+      },
+      {
+        text: "Nein",
+        style: "cancel"
+      }
+    ],
+    { cancelable: false }
+  );
   
 
   const handleDeleteDeck = () => {
@@ -48,9 +57,10 @@ const Deck = props => {
     selectDeck('')
     navigation.navigate('Karteikarten')
   } 
-  console.log(deck)
+
   if (deck === undefined) return null;
   
+  // added deletion of a card
   const handleDeleteCard = (index) => {
     deleteCard(selectedDeck, index)
     removeCard(selectedDeck, index)
@@ -60,17 +70,17 @@ const Deck = props => {
   }
 
   return (
-    // Scrollview added
+    // added scrollview
     <ScrollView
-  contentContainerStyle={{
-    minHeight: 10,
-    flexDirection: "column",
-    alignItems: "stretch",
-    marginTop: 16,
-  }}
-  alwaysBounceVertical={false}
-  showsVerticalScrollIndicator={true}
->
+      contentContainerStyle={{
+        minHeight: 10,
+        flexDirection: "column",
+        alignItems: "stretch",
+        marginTop: 16,
+      }}
+      alwaysBounceVertical={false}
+      showsVerticalScrollIndicator={true}
+    >
       <Card style={{ height: '100%' }}>
         <View style={{flex: 1}}>
         <Text style={styles.header}>{deck.title}</Text>
@@ -81,17 +91,17 @@ const Deck = props => {
             <Text style={styles.cardtext}>{index+1}. Frage: {object.question + " "}</Text> 
             <Text style={styles.cardtext}>Antwort: {object.answer}</Text>
             <Text style={styles.cardtextDiff}>Schwierigkeit: {object.difficulty}</Text>
-            <Button style={styles.buttonsDelete} block ligh title='Delete card' onPress={() => deletionWarn(index)}><Text>X</Text></Button>
+            <Button style={styles.buttonsDelete} title='Delete card' onPress={() => deletionWarn(index)}><Text>X</Text></Button>
           </View>))}
         </View>
         <Button style={styles.buttons} block ligh title='Add new card' onPress={() => navigation.navigate('Karteikarte hinzufügen')}>
           <Text style={styles.buttonText}>Karteikarte hinzufügen</Text>
         </Button>
-        <Button style={styles.buttons} block ligh title='Delete Deck' onPress={handleDeleteDeck}>
+        <Button style={styles.buttons} block ligh title='Delete Deck' onPress={deletionDeck}>
           <Text style={styles.buttonText}>Karteikartenset löschen</Text>
         </Button></View>
         {/* <Text style={styles.subtitle}>{deck.questions.length} cards</Text> */}
-        </Card>
+      </Card>
     </ScrollView>
   );
 }
@@ -112,7 +122,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 20,
     //marginTop: 80,
-    color: '	rgb(64,64,64)',
+    color: '	rgb(00,161,200)',
   },
   buttons: {
     margin: 5,
@@ -124,7 +134,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(00,161,200)'
   },
   buttonsDelete: {
-    backgroundColor: 'rgb(00,191,200)',
+    backgroundColor: 'rgb(00,161,200)',
     //margin: 5,
     marginLeft: 130,
     marginRight: 130,
@@ -141,7 +151,7 @@ const styles = StyleSheet.create({
   cardsFrame: {
     margin: 15,
     padding: 2,
-    borderColor: 'rgb(0,191,200)',
+    borderColor: 'rgb(0,161,200)',
     borderWidth: 2,
     borderStyle: "solid"
   },

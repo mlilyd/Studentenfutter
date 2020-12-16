@@ -5,7 +5,6 @@ import Sprite from "./Sprite";
 let hurdleCount = 0;
 let hurdlex = Constants.MAX_WIDTH;
 let heartCount = 0;
-let trashCount = 0;
 
 let tick = 0;
 let paused = true;
@@ -126,7 +125,6 @@ export const generateTrash = (world, entities) => {
         { isStatic: true, label:"trash" }
     );
     
-    trashCount += 1;
     Matter.World.add(world, [trash]);
     
     entities["trash"] = {
@@ -147,9 +145,11 @@ const Physics = (entities, { touches, time, dispatch }) => {
             world.gravity.y = 1.05;
             paused = false;
             if (correct_answer){
+                if (typeof entities.trash === 'object' && entities.trash !== null){
                 Matter.World.remove(world, entities.trash.body);
                 delete entities.trash;
-            }
+                correct_answer = false;
+            }}
         }
              Matter.Body.setVelocity(squirrel, {x: 0, y: -25});            
         });
@@ -166,7 +166,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
     if(tick%200 == 0 && !paused && heartCount<5){
         generateHearts(squirrel, world, entities);
     }
-    if(tick%100 == 0 && !paused && trashCount<6){
+    if(tick%100 == 0 && !paused){
         generateTrash(world, entities);
     }
     
@@ -209,15 +209,21 @@ const Physics = (entities, { touches, time, dispatch }) => {
         Matter.Body.setVelocity(squirrel, {x: 10, y:0});
     }
 
-    /* has flickering issues! Maybe need to adjust sprite renderer
+    /* //has flickering issues! Maybe need to adjust sprite renderer
     ///squirrel animation: updates squirrel animation to a new frame every 3 ticks
-    if (tick% 3 == 0 && world.gravity.y > 0) {
-        pose += 1;
-        if (pose%7 == 0)
-            pose = 1;
-        entities.squirrel.img_file = "squirrel_" + (pose);  
+    if (paused){
+        entities.squirrel.img_file = "squirrel_" + 1;
+    }
+    else{
+        if (tick% 3 == 0 && world.gravity.y > 0) {
+            pose += 1;
+            if (pose%7 == 0)
+                pose = 1;
+            entities.squirrel.img_file = "squirrel_" + (pose);  
+        }
     }
     //*/
+
     if (!paused){
     //moves floor to the left of the screen to simulate movement
     Object.keys(entities).forEach(key => {

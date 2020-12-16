@@ -82,7 +82,7 @@ export default class Game extends Component {
                 switch (pair.bodyB.label) {
                     //if squirrel hits log, game over
                     case 'hurdle':
-                        gameEngine.dispatch({ type: 'game-over' });
+                        gameEngine.dispatch({ type: 'min-heart' });
                         break;
                     //if squirrel hits heart, increase game state heart
                     case 'heart':
@@ -91,9 +91,6 @@ export default class Game extends Component {
                     //if squirrel hits trash, display question
                     case 'trash':
                         gameEngine.dispatch({ type: 'show-question' });
-                        break;
-                    case 'nut':
-                        gameEngine.dispatch({ type: 'add-nut' });
                         break;
                 }
             });
@@ -165,6 +162,7 @@ export default class Game extends Component {
                         question_number: this.state.question_number + 1
                     });
                 } else {
+                    isCorrect(false);
                     console.log("Spiel beendet");
                     this.props.navigation.navigate("Home");
                 }
@@ -175,24 +173,19 @@ export default class Game extends Component {
                 isCorrect(true);
                 this.setState({
                     question: false,
-                    answer: false
+                    answer: false,
+                    nut: this.state.nut+1
                 });
                 if (this.state.question_number != this.props.route.params.gameCard.length-1) {
                     this.setState({
                         question_number: this.state.question_number + 1
                     });
                 } else {
+                    isCorrect(false);
                     console.log("Spiel beendet");
                     this.props.navigation.navigate("Home");
                 }
                 pause_game(true);
-                break;
-            //if squirrel hit nut increase nut state
-            case 'add-nut':
-                delete_entity('trash');
-                this.setState({
-                    nut: this.state.nut + 1
-                });
                 break;
         }
     }
@@ -201,6 +194,7 @@ export default class Game extends Component {
     reset = () => {
         this.gameEngine.swap(this.setupWorld());
         resetHeart();
+        isCorrect(false);
         this.setState({
             running: true,    //whether squirrel is running or not
             score: 0,         //how many scores

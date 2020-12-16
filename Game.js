@@ -278,30 +278,28 @@ export default class Game extends Component {
 
                 {!this.state.running &&
                     <View style={styles.fullScreen}>
-                        <Text style={styles.gameOverText}>Game Over</Text>
+                        <Text style={styles.gameOverText}>Spiel beendet</Text>
                         <Text style={styles.home} onPress={() => {this.props.navigation.navigate("Home")}}>Home</Text>
-                        <Text style={styles.retry} onPress={this.reset}>Retry</Text>
+                        <Text style={styles.retry} onPress={this.reset}>Neuer Versuch</Text>
                     </View>}
 
                 {this.state.question &&
                     <View style={styles.fullScreen}>
-                        <Text style={styles.questionText}>Question</Text>
+                        <Text style={styles.questionText}>Frage</Text>
                         <Text style={styles.questionSubText}> {this.state.question_text} </Text>
-                        <TextInput style={styles.textInput} placeholder="Your answer" onChangeText={text => this.getAnswer(text)}/>
-                        <Text style={styles.submitButton} onPress={this.showAnswer}>Check answer</Text>
+                        <TextInput style={styles.textInput} placeholder="Deine Antwort" onChangeText={text => this.getAnswer(text)}/>
+                        <Text style={styles.submitButton} onPress={this.showAnswer}>Antwort überprüfen</Text>
 
                     </View>}
 
                 {this.state.answer &&
                     <View style={styles.fullScreen}>
-                        <Text style={styles.answerText}>Your Answer:</Text>
+                        <Text style={styles.answerText}>Deine Antwort:</Text>
                         <Text style={styles.answerSubText}> {this.state.your_answer} </Text>
-                        <Text style={styles.ranswerText}>Right Answer:</Text>
+                        <Text style={styles.ranswerText}>Richtige Antwort:</Text>
                         <Text style={styles.ranswerSubText}> {this.state.right_answer} </Text>
-
-                        <Text style={styles.right} onPress={this.rightAnswer}>Right</Text>
-                        <Text style={styles.wrong} onPress={this.wrongAnswer}>Wrong</Text>
-
+                        <Text style={styles.right} onPress={this.rightAnswer}>Richtig</Text>
+                        <Text style={styles.wrong} onPress={this.wrongAnswer}>Falsch</Text>
                     </View>}
             </View>
         );

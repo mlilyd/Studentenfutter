@@ -162,7 +162,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
     if(tick%200 == 0 && !paused && heartCount<5){
         generateHearts(squirrel, world, entities);
     }
-    if(tick%300 == 0 && !paused && trashCount<6){
+    if(tick%150 == 0 && !paused && trashCount<6){
         generateTrash(world, entities);
     }
     

@@ -140,8 +140,7 @@ export default class Game extends Component {
                 this.setState({
                     question: false,
                     answer: true,
-                    running: true,
-                    question_number: this.state.question_number + 1
+                    running: true
                 });
                 break;
             //in cases which squirrel loses a heart, stop running until the next user tap (not game running, but physics running!)
@@ -161,6 +160,14 @@ export default class Game extends Component {
                     answer: false
                 });
                 this.checkHeart();
+                if (this.state.question_number != this.props.route.params.gameCard.length) {
+                    this.setState({
+                        question_number: this.state.question_number + 1
+                    });
+                } else {
+                    console.log("Spiel beendet");
+                    this.props.navigation.navigate("Home");
+                }
                 pause_game(true);
                 break;
             //if player gives right answer trash turns into nut, set question to false, and unpause game.
@@ -170,6 +177,14 @@ export default class Game extends Component {
                     question: false,
                     answer: false
                 });
+                if (this.state.question_number != this.props.route.params.gameCard.length) {
+                    this.setState({
+                        question_number: this.state.question_number + 1
+                    });
+                } else {
+                    console.log("Spiel beendet");
+                    this.props.navigation.navigate("Home");
+                }
                 pause_game(true);
                 break;
             //if squirrel hit nut increase nut state

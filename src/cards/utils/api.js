@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-community/async-storage";
-// import { generateUID } from "./helper";
 
 const FLASHCARDS_STORAGE_KEY = "flashcards_data";
 
+// changed initialData according to our needs
 function initialData() {
   return {
     sxbjgrwdbhf58lxznh9q79: {
@@ -12,7 +12,7 @@ function initialData() {
         {
           question: "Was ist die Hauptstadt von Deutschland?",
           answer: "Berlin",
-          difficulty: "L"
+          difficulty: "L" // added difficulty for each card!
         },
         {
           question: "Was ist die Hauptstadt von Frankreich?",
@@ -38,6 +38,68 @@ function initialData() {
           question: "Was ist die Hauptstadt von Madagaskar?",
           answer: "Antananarivo",
           difficulty: "S"
+        }
+      ]
+    },
+    "636jgrwdbhf58lxznh9q79": {
+      id: "636jgrwdbhf58lxznh9q79",
+      title: "Test",
+      questions: [
+        {
+          question: "",
+          answer: "",
+          difficulty: "L"
+        },
+        {
+          question: "",
+          answer: "",
+          difficulty: "L"
+        },
+        {
+          question: "",
+          answer: "",
+          difficulty: "L"
+        },
+        {
+          question: "",
+          answer: "",
+          difficulty: "L"
+        },
+        {
+          question: "",
+          answer: "",
+          difficulty: "L"
+        }
+      ]
+    },
+    "632mgp7hm68vzvg2amz1hq": {
+      id: "632mgp7hm68vzvg2amz1hq",
+      title: "Mathe",
+      questions: [
+        {
+          question: "Was ergibt 4 + 18?",
+          answer: "22",
+          difficulty: "L"
+        },
+        {
+          question: "Was ist die Wurzel aus 49?",
+          answer: "7",
+          difficulty: "L"
+        },
+        {
+          question: "Was ist die Wurzel aus 256?",
+          answer: "16",
+          difficulty: "L"
+        },
+        {
+          question: "Was ergibt 40 + 12?",
+          answer: "52",
+          difficulty: "L"
+        },
+        {
+          question: "Was ergibt 1 + 1?",
+          answer: "2",
+          difficulty: "L"
         }
       ]
     }
@@ -123,6 +185,9 @@ export async function removeDeck(deckId) {
   return {};
 }
 
+// -------------------------------------------------------- MANUALLY ADDED FUNCTIONS --------------------------------------------------------
+
+// remove a single card from the selected deck
 export async function removeCard(deckId, index) {
   const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
   if (results) {
@@ -130,14 +195,87 @@ export async function removeCard(deckId, index) {
     
     for (i=0; i<data[deckId]["questions"].length; i++) {
       if (i == index) {
+        // if i is index to delete, splice question array so it disappears
         data[deckId]["questions"].splice(i, 1);
       }
     };
 
+    // change item in AsyncStorage according to new object
     await AsyncStorage.setItem(FLASHCARDS_STORAGE_KEY, JSON.stringify(data));
 
     return data;
   }
   return {};
+}
+
+// get all titles of decks
+export async function getDecktitles() {
+  const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
+  var decktitles = [];
+
+  if (results && results !== '{}') {
+    var data = JSON.parse(results);
+
+    // https://stackoverflow.com/questions/5223/length-of-a-javascript-object
+    // get "size" of object with number of keys
+    Object.size = function(obj) {
+      var size = 0, key;
+      for (key in obj) {
+          if (obj.hasOwnProperty(key)) size++;
+      }
+      return size;
+    }
+
+    for (i=0; i<Object.size(data); i++) {
+      // get all titles of decks and add them to array
+      decktitles.push(Object.values(data)[i]["title"]);
+    }
+      return decktitles;
+  }
+
+  return {};
+}
+
+// get n cards according to difficulty and deck set by user to play the game!
+export async function getGameCards(difficulty, decktitle) {
+  const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
+  var gameCards = [];
+  var n = 0;
+
+  if (results && results !== '{}') {
+    var data = JSON.parse(results);
+
+    // https://stackoverflow.com/questions/5223/length-of-a-javascript-object
+    // get "size" of object with number of keys
+    Object.size = function(obj) {
+      var size = 0, key;
+      for (key in obj) {
+          if (obj.hasOwnProperty(key)) size++;
+      }
+      return size;
+    }
+
+    // get possible cards that fit user selection (decktitle and difficulty)
+    for (i=0; i<Object.size(data); i++) {
+      for (j=0; j<Object.size(Object.values(data)[i]["questions"]); j++) {
+        if (Object.values(data)[i]["title"] == decktitle && Object.values(data)[i]["questions"][j]["difficulty"] == difficulty) {
+          gameCards.push(Object.values(data)[i]["questions"][j]);
+        }   
+      }
+    }
+
+    console.log("MATCHING CARDS: \n", gameCards, "\n");
+    
+    // take n random elements of gameCards array to play the game
+    // for now: n = 3 to see if it works
+    if (gameCards.length < 3) {
+      return gameCards;
+    } else {
+      // https://stackoverflow.com/questions/19269545/how-to-get-a-number-of-random-elements-from-an-array/38571132#38571132
+      let randomGameCards = gameCards.sort(() => .5 - Math.random()).slice(0,3)
+      console.log("N CARDS OF MATCHING CARDS: \n", randomGameCards, "\n");
+      return randomGameCards;
+    }
+  }
 
 }

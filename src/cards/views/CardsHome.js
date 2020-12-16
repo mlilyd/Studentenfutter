@@ -4,7 +4,7 @@ import { StyleSheet, View , ScrollView, SafeAreaView} from 'react-native';
 import { connect } from 'react-redux'
 import { bindActionCreators, compose } from 'redux';
 import * as actions from '../store/actions/decks'
-import {  Button, Text } from 'native-base';
+import { Button, Text } from 'native-base';
 //import App from 'App';
 
 
@@ -32,7 +32,7 @@ function Home(props){
 
   return (
     <SafeAreaView style={styles.container}>
-
+            {/*<Button title="zurück" style={styles.buttons}><Text>Menü</Text></Button>*/}
             <Button rounded light style={ styles.newDeckButton} onPress={() => navigation.navigate('Karteikartenset hinzufügen')} ><Text>+</Text></Button>
             
       <ScrollView >

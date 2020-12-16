@@ -12,7 +12,7 @@ import CardsHome from './src/cards/views/CardsHome';
 import AddCard from './src/cards/views/AddCard';
 import AddDeck from './src/cards/views/AddDeck';
 
-import App from './App';
+// import App from './App';
 import bg from './src/assets/bg.png';
 
 const Stack = createStackNavigator()

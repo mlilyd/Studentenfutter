@@ -8,7 +8,7 @@ import { Button, Text } from 'native-base';
 
 
 const AddDeck = ({ handleAddDecks, navigation }) => {
-    const [title, onChangeTitle] = useState('Title of Deck? ')
+    const [title, onChangeTitle] = useState('Titel des Sets? ')
 
 
     const handleAddDeck = () => {
@@ -22,7 +22,7 @@ const AddDeck = ({ handleAddDecks, navigation }) => {
               value={title} />
 
           <Button block light style={styles.buttons} title='Create New Deck' onPress={handleAddDeck} >
-              <Text style={styles.titles}>Create New Deck</Text>
+              <Text style={styles.titles}>Neues Set erstellen</Text>
           </Button>
     </View>
   );
@@ -45,10 +45,11 @@ const styles = StyleSheet.create({
     height: 100,
     fontWeight: '600',
     textAlign: 'center',
+    backgroundColor: 'rgb(198,226,255)'
     },
             titles: {
     fontWeight: '600',
-    fontSize: 28,
+    fontSize: 26,
                 margin: 10,
     color: 'rgb(64,64,64)'
     },

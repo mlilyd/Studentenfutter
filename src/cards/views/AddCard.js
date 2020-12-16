@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators, compose } from 'redux';
 import * as actions from '../store/actions/decks'
 import {  Button, Text, Card, Radio } from 'native-base';
+import { Picker } from '@react-native-community/picker';
 
 
 const AddCard = ({ handleAddCardToDeck, selectedDeck, navigation })=> {
@@ -24,6 +25,16 @@ const AddCard = ({ handleAddCardToDeck, selectedDeck, navigation })=> {
           <TextInput style={styles.input} title='What is the answer of your card?' onChangeText={text => onChangeAnswer(text)}
       value={answer}/>
           <Text style={styles.puretext}>Ordnen Sie diese Karteikarte als Leicht (L) oder Schwierig (S) ein? Bitte nur einen Buchstaben eingeben.</Text>
+          <View style={styles.pickerContainer}>
+                <Picker
+                    //selectedValue={this.state.difficulty}
+                    //style={{ height: 50, width: 150 }}
+                    //onValueChange={(itemValue, itemIndex) => this.setState({difficulty:itemValue})}
+                >
+                    <Picker.Item label="Leicht" value="L" />
+                    <Picker.Item label="Schwer" value="S" />
+                </Picker>
+            </View>
           <TextInput style={styles.input} title='What is the difficulty of your card?' onChangeText={text => onChangeDifficulty(text)} 
                 value={difficulty}/>
           <Button block light style={styles.buttons} onPress={handleAddCard} >
@@ -49,6 +60,7 @@ const styles = StyleSheet.create({
         height: 100,
         fontWeight: '600',
         textAlign: 'center',
+        backgroundColor: 'rgb(198,226,255)'
     },
     puretext: {
         fontSize: 12

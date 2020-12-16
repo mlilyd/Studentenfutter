@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, TouchableOpacity, Image, Modal } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import Game from './Game';
 import Cards from './Cards';
+import { getDecktitles, getGameCards } from './src/cards/utils/api';
 import bg from './src/assets/bg.png';
 import squirrel from './src/assets/squirrel_3.png';
 import nut from './src/assets/nut.png';
@@ -12,36 +14,95 @@ export default class App extends Component{
 
         this.state = {
             sceneVisible: false,
-            scene: null
+            scene: null,
+            selectionDifficulty: "L",
+            selectionDeck: "Hauptstädte",
+            decktitle: null
           };
+
+        this.decktitles = this.setPicker();
+
         }
       
-        mountScene = scene => {
-            this.setState({
-              sceneVisible: true,
-              scene: scene
-            });
-          };
-        
-        unMountScene = () => {
+    mountScene = scene => {
+        this.setState({
+            sceneVisible: true,
+            scene: scene
+        });
+        };
+    
+    unMountScene = () => {
         this.setState({
             sceneVisible: false,
             scene: null
         });
-        };
-        
-            
+    };
+
+    setPicker = async () => {
+        try {
+            var decktitles = await getDecktitles();
+
+            // https://stackoverflow.com/questions/47658765/objects-are-not-valid-as-a-react-child-found-object-promise/47659112
+            this.setState({
+                decktitle: decktitles.map((object, index) => (
+                    <Picker.Item key={index} label={object} value={object}/>
+                ))
+            });
+
+        } catch (e) {
+            console.log(e);
+        }      
+    };
+
+    handleStartGame = async () => {
+        try {
+            var cards = await getGameCards(this.state.selectionDifficulty, this.state.selectionDeck);
+
+            // https://www.pluralsight.com/guides/how-to-send-state-of-current-component-as-a-parameter-to-another-external-method-using-react
+            // add parameter to <Game /> and access it in class
+            this.mountScene(<Game data={cards}/>);
+
+        } catch (e) {
+            console.log(e);
+        }      
+
+    };
+
     render(){
+
         return(
             <View style={styles.container}>
             <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
             <Text style={styles.title}>STUDENTEN</Text>
             <Text style={styles.title}>FUTTER</Text>
             <Image source={nut} style={styles.nut}/>
-                <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
+
+            {/* set difficulty */}
+            <View style={styles.pickerContainer}>
+                <Picker
+                    selectedValue={this.state.selectionDifficulty}
+                    style={{ height: 50, width: 150 }}
+                    onValueChange={(itemValue, itemIndex) => this.setState({selectionDifficulty:itemValue})}
+                >
+                    <Picker.Item label="Leicht" value="L" />
+                    <Picker.Item label="Schwer" value="S" />
+                </Picker>
+            </View>
+
+            {/* set deck title */}
+            <View style={styles.pickerContainer}>
+                <Picker
+                    selectedValue={this.state.selectionDeck}
+                    style={{ height: 50, width: 200 }}
+                    onValueChange={(itemValue, itemIndex) => this.setState({selectionDeck:itemValue})}
+                >{this.state.decktitle}</Picker>
+            </View>
+
+            {/* play and cards buttons */}
+            <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
                 <Button style={styles.buttons} color='#35916b'
                     onPress={ _ => {
-                        this.mountScene(<Game />);
+                        this.handleStartGame();
                     }}
                     title="Spielen"
                 />
@@ -52,51 +113,20 @@ export default class App extends Component{
                     }}
                     title="Karteikarten"
                 />
-                </View>
-
-                <Modal
-                    animationType={"slide"}
-                    transparent={false}
-                    visible={this.state.sceneVisible}
-                    onRequestClose={_ => {}}
-                    >
-                    {this.state.scene}
-
-                    {/* <CloseButton onPress={this.unMountScene} /> */}
-                </Modal>
-
             </View>
 
-            
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.sceneVisible}
+                onRequestClose={_ => {}}
+                >
+                {this.state.scene}
 
-    //     <div>
-    //     <Button onClick={this._onButtonClick} title="Press"/>
-    //     {this.state.showComponent ?
-    //        <Game /> :
-    //        null
-    //     }
-    //   </div>
+                {/* <CloseButton onPress={this.unMountScene} /> */}
+            </Modal>
 
-        // <View style={styles.container}>
-        //     <View style={styles.buttonContainer}>
-        //         <Game />
-        //       {/* <Button
-        //         onPress={() => {
-        //             var game = new Game();
-        //             alert('You tapped the button!');
-        //         }}
-        //         title="Spielen"
-        //         /> */}
-        //     </View>
-        //     <View style={styles.buttonContainer}>
-        //       <Button
-        //         onPress={() => {
-        //             alert('You tapped button!');
-        //         }}
-        //         title="Karteikarten"
-        //         />
-        //     </View>
-        // </View>
+            </View>
         
         );
     };
@@ -108,14 +138,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#41c48e',
     },
     title: {
-        top: 90,
+        top: 40,
         fontSize: 50,
-        fontFamily: 'Century Gothic',
-        color: 'rgb(100,185,255)',
+        color: '#35916b',
         textAlign: 'center'
     },
     squirrel: {
-        top: 120,
+        top: 190,
         left: 250
     },
     nut: {
@@ -179,13 +208,18 @@ const styles = StyleSheet.create({
         flex: 1
     },
     buttonContainer: {
-        top: 200
+        top: 20
     },
     separator: {
         marginVertical: 20,
         borderBottomColor: 'rgb(176,226,255)',
         borderBottomWidth: StyleSheet.hairlineWidth,
-    }
+    },
+    pickerContainer: {
+        //paddingTop: 10,
+        marginTop: 5,
+        alignItems: "center"
+      }
 });
   
 //   export default App;

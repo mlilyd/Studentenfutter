@@ -17,6 +17,8 @@ export default class Game extends Component {
     constructor(props) {
         super(props);
 
+        console.log("CARDS IN GAME.JS! \n", this.props.data[0]["question"]);
+
         //game state values
         this.state = {
             running: true,            //whether game is running or not. To pause game, use pause_game from Physicsjs
@@ -24,6 +26,7 @@ export default class Game extends Component {
             nut: 0,               //how many nuts
             question: false,      //whether currently answering question or not
             answer: false,        //whether currently showing answer
+            question_number: 0,
 
             question_text: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod?',
             right_answer: 'right answer',
@@ -33,9 +36,9 @@ export default class Game extends Component {
         this.entities = this.setupWorld();
 
         //set deck as per user selection
-        let decks = Constants.DECKS;
-        let chosen_deck = "632mgp7hm68vzvg2amz1hq"; //need to be changed
-        this.deck = decks[0][chosen_deck];
+        // let decks = Constants.DECKS;
+        // let chosen_deck = "632mgp7hm68vzvg2amz1hq"; //need to be changed
+        // this.deck = decks[0][chosen_deck];
         //this.deck = .... //import function to get selected deck 
     }
 
@@ -129,10 +132,10 @@ export default class Game extends Component {
                 break;
             //if squirrel hits trash, display question
             case 'show-question':
-                this.getQuestion();
+                this.getQuestion(this.state.question_number);
                 this.setState({
                     question: true,
-                    running: true
+                    running: true,
                 });
                 pause_game(true);
                 break;
@@ -140,7 +143,8 @@ export default class Game extends Component {
                 this.setState({
                     question: false,
                     answer: true,
-                    running: true
+                    running: true,
+                    question_number: this.state.question_number + 1
                 });
                 break;
             //in cases which squirrel loses a heart, stop running until the next user tap (not game running, but physics running!)
@@ -205,13 +209,13 @@ export default class Game extends Component {
 
     ///// QUESTION/ANSWER HANDLING //////////////
     // set question_text and right_answer from deck
-    getQuestion = () => {
+    getQuestion = (question_number) => {
         //get set of questions from deck
         //choose random question i
-        let set = this.deck.questions[Math.floor(Math.random() * this.deck.questions.length)];
+        // let set = this.deck.questions[Math.floor(Math.random() * this.deck.questions.length)];
         this.setState({
-            question_text: set['question'],
-            right_answer: set['answer']
+            question_text: this.props.data[question_number]["question"],
+            right_answer: this.props.data[question_number]["answer"]
         });
     }
 

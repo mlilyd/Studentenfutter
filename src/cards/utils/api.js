@@ -5,7 +5,7 @@ const FLASHCARDS_STORAGE_KEY = "flashcards_data";
 // changed initialData according to our needs
 function initialData() {
   return {
-    sxbjgrwdbhf58lxznh9q79: {
+    "sxbjgrwdbhf58lxznh9q79": {
       id: "sxbjgrwdbhf58lxznh9q79",
       title: "Hauptstädte",
       questions: [

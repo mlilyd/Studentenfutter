@@ -41,7 +41,6 @@ export default class App extends Component{
     setPicker = async () => {
         try {
             var decktitles = await getDecktitles();
-
             // https://stackoverflow.com/questions/47658765/objects-are-not-valid-as-a-react-child-found-object-promise/47659112
             this.setState({
                 decktitle: decktitles.map((object, index) => (
@@ -57,7 +56,6 @@ export default class App extends Component{
     handleStartGame = async () => {
         try {
             var cards = await getGameCards(this.state.selectionDifficulty, this.state.selectionDeck);
-
             // https://www.pluralsight.com/guides/how-to-send-state-of-current-component-as-a-parameter-to-another-external-method-using-react
             // add parameter to <Game /> and access it in class
             this.mountScene(<Game data={cards}/>);

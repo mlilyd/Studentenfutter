@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     height: 100,
     fontWeight: '600',
     textAlign: 'center',
-    backgroundColor: 'rgb(198,226,255)',
+    backgroundColor: '#d4f6f8',
     color: 'black'
   },
   titles: {

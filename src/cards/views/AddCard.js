@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(198,226,255)'
     },
     puretext: {
-        fontSize: 12
+        fontSize: 22,
+        marginLeft: 20
     },
     titles: {
         fontWeight: '600',

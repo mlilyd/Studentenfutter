@@ -88,10 +88,10 @@ const Deck = props => {
             removed prior quiz button and number of cards display */}
         <View>{deck.questions.map((object, index) => (
           <View key={index} style={styles.cardsFrame}>
+            <Button style={styles.buttonsDelete} title='Delete card' onPress={() => deletionWarn(index)}><Text>X</Text></Button>
             <Text style={styles.cardtext}>{index+1}. Frage: {object.question + " "}</Text> 
             <Text style={styles.cardtext}>Antwort: {object.answer}</Text>
             <Text style={styles.cardtextDiff}>Schwierigkeit: {object.difficulty}</Text>
-            <Button style={styles.buttonsDelete} title='Delete card' onPress={() => deletionWarn(index)}><Text>X</Text></Button>
           </View>))}
         </View>
         <Button style={styles.buttons} block ligh title='Add new card' onPress={() => navigation.navigate('Karteikarte hinzufügen')}>
@@ -122,27 +122,31 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 20,
     //marginTop: 80,
-    color: '	rgb(00,161,200)',
+    color: '#4bb08e',
   },
   buttons: {
+    backgroundColor: '#4bb08e',
     margin: 5,
     marginBottom: 20,
     //height: "10%",
     fontSize: 62,
     fontWeight: '600',
-    textAlign: 'center',
-    backgroundColor: 'rgb(00,161,200)'
+    textAlign: 'center'
+    //backgroundColor: 'rgb(00,161,200)'
   },
   buttonsDelete: {
-    backgroundColor: 'rgb(00,161,200)',
-    //margin: 5,
-    marginLeft: 130,
-    marginRight: 130,
+    backgroundColor: '#4bb08e',
+    borderColor: 'transparent',
+    shadowColor: 'transparent',
+    shadowOpacity: 110,
+    margin: 5,
+    marginLeft: 275,
+    marginRight: 0,
     marginBottom: 10,
     //height: "10%",
     //fontSize: 6,
     fontWeight: '600',
-    //textAlign: 'left',
+    textAlign: 'center'
   },
   buttonText: {
     fontSize: 22,
@@ -151,9 +155,7 @@ const styles = StyleSheet.create({
   cardsFrame: {
     margin: 15,
     padding: 2,
-    borderColor: 'rgb(0,161,200)',
-    borderWidth: 2,
-    borderStyle: "solid"
+    backgroundColor: '#d4f6f8'
   },
   subtitle: {
     fontSize: 32,
@@ -163,13 +165,13 @@ const styles = StyleSheet.create({
   },
   cardtext: {
     //padding: 1,
-    fontSize: 12,
+    fontSize: 22,
     textAlign: 'center',
     margin: 5
   },
   cardtextDiff: {
     //padding: 1,
-    fontSize: 10,
+    fontSize: 22,
     textAlign: 'right',
     margin: 5,
     color: 'grey'

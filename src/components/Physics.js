@@ -122,7 +122,7 @@ export const generateTrash = (world, entities) => {
     
     let trash = Matter.Bodies.rectangle(
         x, Constants.MAX_HEIGHT*0.849,
-        19,25,
+        28.5,37.5,
         { isStatic: true, label:"trash" }
     );
     
@@ -146,6 +146,10 @@ const Physics = (entities, { touches, time, dispatch }) => {
         if (paused && !question){
             world.gravity.y = 1.05;
             paused = false;
+            if (correct_answer){
+                Matter.World.remove(world, entities.trash.body);
+                delete entities.trash;
+            }
         }
              Matter.Body.setVelocity(squirrel, {x: 0, y: -25});            
         });
@@ -156,13 +160,13 @@ const Physics = (entities, { touches, time, dispatch }) => {
     if (tick%183 == 0 && !paused || tick == 0){
         generateHurdles(world, entities);  
     }
-    if (hurdleCount == 3){
+    if (hurdleCount == 2){
         resetHurdles(entities, world);
     }
     if(tick%200 == 0 && !paused && heartCount<5){
         generateHearts(squirrel, world, entities);
     }
-    if(tick%150 == 0 && !paused && trashCount<6){
+    if(tick%100 == 0 && !paused && trashCount<6){
         generateTrash(world, entities);
     }
     
@@ -193,7 +197,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
         if (typeof entities.trash === 'object' && entities.trash !== null){
         entities.trash.img_file = 'nut';
         entities.trash.body.label = 'nut';
-        correct_answer = false;
+        //correct_answer = false;
     }}
     //making sure squirrel stays on screen by pushing squirrel towards the center if it gets too close to the edge of the screen
     //not sure if necessary

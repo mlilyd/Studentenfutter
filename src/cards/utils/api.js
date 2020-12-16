@@ -225,6 +225,7 @@ export async function getDecktitles() {
       }
       return size;
     }
+<<<<<<< HEAD
 
     for (i=0; i<Object.size(data); i++) {
       // get all titles of decks and add them to array
@@ -233,6 +234,16 @@ export async function getDecktitles() {
       return decktitles;
   }
 
+=======
+
+    for (i=0; i<Object.size(data); i++) {
+      // get all titles of decks and add them to array
+      decktitles.push(Object.values(data)[i]["title"]);
+    }
+      return decktitles;
+  }
+
+>>>>>>> d110c091bbbe0213ed70e413d153df88b3aab867
   return {};
 }
 

@@ -84,13 +84,8 @@ export default class App extends Component{
                     style={{ height: 50, width: 150 }}
                     onValueChange={(itemValue, itemIndex) => this.setState({selectionDifficulty:itemValue})}
                 >
-<<<<<<< HEAD
                     <Picker.Item label="Leicht" value="L" />
                     <Picker.Item label="Schwer" value="S" />
-=======
-                    <Picker.Item label="L" value="L" />
-                    <Picker.Item label="S" value="S" />
->>>>>>> d110c091bbbe0213ed70e413d153df88b3aab867
                 </Picker>
             </View>
 
@@ -98,11 +93,7 @@ export default class App extends Component{
             <View style={styles.pickerContainer}>
                 <Picker
                     selectedValue={this.state.selectionDeck}
-<<<<<<< HEAD
                     style={{ height: 50, width: 200 }}
-=======
-                    style={{ height: 50, width: 150 }}
->>>>>>> d110c091bbbe0213ed70e413d153df88b3aab867
                     onValueChange={(itemValue, itemIndex) => this.setState({selectionDeck:itemValue})}
                 >{this.state.decktitle}</Picker>
             </View>
@@ -153,11 +144,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     squirrel: {
-<<<<<<< HEAD
         top: 190,
-=======
-        top: 210,
->>>>>>> d110c091bbbe0213ed70e413d153df88b3aab867
         left: 250
     },
     nut: {
@@ -229,12 +216,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
     pickerContainer: {
-<<<<<<< HEAD
         //paddingTop: 10,
         marginTop: 5,
-=======
-        paddingTop: 40,
->>>>>>> d110c091bbbe0213ed70e413d153df88b3aab867
         alignItems: "center"
       }
 });

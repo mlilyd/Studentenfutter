@@ -9,13 +9,12 @@ import { Picker } from '@react-native-community/picker';
 
 const AddCard = ({ handleAddCardToDeck, selectedDeck, navigation })=> {
 
-    const [selectedValue, setSelectedValue] = useState("L");
+    const [difficulty, setSelectedValue] = useState("L");
     const [question, onChangeQuestion] = useState('Frage')
     const [answer, onChangeAnswer] = useState('Antwort')
-    // const [difficulty, onChangeDifficulty] = useState('')
 
     const handleAddCard = () => {
-        handleAddCardToDeck(selectedDeck, {question, answer, selectedValue})
+        handleAddCardToDeck(selectedDeck, {question, answer, difficulty})
         navigation.navigate('gewähltes Karteikartenset')
     }
   
@@ -28,7 +27,7 @@ const AddCard = ({ handleAddCardToDeck, selectedDeck, navigation })=> {
         <Text style={styles.puretext}>Kartenschwierigkeit: </Text>
         <View style={styles.pickerContainer}>
             <Picker
-                selectedValue={selectedValue}
+                selectedValue={difficulty}
                 style={{ height: 50, width: 150 }}
                 onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
             >
@@ -36,9 +35,6 @@ const AddCard = ({ handleAddCardToDeck, selectedDeck, navigation })=> {
                 <Picker.Item label="Schwer" value="S" />
             </Picker>
         </View>
-
-        {/* <TextInput style={styles.input} title='What is the difficulty of your card?' onChangeText={text => onChangeDifficulty(text)} 
-            value={difficulty}/> */}
         <Button block light style={styles.buttons} onPress={handleAddCard} >
         <Text style={styles.titles} >Neue Karteikarte hinzufügen</Text>
         </Button>

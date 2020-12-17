@@ -29,6 +29,7 @@ Die App bedient sich hauptsächlich an zwei Open Source Projekten, die jeweils w
 	- Herzen eingefügt
 	- Rohre von Flappy Bird durch Baumstämme am Boden ersetzt
 	- Karteikarten mit Nüssen als Belohnung eingebunden 
+    - Game-States erweitert und angepasst für ein Jump 'n Run mit Karteikarteabfrage
 - [Karteikarten](https://github.com/jkmagnussen/mobile-flashcards), eigenhändisch erweitert/verändert durch:
 	- einzelne Karteikarte löschen
 	- Schwierigkeitsgrad zu Karteikarten hinzugefügt

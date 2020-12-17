@@ -69,7 +69,7 @@ export default class Play extends PureComponent {
     return (
       <View style={styles.container}>
         <Image
-          source={require('../assets/bg.png')}
+          source={require('../../assets/bg.png')}
           style={styles.backgroundImage}
           resizeMode="stretch"
         />

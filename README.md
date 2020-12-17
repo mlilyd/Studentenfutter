@@ -23,7 +23,12 @@ Zu Beginn ist die dynamische Selektion der Karteikartensets leer. Um dies zu än
 ## Quellen
 
 Die App bedient sich hauptsächlich an zwei Open Source Projekten, die jeweils wie folgt erweitert und/oder angepasst wurden:
-- [Flappy Bird](https://github.com/lepunk/react-native-videos/tree/master/FlappyBird) zur Orientierung für das Jump 'n' Run Spiel
+- [Flappy Bird](https://github.com/lepunk/react-native-videos/tree/master/FlappyBird) zur Orientierung für Jump 'n' Run, eigenhändisch erweitert/verändert durch:
+	- Grafiken erstellt und eingefügt
+	- Eichhörnchen läuft am Boden
+	- Herzen eingefügt
+	- Rohre von Flappy Bird durch Baumstämme am Boden ersetzt
+	- Karteikarten mit Nüssen als Belohnung eingebunden 
 - [Karteikarten](https://github.com/jkmagnussen/mobile-flashcards), eigenhändisch erweitert/verändert durch:
 	- einzelne Karteikarte löschen
 	- Schwierigkeitsgrad zu Karteikarten hinzugefügt
@@ -36,6 +41,10 @@ Die App bedient sich hauptsächlich an zwei Open Source Projekten, die jeweils w
 Weitere Quellen:
 - [React Native Dokumentation](https://reactnative.dev/docs/getting-started)
 - [React Native Game Engine](https://www.npmjs.com/package/react-native-game-engine)
+- [Flappy Bird OS Post 1](https://medium.com/better-programming/flappy-bird-with-react-native-game-engine-and-matter-js-d5673f50eb9)
+- [Flappy Bird OS Post 2](https://medium.com/better-programming/making-a-production-ready-flappy-bird-in-react-native-751713661a60)
+- [Matter.js Dokumentation](https://brm.io/matter-js/docs/)
+- [Getting started with Matter.js](https://code.tutsplus.com/tutorials/getting-started-with-matterjs-body-module--cms-28835)
 - [Dynamisches Füllen des Pickers](https://stackoverflow.com/questions/47658765/objects-are-not-valid-as-a-react-child-found-object-promise/47659112) in `Home.js`
 - [Länge eines Objekts anhand seiner Keys](https://stackoverflow.com/questions/5223/length-of-a-javascript-object) in `/src/cards/utils/api.js`
 - [n zufällige Elemente einer Liste](https://stackoverflow.com/questions/19269545/how-to-get-a-number-of-random-elements-from-an-array/38571132#38571132) in `/src/cards/utils/api.js`

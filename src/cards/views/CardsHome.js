@@ -18,7 +18,7 @@ function Home(props){
 
   return (
     <SafeAreaView style={styles.container}>
-      <Button rounded light style={ styles.newDeckButton} onPress={() => navigation.navigate('Karteikartenset hinzufügen')} ><Text>+</Text></Button>
+      <Button rounded light style={ styles.newDeckButton} onPress={() => navigation.navigate('Karteikartenset hinzufügen')} ><Text style={{color:'white', fontWeight:'bold'}}>+</Text></Button>
             
       <ScrollView >
         <View style={{height: '100%'}}>

@@ -17,19 +17,19 @@ Then, add this to game entities
 
 
 let Images = {
-    log: require("../assets/log.png"),
-    squirrel: require("../assets/squirrel.png"),
-    squirrel_1: require("../assets/squirrel_1.png"),
-    squirrel_2: require("../assets/squirrel_2.png"),
-    squirrel_3: require("../assets/squirrel_3.png"),
-    squirrel_4: require("../assets/squirrel_4.png"),
-    squirrel_5: require("../assets/squirrel_5.png"),
-    squirrel_6: require("../assets/squirrel_6.png"),
-    squirrel_7: require("../assets/squirrel_7.png"),
-    question: require("../assets/question.png"),
-    heart: require("../assets/heart.png"),
-    nut: require("../assets/nut.png"),
-    trash: require("../assets/trash.png")
+    log: require("../../assets/log.png"),
+    squirrel: require("../../assets/squirrel.png"),
+    squirrel_1: require("../../assets/squirrel_1.png"),
+    squirrel_2: require("../../assets/squirrel_2.png"),
+    squirrel_3: require("../../assets/squirrel_3.png"),
+    squirrel_4: require("../../assets/squirrel_4.png"),
+    squirrel_5: require("../../assets/squirrel_5.png"),
+    squirrel_6: require("../../assets/squirrel_6.png"),
+    squirrel_7: require("../../assets/squirrel_7.png"),
+    question: require("../../assets/question.png"),
+    heart: require("../../assets/heart.png"),
+    nut: require("../../assets/nut.png"),
+    trash: require("../../assets/trash.png")
 };
 
 export default class Sprite extends Component {

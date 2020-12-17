@@ -3,14 +3,19 @@ import { StyleSheet, View, StatusBar, TouchableOpacity, Image, Text, Keyboard, T
 import Matter from "matter-js";
 import { GameEngine } from "react-native-game-engine";
 
-import Sprite from './src/components/Sprite';
-import Floor from './src/components/Floor';
-import Physics, { resetHeart, pause_game, delete_entity, isCorrect, resetTrash } from './src/components/Physics';
-import Constants from './src/Constants';
+import Sprite from './src/game/components/Sprite';
+import Floor from './src/game/components/Floor';
+import Physics, { resetHeart, pause_game, delete_entity, isCorrect, resetTrash } from './src/game/components/Physics';
+import Constants from './src/game/Constants';
 
 import bg from './src/assets/bg.png';
 import heart from './src/assets/heart.png';
 import nut from './src/assets/nut.png';
+
+// https://medium.com/better-programming/flappy-bird-with-react-native-game-engine-and-matter-js-d5673f50eb9
+// https://medium.com/better-programming/making-a-production-ready-flappy-bird-in-react-native-751713661a60
+// https://code.tutsplus.com/tutorials/getting-started-with-matterjs-body-module--cms-28835
+// https://brm.io/matter-js/docs/
 
 export default class Game extends Component {
     constructor(props) {
@@ -397,7 +402,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: '5%',
         color: 'white',
-        fontSize: 48,
+        fontSize: 44,
         fontFamily: '04b_19'
     },
     ranswerText: {

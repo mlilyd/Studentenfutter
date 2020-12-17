@@ -145,7 +145,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   buttonTextX: {
-    fontSize: 18
+    fontSize: 18,
+    fontWeight: 'bold'
   },
   cardsFrame: {
     margin: 15,
@@ -169,6 +170,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     textAlign: 'right',
     margin: 5,
-    color: 'grey'
+    color: '#2C7758'
   }
 });

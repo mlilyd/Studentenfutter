@@ -38,36 +38,111 @@ function initialData() {
           question: "Was ist die Hauptstadt von Madagaskar?",
           answer: "Antananarivo",
           difficulty: "S"
+        },
+        {
+          question: "Was ist die Hauptstadt von Nicaragua?",
+          answer: "Managua",
+          difficulty: "S"
+        },
+        {
+          question: "Was ist die Hauptstadt von Honduras?",
+          answer: "Tegucigalpa",
+          difficulty: "S"
+        },
+        {
+          question: "Was ist die Hauptstadt von Estland?",
+          answer: "Tallinn",
+          difficulty: "S"
+        },
+        {
+          question: "Was ist die Hauptstadt von Ungarn?",
+          answer: "Budapest",
+          difficulty: "L"
+        },
+        {
+          question: "Was ist die Hauptstadt von Schweden?",
+          answer: "Stockholm",
+          difficulty: "L"
+        },
+        {
+          question: "Was ist die Hauptstadt von Österreich?",
+          answer: "Wien",
+          difficulty: "L"
+        },
+        {
+          question: "Was ist die Hauptstadt von Griechenland?",
+          answer: "Athen",
+          difficulty: "L"
+        },
+        {
+          question: "Was ist die Hauptstadt von Ghana?",
+          answer: "Accra",
+          difficulty: "S"
+        },
+        {
+          question: "Was ist die Hauptstadt von Nigeria?",
+          answer: "Abuja",
+          difficulty: "S"
+        },
+        {
+          question: "Was ist die Hauptstadt von Italien?",
+          answer: "Rom",
+          difficulty: "L"
         }
       ]
     },
     "636jgrwdbhf58lxznh9q79": {
       id: "636jgrwdbhf58lxznh9q79",
-      title: "Test",
+      title: "Verschiedenes", //source: Internet :)
       questions: [
         {
-          question: "",
-          answer: "",
+          question: "In welchem Jahr wurde Mozart geboren?",
+          answer: "1756",
+          difficulty: "S"
+        },
+        {
+          question: "Wie viele Kontinente gibt es?",
+          answer: "7",
           difficulty: "L"
         },
         {
-          question: "",
-          answer: "",
+          question: "Wie 'lang' ist ein erwachsener Maulwurf ca.?",
+          answer: "13cm",
+          difficulty: "S"
+        },
+        {
+          question: "Wie groß war Goethe?",
+          answer: "1,69m",
+          difficulty: "S"
+        },
+        {
+          question: "In welchem Ort kam Einstein zur Welt?",
+          answer: "Ulm",
+          difficulty: "S"
+        },
+        {
+          question: "In welchem Jahr wurde das erste Harry Potter Buch veröffentlicht?",
+          answer: "1997",
+          difficulty: "S"
+        },
+        {
+          question: "Welcher Planet ist der Sonne am nächsten?",
+          answer: "Merkur",
           difficulty: "L"
         },
         {
-          question: "",
-          answer: "",
+          question: "Was für ein Fisch ist Nemo aus 'Findet Nemo'?",
+          answer: "Ein Clownfisch",
           difficulty: "L"
         },
         {
-          question: "",
-          answer: "",
+          question: "Wie viele Kugeln kommen beim Billiard zum Einsatz?",
+          answer: "16 = 15 + 1 (15 Spielkugeln und der weiße Spielball)",
           difficulty: "L"
         },
         {
-          question: "",
-          answer: "",
+          question: "Wie viele Tage hat der Juli",
+          answer: "31",
           difficulty: "L"
         }
       ]
@@ -100,6 +175,31 @@ function initialData() {
           question: "Was ergibt 1 + 1?",
           answer: "2",
           difficulty: "L"
+        },
+        {
+          question: "Was ist die Wurzel aus 625?",
+          answer: "25",
+          difficulty: "S"
+        },
+        {
+          question: "Was ergibt 17*16?",
+          answer: "272",
+          difficulty: "S"
+        },
+        {
+          question: "Was ergibt 984/12?",
+          answer: "82",
+          difficulty: "S"
+        },
+        {
+          question: "Was ist die dritte Wurzel aus 125?",
+          answer: "5",
+          difficulty: "S"
+        },
+        {
+          question: "Was ergibt 152/19?",
+          answer: "8",
+          difficulty: "S"
         }
       ]
     }

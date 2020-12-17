@@ -29,7 +29,7 @@ const AddCard = ({ handleAddCardToDeck, selectedDeck, navigation })=> {
             <View style={styles.pickerContainer}>
                 <Picker
                     selectedValue={difficulty}
-                    style={{ height: 50, width: 150 }}
+                    style={{ height: 50, width: 200 }}
                     onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
                 >
                     <Picker.Item label="Leicht" value="L" />
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         height: 100,
         fontWeight: '600',
         textAlign: 'center',
-        backgroundColor: 'rgb(198,226,255)'
+        backgroundColor: '#d4f6f8'
     },
     puretext: {
         fontSize: 22,
@@ -76,15 +76,19 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         fontSize: 28,
         textAlign: 'center',
-        borderBottomColor: 'rgb(64,64,64)',
+        borderBottomColor: 'grey',
         borderBottomWidth: 1.5,
+        marginTop: 30,
         marginBottom: 30,
         color: 'rgb(64,64,64)'
     },
     pickerContainer: {
         //paddingTop: 10,
         marginTop: 5,
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: 'white',
+        marginHorizontal: 80,
+        marginBottom: 15
     }
 });
 

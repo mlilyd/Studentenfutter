@@ -1,9 +1,9 @@
 import React, { Component, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Image, Modal } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Image, Modal, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import Game from './Game';
 import { getDecktitles, getGameCards } from './src/cards/utils/api';
-import bg from './src/assets/bg.png';
+import homebg from './src/assets/homebg.png';
 import squirrel from './src/assets/squirrel_3.png';
 import nut from './src/assets/nut.png';
 
@@ -76,16 +76,16 @@ export default class Home extends Component{
 
         return(
             <View style={styles.container}>
-            <Image source={bg} style={styles.backgroundImage} resizeMode="stretch" />
+            <Image source={homebg} style={styles.backgroundImage} resizeMode="stretch" />
             <Text style={styles.title}>STUDENTEN</Text>
             <Text style={styles.title}>FUTTER</Text>
-            <Image source={nut} style={styles.nut}/>
 
             {/* set difficulty */}
             <View style={styles.pickerContainer}>
+                <Text style={{paddingRight:50, paddingLeft:10, fontSize:16}}>Schwierigkeit:</Text>
                 <Picker
                     selectedValue={this.state.selectionDifficulty}
-                    style={{ height: 50, width: 150 }}
+                    style={{ height: 50, width: 200 }}
                     onValueChange={(itemValue, itemIndex) => this.setState({selectionDifficulty:itemValue})}
                 >
                     <Picker.Item label="Leicht" value="L" />
@@ -94,7 +94,8 @@ export default class Home extends Component{
             </View>
 
             {/* set deck title */}
-            <View style={styles.pickerContainer}>
+            <View style={styles.pickerContainer2}>
+                <Text style={{paddingRight:74, paddingLeft:10, fontSize:16}}>Kartenset:</Text>
                 <Picker
                     selectedValue={this.state.selectionDeck}
                     style={{ height: 50, width: 200 }}
@@ -104,19 +105,24 @@ export default class Home extends Component{
 
             {/* play and cards buttons */}
             <View style={styles.buttonContainer}  sceneVisible={this.state.sceneVisible}>
-                <Button style={styles.buttons} color='#35916b'
+                <TouchableOpacity
+                    style={styles.buttons}
                     onPress={ _ => {
                         this.handleStartGame();
                     }}
-                    title="Spielen"
-                />
-                <Image source={squirrel} style={styles.squirrel}/>
-                <Button color='#35916b'
-                    onPress={ () => {
+                >
+                    <Text style={styles.buttontext}>SPIELEN</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.buttons}
+                    onPress={ _ => {
                         this.props.navigation.navigate("Karteikarten");
                     }}
-                    title="Karteikarten"
-                />
+                >
+                    <Text style={styles.buttontext}>KARTEIKARTEN</Text>
+                </TouchableOpacity>
+
             </View>
 
             <Modal
@@ -141,11 +147,31 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#41c48e',
     },
+    buttons: {
+        backgroundColor: '#308260',
+        height: 70,
+        marginBottom: 20,
+        //height: "10%",
+        fontSize: 62,
+        fontWeight: '600',
+        textAlign: 'center',
+        //backgroundColor: 'rgb(00,161,200)',
+        justifyContent: 'center',
+        alignItems: "center",
+        padding: 10
+    },
+    buttontext: {
+        fontSize: 40,
+        color: 'white',
+        fontWeight: 'bold'
+    },
     title: {
         top: 40,
         fontSize: 50,
         color: '#35916b',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'serif',
+        fontWeight: 'bold'
     },
     squirrel: {
         top: 190,
@@ -167,14 +193,23 @@ const styles = StyleSheet.create({
     buttonContainer: {
         top: 20
     },
-    separator: {
-        marginVertical: 20,
-        borderBottomColor: 'rgb(176,226,255)',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
     pickerContainer: {
+        //margin: 15,
+        flexDirection: 'row',
+        height: 30,
         //paddingTop: 10,
-        marginTop: 5,
+        //marginLeft: 50,
+        //marginRight: 60,
+        backgroundColor: 'white',
+        marginTop: 60,
+        alignItems: "center"
+      },
+    pickerContainer2: {
+        flexDirection: 'row',
+        height: 30,
+        backgroundColor: 'white',
+        marginTop: 10,
+        marginBottom: 5,
         alignItems: "center"
       }
 });

@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     right: 20,
     position: 'absolute',
     zIndex:1,
-    backgroundColor: 'rgb(00,255,152)',
+    backgroundColor: '#308260',
     fontWeight: '600',
     fontSize: 120,
 }

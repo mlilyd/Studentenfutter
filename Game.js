@@ -25,9 +25,9 @@ export default class Game extends Component {
             answer: false,        //whether currently showing answer
             question_number: 0,
 
-            question_text: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod?',
-            right_answer: 'right answer',
-            your_answer: 'hi'
+            question_text: '',
+            right_answer: '',
+            your_answer: ''
         };
         this.gameEngine = null;
         this.entities = this.setupWorld();
@@ -82,7 +82,7 @@ export default class Game extends Component {
                 switch (pair.bodyB.label) {
                     //if squirrel hits log, game over
                     case 'hurdle':
-                        gameEngine.dispatch({ type: 'game-over' });
+                        gameEngine.dispatch({ type: 'min-heart' });
                         break;
                     //if squirrel hits heart, increase game state heart
                     case 'heart':
@@ -91,9 +91,6 @@ export default class Game extends Component {
                     //if squirrel hits trash, display question
                     case 'trash':
                         gameEngine.dispatch({ type: 'show-question' });
-                        break;
-                    case 'nut':
-                        gameEngine.dispatch({ type: 'add-nut' });
                         break;
                 }
             });
@@ -165,6 +162,7 @@ export default class Game extends Component {
                         question_number: this.state.question_number + 1
                     });
                 } else {
+                    isCorrect(false);
                     console.log("Spiel beendet");
                     this.props.navigation.navigate("Home");
                 }
@@ -175,24 +173,19 @@ export default class Game extends Component {
                 isCorrect(true);
                 this.setState({
                     question: false,
-                    answer: false
+                    answer: false,
+                    nut: this.state.nut+1
                 });
                 if (this.state.question_number != this.props.route.params.gameCard.length-1) {
                     this.setState({
                         question_number: this.state.question_number + 1
                     });
                 } else {
+                    isCorrect(false);
                     console.log("Spiel beendet");
                     this.props.navigation.navigate("Home");
                 }
                 pause_game(true);
-                break;
-            //if squirrel hit nut increase nut state
-            case 'add-nut':
-                delete_entity('trash');
-                this.setState({
-                    nut: this.state.nut + 1
-                });
                 break;
         }
     }
@@ -201,6 +194,7 @@ export default class Game extends Component {
     reset = () => {
         this.gameEngine.swap(this.setupWorld());
         resetHeart();
+        isCorrect(false);
         this.setState({
             running: true,    //whether squirrel is running or not
             score: 0,         //how many scores
@@ -278,30 +272,28 @@ export default class Game extends Component {
 
                 {!this.state.running &&
                     <View style={styles.fullScreen}>
-                        <Text style={styles.gameOverText}>Game Over</Text>
+                        <Text style={styles.gameOverText}>Spiel beendet</Text>
                         <Text style={styles.home} onPress={() => {this.props.navigation.navigate("Home")}}>Home</Text>
-                        <Text style={styles.retry} onPress={this.reset}>Retry</Text>
+                        <Text style={styles.retry} onPress={this.reset}>Neuer Versuch</Text>
                     </View>}
 
                 {this.state.question &&
                     <View style={styles.fullScreen}>
-                        <Text style={styles.questionText}>Question</Text>
+                        <Text style={styles.questionText}>Frage</Text>
                         <Text style={styles.questionSubText}> {this.state.question_text} </Text>
-                        <TextInput style={styles.textInput} placeholder="Your answer" onChangeText={text => this.getAnswer(text)}/>
-                        <Text style={styles.submitButton} onPress={this.showAnswer}>Check answer</Text>
+                        <TextInput style={styles.textInput} placeholder="Deine Antwort" onChangeText={text => this.getAnswer(text)}/>
+                        <Text style={styles.submitButton} onPress={this.showAnswer}>Antwort überprüfen</Text>
 
                     </View>}
 
                 {this.state.answer &&
                     <View style={styles.fullScreen}>
-                        <Text style={styles.answerText}>Your Answer:</Text>
+                        <Text style={styles.answerText}>Deine Antwort:</Text>
                         <Text style={styles.answerSubText}> {this.state.your_answer} </Text>
-                        <Text style={styles.ranswerText}>Right Answer:</Text>
+                        <Text style={styles.ranswerText}>Richtige Antwort:</Text>
                         <Text style={styles.ranswerSubText}> {this.state.right_answer} </Text>
-
-                        <Text style={styles.right} onPress={this.rightAnswer}>Right</Text>
-                        <Text style={styles.wrong} onPress={this.wrongAnswer}>Wrong</Text>
-
+                        <Text style={styles.right} onPress={this.rightAnswer}>Richtig</Text>
+                        <Text style={styles.wrong} onPress={this.wrongAnswer}>Falsch</Text>
                     </View>}
             </View>
         );
@@ -412,7 +404,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: '45%',
         color: 'white',
-        fontSize: 48,
+        fontSize: 44,
         fontFamily: '04b_19'
     },
     questionSubText: {

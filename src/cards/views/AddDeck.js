@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         height: 100,
         fontWeight: '600',
         textAlign: 'center',
-        backgroundColor: 'rgb(198,226,255)'
+        backgroundColor: '#d4f6f8'
     },
     titles: {
         fontWeight: '600',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         fontSize: 28,
         textAlign: 'center',
-        borderBottomColor: 'rgb(64,64,64)',
+        borderBottomColor: 'grey',
         borderBottomWidth: 1.5,
         marginBottom: 30,
         color: 'rgb(64,64,64)'

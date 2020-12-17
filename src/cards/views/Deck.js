@@ -84,22 +84,23 @@ const Deck = props => {
       <Card style={{ height: '100%' }}>
         <View style={{flex: 1}}>
         <Text style={styles.header}>{deck.title}</Text>
-        {/* display of all cards and deletion option added.
-            removed prior quiz button and number of cards display */}
-        <View>{deck.questions.map((object, index) => (
-          <View key={index} style={styles.cardsFrame}>
-            <Button style={styles.buttonsDelete} title='Delete card' onPress={() => deletionWarn(index)}><Text>X</Text></Button>
-            <Text style={styles.cardtext}>{index+1}. Frage: {object.question + " "}</Text> 
-            <Text style={styles.cardtext}>Antwort: {object.answer}</Text>
-            <Text style={styles.cardtextDiff}>Schwierigkeit: {object.difficulty}</Text>
-          </View>))}
-        </View>
         <Button style={styles.buttons} block ligh title='Add new card' onPress={() => navigation.navigate('Karteikarte hinzufügen')}>
           <Text style={styles.buttonText}>Karteikarte hinzufügen</Text>
         </Button>
         <Button style={styles.buttons} block ligh title='Delete Deck' onPress={deletionDeck}>
           <Text style={styles.buttonText}>Karteikartenset löschen</Text>
-        </Button></View>
+        </Button>
+        {/* display of all cards and deletion option added.
+            removed prior quiz button and number of cards display */}
+        <View>{deck.questions.map((object, index) => (
+          <View key={index} style={styles.cardsFrame}>
+            <Button style={styles.buttonsDelete} title='Delete card' onPress={() => deletionWarn(index)}><Text style={styles.buttonTextX}>X</Text></Button>
+            <Text style={styles.cardtext}>{index+1}. Frage: {object.question + " "}</Text> 
+            <Text style={styles.cardtext}>Antwort: {object.answer}</Text>
+            <Text style={styles.cardtextDiff}>Schwierigkeit: {object.difficulty}</Text>
+          </View>))}
+        </View>
+        </View>
         {/* <Text style={styles.subtitle}>{deck.questions.length} cards</Text> */}
       </Card>
     </ScrollView>
@@ -118,14 +119,14 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 40,
-    fontWeight: '600',
     textAlign: 'center',
     margin: 20,
     //marginTop: 80,
-    color: '#4bb08e',
+    color: '#308260',
+    fontWeight: 'bold'
   },
   buttons: {
-    backgroundColor: '#4bb08e',
+    backgroundColor: '#308260',
     margin: 5,
     marginBottom: 20,
     //height: "10%",
@@ -135,22 +136,18 @@ const styles = StyleSheet.create({
     //backgroundColor: 'rgb(00,161,200)'
   },
   buttonsDelete: {
-    backgroundColor: '#4bb08e',
-    borderColor: 'transparent',
-    shadowColor: 'transparent',
-    shadowOpacity: 110,
+    borderRadius: 8,
+    backgroundColor: '#308260',
     margin: 5,
-    marginLeft: 275,
-    marginRight: 0,
-    marginBottom: 10,
-    //height: "10%",
-    //fontSize: 6,
-    fontWeight: '600',
-    textAlign: 'center'
+    marginLeft: "85%",
+    fontWeight: 'bold'
   },
   buttonText: {
     fontSize: 22,
-    fontWeight: '600',
+    fontWeight: 'bold',
+  },
+  buttonTextX: {
+    fontSize: 18
   },
   cardsFrame: {
     margin: 15,

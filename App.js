@@ -1,3 +1,10 @@
+// PSeL 1 Projekt: Studentenfutter
+
+// Paula Wiesemüller (6338378)
+// Alicia Wirth (6339704)
+// Seida Basha (7392317)
+// Lily Djami (7478862)
+
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
@@ -19,7 +26,7 @@ const Stack = createStackNavigator()
 // Karteikarten: https://github.com/jkmagnussen/mobile-flashcards
 // Flappy Bird: https://github.com/lepunk/react-native-videos/tree/master/FlappyBird
 
-export default function Cards() {
+export default function App() {
     
     return (
         <Provider store={store}>

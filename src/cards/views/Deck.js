@@ -6,7 +6,6 @@ import { bindActionCreators, compose } from 'redux';
 import { removeDeck, removeCard } from '../utils/api';
 import * as actions from '../store/actions/decks'
 import { Button, Text, Card } from 'native-base';
-import { Render } from 'matter-js';
 
 const Deck = props => {
   const { handleGetAllDecks, decks, selectedDeck, deleteDeck, deleteCard, navigation, selectDeck } = props;
@@ -101,7 +100,6 @@ const Deck = props => {
           </View>))}
         </View>
         </View>
-        {/* <Text style={styles.subtitle}>{deck.questions.length} cards</Text> */}
       </Card>
     </ScrollView>
   );

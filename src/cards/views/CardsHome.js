@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators, compose } from 'redux';
 import * as actions from '../store/actions/decks'
 import { Button, Text } from 'native-base';
-//import App from 'App';
 
 
 function Home(props){
@@ -16,24 +15,10 @@ function Home(props){
     selectDeck(id)
     navigation.navigate('gewähltes Karteikartenset')
   }
-  mountScene = scene => {
-    this.setState({
-      sceneVisible: true,
-      scene: scene
-    });
-  };
-  
-  unMountScene = () => {
-    this.setState({
-      sceneVisible: false,
-      scene: null
-    });
-  };
 
   return (
     <SafeAreaView style={styles.container}>
-            {/*<Button title="zurück" style={styles.buttons}><Text>Menü</Text></Button>*/}
-            <Button rounded light style={ styles.newDeckButton} onPress={() => navigation.navigate('Karteikartenset hinzufügen')} ><Text>+</Text></Button>
+      <Button rounded light style={ styles.newDeckButton} onPress={() => navigation.navigate('Karteikartenset hinzufügen')} ><Text>+</Text></Button>
             
       <ScrollView >
         <View style={{height: '100%'}}>

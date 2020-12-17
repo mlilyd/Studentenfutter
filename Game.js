@@ -163,8 +163,8 @@ export default class Game extends Component {
                     });
                 } else {
                     isCorrect(false);
-                    console.log("Spiel beendet");
-                    this.props.navigation.navigate("Home");
+                    this.gameEngine.dispatch({ type: 'game-over' });
+                    // this.props.navigation.navigate("Home");
                 }
                 pause_game(true);
                 break;
@@ -182,8 +182,8 @@ export default class Game extends Component {
                     });
                 } else {
                     isCorrect(false);
-                    console.log("Spiel beendet");
-                    this.props.navigation.navigate("Home");
+                    this.gameEngine.dispatch({ type: 'game-over' });
+                    // this.props.navigation.navigate("Home");
                 }
                 pause_game(true);
                 break;

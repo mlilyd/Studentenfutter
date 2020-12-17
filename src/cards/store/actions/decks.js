@@ -54,6 +54,7 @@ export function handleDeleteDeck(deckId) {
   };
 }
 
+// added function to delete single card
 export function handleDeleteCard(deckId, card) {
   return dispatch => {
     return removeCard(deckId, card).then(() => {
@@ -91,6 +92,7 @@ export function deleteDeck(deckId) {
   };
 }
 
+// added function to delete single card
 export function deleteCard(deckId, card) {
   return {
     type: DELETE_CARD,

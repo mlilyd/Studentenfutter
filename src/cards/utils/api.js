@@ -364,16 +364,16 @@ export async function getGameCards(difficulty, decktitle) {
       }
     }
 
-    console.log("MATCHING CARDS: \n", gameCards, "\n");
+    // console.log("MATCHING CARDS: \n", gameCards, "\n");
     
     // take n random elements of gameCards array to play the game
-    // for now: n = 3 to see if it works
-    if (gameCards.length < 3) {
+    // for now: n = 5 to see if it works
+    if (gameCards.length < 5) {
       return gameCards;
     } else {
       // https://stackoverflow.com/questions/19269545/how-to-get-a-number-of-random-elements-from-an-array/38571132#38571132
-      let randomGameCards = gameCards.sort(() => .5 - Math.random()).slice(0,3)
-      console.log("N CARDS OF MATCHING CARDS: \n", randomGameCards, "\n");
+      let randomGameCards = gameCards.sort(() => .5 - Math.random()).slice(0,5)
+      // console.log("N CARDS OF MATCHING CARDS: \n", randomGameCards, "\n");
       return randomGameCards;
     }
   }

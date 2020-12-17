@@ -1,5 +1,5 @@
-import React, { Component, useEffect } from 'react';
-import { Dimensions, StyleSheet, Text, View, StatusBar, Button, Alert, TouchableOpacity, Image, Modal } from 'react-native';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -15,6 +15,9 @@ import AddCard from './src/cards/views/AddCard';
 import AddDeck from './src/cards/views/AddDeck';
 
 const Stack = createStackNavigator()
+
+// Karteikarten: https://github.com/jkmagnussen/mobile-flashcards
+// Flappy Bird: https://github.com/lepunk/react-native-videos/tree/master/FlappyBird
 
 export default function Cards() {
     
@@ -34,14 +37,12 @@ export default function Cards() {
         </Provider>
       );
 
-    }
+  }
     
-    const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-      },
-    });
-       
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+});
